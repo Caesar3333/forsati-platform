@@ -273,6 +273,82 @@ services:
     networks:
       - forsati-network
 
+  # ===========================================
+  # HumHub (Social Networking Engine)
+  # ===========================================
+  humhub:
+    image: mriedmann/humhub:stable
+    container_name: forsati-humhub
+    restart: unless-stopped
+    environment:
+      HUMHUB_DB_HOST: postgres
+      HUMHUB_DB_NAME: ${HUMHUB_DB_NAME:-humhub_db}
+      HUMHUB_DB_USER: ${POSTGRES_USER:-forsati}
+      HUMHUB_DB_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      HUMHUB_AUTO_INSTALL: "true"
+      HUMHUB_ADMIN_LOGIN: ${HUMHUB_ADMIN_LOGIN:-admin}
+      HUMHUB_ADMIN_EMAIL: ${HUMHUB_ADMIN_EMAIL:-admin@forsati.jo}
+      HUMHUB_ADMIN_PASSWORD: ${HUMHUB_ADMIN_PASSWORD:-changeme}
+      HUMHUB_NAME: "Forsati Community"
+      HUMHUB_EMAIL: "noreply@forsati.jo"
+      HUMHUB_MAILER_SYSTEM_EMAIL_ADDRESS: "noreply@forsati.jo"
+      HUMHUB_MAILER_SYSTEM_EMAIL_NAME: "Forsati"
+      HUMHUB_ANONYMOUS_REGISTRATION: "false"
+      # S3/MinIO Storage
+      HUMHUB_FILESYSTEM_S3_BUCKET: ${MINIO_BUCKET_HUMHUB:-forsati-humhub}
+      HUMHUB_FILESYSTEM_S3_ENDPOINT: http://minio:9000
+      HUMHUB_FILESYSTEM_S3_KEY: ${MINIO_ROOT_USER:-minioadmin}
+      HUMHUB_FILESYSTEM_S3_SECRET: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      HUMHUB_FILESYSTEM_S3_REGION: us-east-1
+      HUMHUB_FILESYSTEM_S3_USE_PATH_STYLE: "true"
+    ports:
+      - "8081:80"
+    volumes:
+      - humhub_config:/var/www/localhost/htdocs/protected/config
+      - humhub_uploads:/var/www/localhost/htdocs/uploads
+      - humhub_modules:/var/www/localhost/htdocs/protected/modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    networks:
+      - forsati-network
+
+  # ===========================================
+  # Rocket.Chat (Optional - Rich Messaging)
+  # ===========================================
+  # rocketchat:
+  #   image: rocket.chat:latest
+  #   container_name: forsati-rocketchat
+  #   restart: unless-stopped
+  #   environment:
+  #     MONGO_URL: mongodb://mongo:27017/rocketchat
+  #     ROOT_URL: http://localhost:3030
+  #     PORT: 3000
+  #     OVERWRITE_SETTING_Show_Setup_Wizard: completed
+  #   ports:
+  #     - "3030:3000"
+  #   depends_on:
+  #     - mongo
+  #   networks:
+  #     - forsati-network
+
+  # mongo:
+  #   image: mongo:5.0
+  #   container_name: forsati-mongo
+  #   restart: unless-stopped
+  #   volumes:
+  #     - mongo_data:/data/db
+  #   networks:
+  #     - forsati-network
+
 # ===========================================
 # Networks
 # ===========================================
@@ -289,4 +365,8 @@ volumes:
   strapi_data:
   redis_data:
   typesense_data:
+  humhub_config:
+  humhub_uploads:
+  humhub_modules:
+  # mongo_data:
   # elasticsearch_data:

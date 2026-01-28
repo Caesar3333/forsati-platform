@@ -28,3 +28,6 @@
 [submodule "frontend/nextjs-examples"]
 	path = frontend/nextjs-examples
 	url = https://github.com/vercel/next.js.git
+[submodule "services/humhub"]
+	path = services/humhub
+	url = https://github.com/humhub/humhub.git

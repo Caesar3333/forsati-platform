@@ -43,7 +43,7 @@ if (-not $LocalEnvOnly) {
     }
     
     # Check auth status
-    $authStatus = gh auth status 2>&1
+    $null = gh auth status 2>&1
     if ($LASTEXITCODE -ne 0) {
         Write-Host "❌ Not logged in to GitHub CLI. Run: gh auth login" -ForegroundColor Red
         exit 1
@@ -99,13 +99,12 @@ Write-Host ""
 
 foreach ($secret in $secrets) {
     $name = $secret.Name
-    $desc = $secret.Desc
     $required = $secret.Required
     $default = $secret.Default
     $generate = $secret.Generate
     $manual = $secret.Manual
     
-    $prompt = "  $name"
+    $prompt = "  $name ($($secret.Desc))"
     if ($default) { $prompt += " [$default]" }
     elseif ($generate) { $prompt += " [auto-generate]" }
     elseif ($manual) { $prompt += " [skip for now]" }

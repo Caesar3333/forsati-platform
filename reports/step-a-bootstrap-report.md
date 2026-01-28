@@ -8,11 +8,13 @@
 ## العربية
 
 ### ملخص
+
 تم إنشاء هيكل منصة فرصتي الأساسي بنجاح مع جميع الملفات المطلوبة للتشغيل.
 
 ### المتطلبات المتحققة ✅
+
 | الأداة | الإصدار | الحالة |
-|--------|---------|--------|
+| ------ | ------- | ------ |
 | Git | 2.51.0 | ✅ |
 | Docker | 29.1.3 | ✅ |
 | Docker Compose | 2.40.3 | ✅ |
@@ -21,7 +23,8 @@
 | Python | 3.12.10 | ✅ |
 
 ### الملفات المنشأة
-```
+
+```text
 forsati-platform/
 ├── .env.example                              # متغيرات البيئة
 ├── .gitignore                                # استثناءات Git
@@ -46,7 +49,8 @@ forsati-platform/
 ```
 
 ### متغيرات البيئة المطلوبة (أسماء فقط — لا قيم)
-```
+
+```text
 MARKET_DEFAULT, ENABLED_MARKETS
 POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD
 STRAPI_URL, STRAPI_API_TOKEN, STRAPI_APP_KEYS, STRAPI_API_TOKEN_SALT
@@ -57,8 +61,9 @@ INGESTOR_URL, INGESTOR_API_KEY
 ```
 
 ### الـ Submodules المضافة (10 مشاريع)
+
 | المسار | المشروع | الإصدار |
-|--------|---------|---------|
+| ------ | ------- | ------- |
 | services/strapi | Strapi CMS | v5.33.4 |
 | services/directus | Directus | v9.14.1 |
 | services/pyresparser | PyResParser | v1.0.6 |
@@ -71,28 +76,32 @@ INGESTOR_URL, INGESTOR_API_KEY
 | frontend/nextjs-examples | Next.js | v16.2.0 |
 
 ### الخطوات التالية
+
 1. نسخ `.env.example` إلى `.env`
 2. تعبئة القيم السرية في `.env`
 3. تشغيل `docker-compose up -d`
 4. التحقق من صحة الخدمات
 
 ### المصادر المرجعية
-- Docker Compose: https://docs.docker.com/compose/
-- Strapi: https://docs.strapi.io
-- Keycloak: https://www.keycloak.org/documentation
-- MinIO: https://min.io/docs
-- FastAPI: https://fastapi.tiangolo.com
+
+- Docker Compose: <https://docs.docker.com/compose/>
+- Strapi: <https://docs.strapi.io>
+- Keycloak: <https://www.keycloak.org/documentation>
+- MinIO: <https://min.io/docs>
+- FastAPI: <https://fastapi.tiangolo.com>
 
 ---
 
 ## English
 
 ### Summary
+
 Successfully created the Forsati platform base structure with all required files for operation.
 
 ### Prerequisites Verified ✅
+
 | Tool | Version | Status |
-|------|---------|--------|
+| ---- | ------- | ------ |
 | Git | 2.51.0 | ✅ |
 | Docker | 29.1.3 | ✅ |
 | Docker Compose | 2.40.3 | ✅ |
@@ -101,7 +110,8 @@ Successfully created the Forsati platform base structure with all required files
 | Python | 3.12.10 | ✅ |
 
 ### Files Created
-```
+
+```text
 forsati-platform/
 ├── .env.example                              # Environment variables
 ├── .gitignore                                # Git exclusions
@@ -126,7 +136,8 @@ forsati-platform/
 ```
 
 ### Required Environment Variables (names only — no values)
-```
+
+```text
 MARKET_DEFAULT, ENABLED_MARKETS
 POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD
 STRAPI_URL, STRAPI_API_TOKEN, STRAPI_APP_KEYS, STRAPI_API_TOKEN_SALT
@@ -137,8 +148,9 @@ INGESTOR_URL, INGESTOR_API_KEY
 ```
 
 ### Submodules Added (10 projects)
+
 | Path | Project | Version |
-|------|---------|---------|
+| ---- | ------- | ------- |
 | services/strapi | Strapi CMS | v5.33.4 |
 | services/directus | Directus | v9.14.1 |
 | services/pyresparser | PyResParser | v1.0.6 |
@@ -151,35 +163,37 @@ INGESTOR_URL, INGESTOR_API_KEY
 | frontend/nextjs-examples | Next.js | v16.2.0 |
 
 ### Next Steps
+
 1. Copy `.env.example` to `.env`
 2. Fill secret values in `.env`
 3. Run `docker-compose up -d`
 4. Verify services health
 
 ### References
-- Docker Compose: https://docs.docker.com/compose/
-- Strapi: https://docs.strapi.io
-- Keycloak: https://www.keycloak.org/documentation
-- MinIO: https://min.io/docs
-- FastAPI: https://fastapi.tiangolo.com
+
+- Docker Compose: <https://docs.docker.com/compose/>
+- Strapi: <https://docs.strapi.io>
+- Keycloak: <https://www.keycloak.org/documentation>
+- MinIO: <https://min.io/docs>
+- FastAPI: <https://fastapi.tiangolo.com>
 
 ---
 
 ## Service URLs (After Starting)
 
 | Service | URL | Purpose |
-|---------|-----|---------|
-| Strapi Admin | http://localhost:1337/admin | Content Management |
-| MinIO Console | http://localhost:9001 | File Storage |
-| Keycloak Admin | http://localhost:8080/admin | Identity Management |
-| Ingestor Docs | http://localhost:8000/docs | Resume Parser API |
-| PostgreSQL | localhost:5432 | Database |
+| ------- | --- | ------- |
+| Strapi Admin | `http://localhost:1337/admin` | Content Management |
+| MinIO Console | `http://localhost:9001` | File Storage |
+| Keycloak Admin | `http://localhost:8080/admin` | Identity Management |
+| Ingestor Docs | `http://localhost:8000/docs` | Resume Parser API |
+| PostgreSQL | `localhost:5432` | Database |
 
 ---
 
 ## Validation Results
 
-```
+```text
 ✅ Manifest Validation: PASS
    - features/platform-bootstrap/manifest.json: VALID
    - Markets: [jo, sa, ae]
