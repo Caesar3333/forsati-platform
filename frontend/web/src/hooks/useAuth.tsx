@@ -7,7 +7,13 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
-export type UserRole = "guest" | "candidate" | "recruiter" | "org_admin" | "moderator" | "admin";
+export type UserRole =
+  | "guest"
+  | "candidate"
+  | "recruiter"
+  | "org_admin"
+  | "moderator"
+  | "admin";
 
 interface UseAuthReturn {
   // State
@@ -24,7 +30,10 @@ interface UseAuthReturn {
   accessToken?: string;
 
   // Actions
-  login: (provider?: string, options?: { callbackUrl?: string }) => Promise<void>;
+  login: (
+    provider?: string,
+    options?: { callbackUrl?: string },
+  ) => Promise<void>;
   loginWithCredentials: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
   loginWithRedirect: () => void;
@@ -60,26 +69,32 @@ export function useAuth(): UseAuthReturn {
   }, [session]);
 
   // Login with OAuth provider
-  const login = useCallback(async (provider = "keycloak", options?: { callbackUrl?: string }) => {
-    const callbackUrl = options?.callbackUrl || pathname || "/";
-    await signIn(provider, { callbackUrl });
-  }, [pathname]);
+  const login = useCallback(
+    async (provider = "keycloak", options?: { callbackUrl?: string }) => {
+      const callbackUrl = options?.callbackUrl || pathname || "/";
+      await signIn(provider, { callbackUrl });
+    },
+    [pathname],
+  );
 
   // Login with email/password
-  const loginWithCredentials = useCallback(async (email: string, password: string): Promise<boolean> => {
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+  const loginWithCredentials = useCallback(
+    async (email: string, password: string): Promise<boolean> => {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
-    if (result?.error) {
-      console.error("Login failed:", result.error);
-      return false;
-    }
+      if (result?.error) {
+        console.error("Login failed:", result.error);
+        return false;
+      }
 
-    return true;
-  }, []);
+      return true;
+    },
+    [],
+  );
 
   // Logout
   const logout = useCallback(async () => {
@@ -93,11 +108,14 @@ export function useAuth(): UseAuthReturn {
   }, [pathname, router]);
 
   // Check if user has specific role(s)
-  const hasRole = useCallback((role: UserRole | UserRole[]): boolean => {
-    if (!user) return false;
-    const roles = Array.isArray(role) ? role : [role];
-    return roles.includes(user.role);
-  }, [user]);
+  const hasRole = useCallback(
+    (role: UserRole | UserRole[]): boolean => {
+      if (!user) return false;
+      const roles = Array.isArray(role) ? role : [role];
+      return roles.includes(user.role);
+    },
+    [user],
+  );
 
   // Role shortcuts
   const isCandidate = user?.role === "candidate";
@@ -126,11 +144,12 @@ export function useAuth(): UseAuthReturn {
 /**
  * Hook to require authentication - redirects to login if not authenticated
  */
-export function useRequireAuth(options?: { 
+export function useRequireAuth(options?: {
   role?: UserRole | UserRole[];
   redirectTo?: string;
 }) {
-  const { isAuthenticated, isLoading, user, hasRole, loginWithRedirect } = useAuth();
+  const { isAuthenticated, isLoading, user, hasRole, loginWithRedirect } =
+    useAuth();
   const router = useRouter();
 
   const isAuthorized = useMemo(() => {
@@ -151,7 +170,13 @@ export function useRequireAuth(options?: {
         router.push("/403"); // Forbidden
       }
     }
-  }, [isAuthorized, isAuthenticated, loginWithRedirect, router, options?.redirectTo]);
+  }, [
+    isAuthorized,
+    isAuthenticated,
+    loginWithRedirect,
+    router,
+    options?.redirectTo,
+  ]);
 
   return {
     isAuthorized,
@@ -166,7 +191,7 @@ export function useRequireAuth(options?: {
  */
 export function withAuth<P extends object>(
   Component: React.ComponentType<P>,
-  options?: { role?: UserRole | UserRole[] }
+  options?: { role?: UserRole | UserRole[] },
 ) {
   return function ProtectedComponent(props: P) {
     const { isAuthorized, isLoading, redirect } = useRequireAuth(options);

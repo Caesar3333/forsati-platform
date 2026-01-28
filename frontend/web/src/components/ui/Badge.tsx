@@ -16,6 +16,8 @@ const badgeVariants = cva(
         success: "bg-success-100 text-success-700",
         warning: "bg-warning-100 text-warning-700",
         danger: "bg-danger-100 text-danger-700",
+        // Generic outline variant
+        outline: "border border-gray-300 text-gray-700 bg-transparent",
         // Solid variants
         "solid-primary": "bg-primary-500 text-white",
         "solid-secondary": "bg-secondary-500 text-white",

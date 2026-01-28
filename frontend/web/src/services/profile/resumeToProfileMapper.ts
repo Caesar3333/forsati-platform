@@ -373,7 +373,7 @@ function detectEmploymentStatus(parsed: ParsedResume): EmploymentStatus {
  * Extract LinkedIn URL from profiles
  */
 function extractLinkedInUrl(
-  profiles?: ParsedResume["basics"]["profiles"],
+  profiles?: Array<{ network?: string; url?: string; username?: string }>,
 ): string | undefined {
   if (!profiles) return undefined;
 

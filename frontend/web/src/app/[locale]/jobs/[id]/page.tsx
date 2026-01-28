@@ -17,9 +17,10 @@ interface JobPageProps {
 export async function generateMetadata({
   params,
 }: JobPageProps): Promise<Metadata> {
+  const isArabic = params.locale === "ar";
+
   try {
     const job = await getJob(params.id);
-    const isArabic = params.locale === "ar";
 
     return {
       title: job.title,
@@ -50,9 +51,6 @@ export async function generateMetadata({
       title: isArabic ? "فرصة عمل" : "Job Opportunity",
     };
   }
-
-  // Helper for Arabic check in catch block
-  var isArabic = params.locale === "ar";
 }
 
 export default async function JobPage({ params }: JobPageProps) {

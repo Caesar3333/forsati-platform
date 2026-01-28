@@ -1,0 +1,1629 @@
+openapi: 3.0.3
+info:
+  title: Forsati Platform - Admin API
+  description: |
+    واجهة برمجة التطبيقات الإدارية لمنصة فرصتي
+    
+    Complete Admin API for managing the Forsati platform including:
+    - Feature Flags management
+    - Gift Codes / Coupons
+    - Loyalty Points system
+    - Quotas management
+    - Keycloak Roles & Users
+    - Audit Logs & Reports
+    - Platform Settings
+    - Email Templates
+    - User & Company Moderation
+    
+    ## Authentication
+    All admin endpoints require a valid Bearer token from Keycloak with either
+    `forsati_super_admin` or `forsati_admin` role.
+    
+    ## Rate Limiting
+    Admin endpoints are rate-limited to 100 requests per minute per IP.
+  version: 1.0.0
+  contact:
+    name: Forsati Platform
+    email: support@forsati.com
+  license:
+    name: Proprietary
+
+servers:
+  - url: http://localhost:3000/api
+    description: Development
+  - url: https://api.forsati.com
+    description: Production
+
+tags:
+  - name: Feature Flags
+    description: إدارة أعلام الميزات - Feature toggle management
+  - name: Gift Codes
+    description: إدارة أكواد الهدايا - Promotional code management
+  - name: Loyalty Points
+    description: إدارة نقاط الولاء - Points and rewards management
+  - name: Quotas
+    description: إدارة الحصص - Resource quota management
+  - name: Keycloak
+    description: إدارة الأدوار والمستخدمين - Roles & users via Keycloak
+  - name: Audit Logs
+    description: سجلات التدقيق - Audit trail and activity logs
+  - name: Settings
+    description: إعدادات المنصة - Platform configuration
+  - name: Email Templates
+    description: قوالب البريد - Email template management
+  - name: Moderation
+    description: إدارة المحتوى - User & company moderation
+  - name: Reports
+    description: التقارير والتصدير - Reports and exports
+
+security:
+  - bearerAuth: []
+
+paths:
+  # ============================================
+  # Feature Flags
+  # ============================================
+  /admin/feature-flags:
+    get:
+      tags: [Feature Flags]
+      summary: List all feature flags
+      description: الحصول على قائمة بجميع أعلام الميزات
+      operationId: listFeatureFlags
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [core, ai, social, monetization, experimental]
+        - name: active
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: List of feature flags
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeatureFlag'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    
+    post:
+      tags: [Feature Flags]
+      summary: Create a new feature flag
+      description: إنشاء علم ميزة جديد
+      operationId: createFeatureFlag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeatureFlagCreate'
+      responses:
+        '201':
+          description: Feature flag created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureFlag'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          description: Flag key already exists
+
+  /admin/feature-flags/{key}:
+    parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+    
+    get:
+      tags: [Feature Flags]
+      summary: Get a specific feature flag
+      operationId: getFeatureFlag
+      responses:
+        '200':
+          description: Feature flag details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureFlag'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    
+    patch:
+      tags: [Feature Flags]
+      summary: Update a feature flag
+      description: تحديث علم ميزة
+      operationId: updateFeatureFlag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeatureFlagUpdate'
+      responses:
+        '200':
+          description: Feature flag updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureFlag'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    
+    delete:
+      tags: [Feature Flags]
+      summary: Delete a feature flag
+      description: حذف علم ميزة
+      operationId: deleteFeatureFlag
+      responses:
+        '204':
+          description: Feature flag deleted
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ============================================
+  # Gift Codes
+  # ============================================
+  /admin/gift-codes:
+    get:
+      tags: [Gift Codes]
+      summary: List gift codes
+      description: الحصول على قائمة أكواد الهدايا
+      operationId: listGiftCodes
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [credit, free_post, free_scan, discount, points, premium_trial]
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: campaign
+          in: query
+          schema:
+            type: string
+        - name: expired
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Paginated list of gift codes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GiftCodeList'
+    
+    post:
+      tags: [Gift Codes]
+      summary: Create a gift code
+      description: إنشاء كود هدية
+      operationId: createGiftCode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GiftCodeCreate'
+      responses:
+        '201':
+          description: Gift code created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GiftCode'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /admin/gift-codes/bulk:
+    post:
+      tags: [Gift Codes]
+      summary: Bulk create gift codes
+      description: إنشاء أكواد هدايا بالجملة
+      operationId: bulkCreateGiftCodes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [count, template]
+              properties:
+                count:
+                  type: integer
+                  minimum: 1
+                  maximum: 1000
+                prefix:
+                  type: string
+                  default: FORSATI
+                template:
+                  $ref: '#/components/schemas/GiftCodeCreate'
+      responses:
+        '201':
+          description: Gift codes created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created:
+                    type: integer
+                  codes:
+                    type: array
+                    items:
+                      type: string
+
+  /admin/gift-codes/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    
+    get:
+      tags: [Gift Codes]
+      summary: Get gift code details
+      operationId: getGiftCode
+      responses:
+        '200':
+          description: Gift code details with redemption history
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GiftCode'
+                  - type: object
+                    properties:
+                      redemptions:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GiftCodeRedemption'
+    
+    patch:
+      tags: [Gift Codes]
+      summary: Update a gift code
+      operationId: updateGiftCode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GiftCodeUpdate'
+      responses:
+        '200':
+          description: Gift code updated
+
+  /admin/gift-codes/{id}/revoke:
+    post:
+      tags: [Gift Codes]
+      summary: Revoke a gift code
+      description: إلغاء كود هدية
+      operationId: revokeGiftCode
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+      responses:
+        '200':
+          description: Gift code revoked
+
+  # ============================================
+  # Loyalty Points
+  # ============================================
+  /admin/points:
+    get:
+      tags: [Loyalty Points]
+      summary: List user points accounts
+      description: قائمة حسابات نقاط المستخدمين
+      operationId: listPointsAccounts
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+        - name: userId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: tier
+          in: query
+          schema:
+            type: string
+            enum: [bronze, silver, gold, platinum]
+        - name: minBalance
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of points accounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointsAccountList'
+
+  /admin/points/award:
+    post:
+      tags: [Loyalty Points]
+      summary: Award points to a user
+      description: منح نقاط لمستخدم
+      operationId: awardPoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId, points, reason]
+              properties:
+                userId:
+                  type: string
+                  format: uuid
+                points:
+                  type: integer
+                  minimum: 1
+                reason:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Points awarded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointsAwardResult'
+
+  /admin/points/adjust:
+    post:
+      tags: [Loyalty Points]
+      summary: Adjust user points (add or subtract)
+      description: تعديل نقاط المستخدم (إضافة أو خصم)
+      operationId: adjustPoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId, points, reason]
+              properties:
+                userId:
+                  type: string
+                  format: uuid
+                points:
+                  type: integer
+                  description: Positive to add, negative to subtract
+                reason:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Points adjusted
+
+  /admin/points/rules:
+    get:
+      tags: [Loyalty Points]
+      summary: List points earning rules
+      operationId: listPointsRules
+      responses:
+        '200':
+          description: List of points rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PointsRule'
+    
+    patch:
+      tags: [Loyalty Points]
+      summary: Update points rules
+      operationId: updatePointsRules
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PointsRuleUpdate'
+      responses:
+        '200':
+          description: Rules updated
+
+  /admin/points/rewards:
+    get:
+      tags: [Loyalty Points]
+      summary: List redemption rewards
+      operationId: listRewards
+      responses:
+        '200':
+          description: List of rewards
+    
+    post:
+      tags: [Loyalty Points]
+      summary: Create a new reward
+      operationId: createReward
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RewardCreate'
+      responses:
+        '201':
+          description: Reward created
+
+  # ============================================
+  # Quotas
+  # ============================================
+  /admin/quotas:
+    get:
+      tags: [Quotas]
+      summary: List quota policies
+      description: قائمة سياسات الحصص
+      operationId: listQuotas
+      parameters:
+        - name: role
+          in: query
+          schema:
+            type: string
+        - name: resource
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of quota policies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuotaPolicy'
+    
+    post:
+      tags: [Quotas]
+      summary: Create quota policy
+      operationId: createQuotaPolicy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuotaPolicyCreate'
+      responses:
+        '201':
+          description: Quota policy created
+
+  /admin/quotas/{id}:
+    patch:
+      tags: [Quotas]
+      summary: Update quota policy
+      operationId: updateQuotaPolicy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuotaPolicyUpdate'
+      responses:
+        '200':
+          description: Quota policy updated
+
+  /admin/quotas/user/{userId}:
+    get:
+      tags: [Quotas]
+      summary: Get user quota usage
+      operationId: getUserQuotas
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User quota usage
+
+  /admin/quotas/user/{userId}/reset:
+    post:
+      tags: [Quotas]
+      summary: Reset user quota
+      operationId: resetUserQuota
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [resource]
+              properties:
+                resource:
+                  type: string
+                reason:
+                  type: string
+      responses:
+        '200':
+          description: Quota reset
+
+  /admin/quotas/user/{userId}/bonus:
+    post:
+      tags: [Quotas]
+      summary: Grant bonus quota
+      operationId: grantBonusQuota
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [resource, amount]
+              properties:
+                resource:
+                  type: string
+                amount:
+                  type: integer
+                reason:
+                  type: string
+      responses:
+        '200':
+          description: Bonus quota granted
+
+  # ============================================
+  # Keycloak Integration
+  # ============================================
+  /admin/keycloak/roles:
+    get:
+      tags: [Keycloak]
+      summary: List Keycloak roles
+      description: قائمة الأدوار في Keycloak
+      operationId: listKeycloakRoles
+      responses:
+        '200':
+          description: List of roles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KeycloakRole'
+    
+    post:
+      tags: [Keycloak]
+      summary: Create a new role
+      operationId: createKeycloakRole
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                attributes:
+                  type: object
+      responses:
+        '201':
+          description: Role created
+
+  /admin/keycloak/roles/{roleName}:
+    delete:
+      tags: [Keycloak]
+      summary: Delete a role
+      operationId: deleteKeycloakRole
+      parameters:
+        - name: roleName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Role deleted
+
+  /admin/keycloak/users:
+    get:
+      tags: [Keycloak]
+      summary: Search users
+      operationId: searchKeycloakUsers
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: email
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: List of users
+
+  /admin/keycloak/users/{userId}/roles:
+    get:
+      tags: [Keycloak]
+      summary: Get user roles
+      operationId: getUserRoles
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User roles
+
+  /admin/keycloak/users/{userId}/assign-role:
+    post:
+      tags: [Keycloak]
+      summary: Assign role to user
+      description: إعطاء دور لمستخدم
+      operationId: assignRoleToUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [roleName]
+              properties:
+                roleName:
+                  type: string
+      responses:
+        '200':
+          description: Role assigned
+
+  /admin/keycloak/users/{userId}/remove-role:
+    post:
+      tags: [Keycloak]
+      summary: Remove role from user
+      description: سحب دور من مستخدم
+      operationId: removeRoleFromUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [roleName]
+              properties:
+                roleName:
+                  type: string
+      responses:
+        '200':
+          description: Role removed
+
+  # ============================================
+  # Audit Logs
+  # ============================================
+  /admin/audit-logs:
+    get:
+      tags: [Audit Logs]
+      summary: List audit logs
+      description: سجلات التدقيق
+      operationId: listAuditLogs
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+        - name: actorId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: action
+          in: query
+          schema:
+            type: string
+        - name: resourceType
+          in: query
+          schema:
+            type: string
+        - name: resourceId
+          in: query
+          schema:
+            type: string
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Paginated audit logs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogList'
+
+  /admin/audit-logs/export:
+    get:
+      tags: [Audit Logs]
+      summary: Export audit logs as CSV
+      operationId: exportAuditLogs
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: CSV file
+          content:
+            text/csv:
+              schema:
+                type: string
+
+  # ============================================
+  # Settings
+  # ============================================
+  /admin/settings:
+    get:
+      tags: [Settings]
+      summary: Get all platform settings
+      operationId: getSettings
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Platform settings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlatformSetting'
+
+  /admin/settings/{key}:
+    patch:
+      tags: [Settings]
+      summary: Update a setting
+      operationId: updateSetting
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [value]
+              properties:
+                value:
+                  description: The new value (type depends on setting)
+      responses:
+        '200':
+          description: Setting updated
+
+  # ============================================
+  # Email Templates
+  # ============================================
+  /admin/email-templates:
+    get:
+      tags: [Email Templates]
+      summary: List email templates
+      operationId: listEmailTemplates
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of templates
+
+  /admin/email-templates/{key}:
+    get:
+      tags: [Email Templates]
+      summary: Get email template
+      operationId: getEmailTemplate
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Template details
+    
+    patch:
+      tags: [Email Templates]
+      summary: Update email template
+      operationId: updateEmailTemplate
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailTemplateUpdate'
+      responses:
+        '200':
+          description: Template updated
+
+  /admin/email-templates/{key}/preview:
+    post:
+      tags: [Email Templates]
+      summary: Preview email template
+      operationId: previewEmailTemplate
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                variables:
+                  type: object
+                locale:
+                  type: string
+                  enum: [en, ar]
+      responses:
+        '200':
+          description: Rendered template preview
+
+  # ============================================
+  # Moderation
+  # ============================================
+  /admin/moderation/users:
+    get:
+      tags: [Moderation]
+      summary: List users pending moderation
+      operationId: listUserModeration
+      responses:
+        '200':
+          description: List of users
+
+  /admin/moderation/users/{userId}/suspend:
+    post:
+      tags: [Moderation]
+      summary: Suspend a user
+      operationId: suspendUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties:
+                reason:
+                  type: string
+                duration_days:
+                  type: integer
+      responses:
+        '200':
+          description: User suspended
+
+  /admin/moderation/users/{userId}/activate:
+    post:
+      tags: [Moderation]
+      summary: Activate a user
+      operationId: activateUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User activated
+
+  /admin/moderation/companies:
+    get:
+      tags: [Moderation]
+      summary: List companies pending verification
+      operationId: listCompanyModeration
+      responses:
+        '200':
+          description: List of companies
+
+  /admin/moderation/companies/{companyId}/verify:
+    post:
+      tags: [Moderation]
+      summary: Verify a company
+      operationId: verifyCompany
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [verified, rejected]
+                notes:
+                  type: string
+      responses:
+        '200':
+          description: Company verification updated
+
+  # ============================================
+  # Reports
+  # ============================================
+  /admin/reports/gift-codes.csv:
+    get:
+      tags: [Reports]
+      summary: Export gift codes report
+      operationId: exportGiftCodesReport
+      parameters:
+        - name: campaign
+          in: query
+          schema:
+            type: string
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: CSV file
+          content:
+            text/csv:
+              schema:
+                type: string
+
+  /admin/reports/points-summary:
+    get:
+      tags: [Reports]
+      summary: Points system summary
+      operationId: getPointsSummary
+      responses:
+        '200':
+          description: Points summary
+
+  /admin/reports/quota-usage:
+    get:
+      tags: [Reports]
+      summary: Quota usage report
+      operationId: getQuotaUsageReport
+      responses:
+        '200':
+          description: Quota usage summary
+
+# ============================================
+# Components
+# ============================================
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Keycloak JWT token with forsati_super_admin or forsati_admin role
+
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    LimitParam:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        errorAr:
+          type: string
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+
+    FeatureFlag:
+      type: object
+      properties:
+        key:
+          type: string
+        label:
+          type: string
+        labelAr:
+          type: string
+        description:
+          type: string
+        descriptionAr:
+          type: string
+        category:
+          type: string
+          enum: [core, ai, social, monetization, experimental]
+        defaultValue:
+          type: boolean
+        active:
+          type: boolean
+        rolloutJson:
+          type: object
+          properties:
+            markets:
+              type: array
+              items:
+                type: string
+            roles:
+              type: array
+              items:
+                type: string
+            percentage:
+              type: integer
+        dependencies:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    FeatureFlagCreate:
+      type: object
+      required: [key, label, category]
+      properties:
+        key:
+          type: string
+          pattern: '^[a-z_]+$'
+        label:
+          type: string
+        labelAr:
+          type: string
+        description:
+          type: string
+        descriptionAr:
+          type: string
+        category:
+          type: string
+          enum: [core, ai, social, monetization, experimental]
+        defaultValue:
+          type: boolean
+          default: false
+        active:
+          type: boolean
+          default: false
+        rolloutJson:
+          type: object
+
+    FeatureFlagUpdate:
+      type: object
+      properties:
+        label:
+          type: string
+        labelAr:
+          type: string
+        description:
+          type: string
+        active:
+          type: boolean
+        rolloutJson:
+          type: object
+        dependencies:
+          type: array
+          items:
+            type: string
+
+    GiftCode:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        type:
+          type: string
+          enum: [credit, free_post, free_scan, discount, points, premium_trial]
+        value:
+          type: number
+        currency:
+          type: string
+        maxUses:
+          type: integer
+        usedCount:
+          type: integer
+        targetRoles:
+          type: array
+          items:
+            type: string
+        markets:
+          type: array
+          items:
+            type: string
+        campaign:
+          type: string
+        active:
+          type: boolean
+        expiresAt:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+        createdAt:
+          type: string
+          format: date-time
+
+    GiftCodeCreate:
+      type: object
+      required: [type, value]
+      properties:
+        code:
+          type: string
+          description: If not provided, will be auto-generated
+        type:
+          type: string
+          enum: [credit, free_post, free_scan, discount, points, premium_trial]
+        value:
+          type: number
+        currency:
+          type: string
+        maxUses:
+          type: integer
+          default: 1
+        targetRoles:
+          type: array
+          items:
+            type: string
+        markets:
+          type: array
+          items:
+            type: string
+        campaign:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+
+    GiftCodeUpdate:
+      type: object
+      properties:
+        maxUses:
+          type: integer
+        active:
+          type: boolean
+        expiresAt:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+
+    GiftCodeRedemption:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        appliedBenefit:
+          type: string
+        redeemedAt:
+          type: string
+          format: date-time
+
+    GiftCodeList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GiftCode'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+
+    PointsAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        balance:
+          type: integer
+        lifetimeEarned:
+          type: integer
+        lifetimeRedeemed:
+          type: integer
+        tier:
+          type: string
+          enum: [bronze, silver, gold, platinum]
+        tierAchievedAt:
+          type: string
+          format: date-time
+
+    PointsAccountList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PointsAccount'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+
+    PointsAwardResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+        awarded:
+          type: integer
+        baseAmount:
+          type: integer
+        bonusAmount:
+          type: integer
+        newBalance:
+          type: integer
+        tier:
+          type: string
+        tierUpgraded:
+          type: boolean
+        message:
+          type: string
+        messageAr:
+          type: string
+
+    PointsRule:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        reason:
+          type: string
+        label:
+          type: string
+        labelAr:
+          type: string
+        points:
+          type: integer
+        maxPerDay:
+          type: integer
+        maxPerMonth:
+          type: integer
+        active:
+          type: boolean
+        targetRoles:
+          type: array
+          items:
+            type: string
+
+    PointsRuleUpdate:
+      type: object
+      required: [reason]
+      properties:
+        reason:
+          type: string
+        points:
+          type: integer
+        maxPerDay:
+          type: integer
+        maxPerMonth:
+          type: integer
+        active:
+          type: boolean
+
+    RewardCreate:
+      type: object
+      required: [name, cost, rewardType, rewardValue]
+      properties:
+        name:
+          type: string
+        nameAr:
+          type: string
+        description:
+          type: string
+        descriptionAr:
+          type: string
+        cost:
+          type: integer
+        rewardType:
+          type: string
+        rewardValue:
+          type: object
+        minTier:
+          type: string
+        stock:
+          type: integer
+        active:
+          type: boolean
+
+    QuotaPolicy:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        role:
+          type: string
+        resource:
+          type: string
+        monthlyAllowance:
+          type: integer
+        carryOver:
+          type: boolean
+        active:
+          type: boolean
+
+    QuotaPolicyCreate:
+      type: object
+      required: [role, resource, monthlyAllowance]
+      properties:
+        role:
+          type: string
+        resource:
+          type: string
+        monthlyAllowance:
+          type: integer
+        carryOver:
+          type: boolean
+
+    QuotaPolicyUpdate:
+      type: object
+      properties:
+        monthlyAllowance:
+          type: integer
+        carryOver:
+          type: boolean
+        active:
+          type: boolean
+
+    KeycloakRole:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        composite:
+          type: boolean
+
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        actorId:
+          type: string
+          format: uuid
+        actorEmail:
+          type: string
+        actorRole:
+          type: string
+        action:
+          type: string
+        resourceType:
+          type: string
+        resourceId:
+          type: string
+        resourceName:
+          type: string
+        changes:
+          type: object
+        payload:
+          type: object
+        ipAddress:
+          type: string
+        userAgent:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    AuditLogList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLog'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+
+    PlatformSetting:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          description: Type varies by setting
+        label:
+          type: string
+        labelAr:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        dataType:
+          type: string
+        isSensitive:
+          type: boolean
+
+    EmailTemplateUpdate:
+      type: object
+      properties:
+        subjectEn:
+          type: string
+        subjectAr:
+          type: string
+        bodyEn:
+          type: string
+        bodyAr:
+          type: string
+        active:
+          type: boolean
+
+    PaginationMeta:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+        totalPages:
+          type: integer

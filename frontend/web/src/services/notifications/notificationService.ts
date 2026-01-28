@@ -555,9 +555,10 @@ class WebPushService {
     try {
       const registration = await navigator.serviceWorker.ready;
 
+      const serverKey = this.urlBase64ToUint8Array(this.vapidPublicKey);
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: this.urlBase64ToUint8Array(this.vapidPublicKey),
+        applicationServerKey: serverKey.buffer as ArrayBuffer,
       });
 
       // Convert to our PushSubscription type

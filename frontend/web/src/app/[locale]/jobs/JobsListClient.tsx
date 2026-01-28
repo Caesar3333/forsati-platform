@@ -171,7 +171,7 @@ export function JobsListClient({
         if (filters.search) {
           trackSearch({
             query: filters.search,
-            filters: filters,
+            filters: filters as unknown as Record<string, unknown>,
             resultsCount: result.meta.total,
           });
         }

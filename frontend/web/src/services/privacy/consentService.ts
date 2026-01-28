@@ -407,7 +407,7 @@ export class PrivacyService {
   /**
    * Apply visibility filter to profile data
    */
-  applyVisibilityFilter<T extends Record<string, any>>(
+  applyVisibilityFilter<T extends Record<string, unknown>>(
     profile: T,
     settings: PrivacySettings,
     viewerRelation: "self" | "connection" | "public",
@@ -418,8 +418,11 @@ export class PrivacyService {
     }
 
     // Check profile visibility level
-    if (settings.profileVisibility === "private" && viewerRelation !== "self") {
-      return { id: profile.id, full_name: profile.full_name } as Partial<T>;
+    if (settings.profileVisibility === "private") {
+      return {
+        id: profile.id,
+        full_name: profile.full_name,
+      } as unknown as Partial<T>;
     }
 
     if (
@@ -430,7 +433,7 @@ export class PrivacyService {
         id: profile.id,
         full_name: profile.full_name,
         headline: profile.headline,
-      } as Partial<T>;
+      } as unknown as Partial<T>;
     }
 
     // Apply field-level visibility

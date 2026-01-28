@@ -24,8 +24,7 @@ export default function ToastProvider({ locale }: ToastProviderProps) {
       theme="colored"
       transition={Slide}
       toastClassName="!rounded-lg !shadow-lg"
-      bodyClassName="!text-sm !font-medium"
-      progressClassName="!bg-white/30"
+      className="!text-sm !font-medium"
     />
   );
 }

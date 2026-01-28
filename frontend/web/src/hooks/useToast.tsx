@@ -67,7 +67,9 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <ToastContext.Provider value={{ toasts, addToast, removeToast, clearToasts }}>
+    <ToastContext.Provider
+      value={{ toasts, addToast, removeToast, clearToasts }}
+    >
       {children}
     </ToastContext.Provider>
   );
@@ -87,35 +89,47 @@ export function useToast() {
     (title: string, options?: Partial<Omit<Toast, "id" | "title">>) => {
       return addToast({ title, type: "info", ...options });
     },
-    [addToast]
+    [addToast],
   );
 
   const success = useCallback(
-    (title: string, options?: Partial<Omit<Toast, "id" | "title" | "type">>) => {
+    (
+      title: string,
+      options?: Partial<Omit<Toast, "id" | "title" | "type">>,
+    ) => {
       return addToast({ title, type: "success", ...options });
     },
-    [addToast]
+    [addToast],
   );
 
   const error = useCallback(
-    (title: string, options?: Partial<Omit<Toast, "id" | "title" | "type">>) => {
+    (
+      title: string,
+      options?: Partial<Omit<Toast, "id" | "title" | "type">>,
+    ) => {
       return addToast({ title, type: "error", duration: 8000, ...options });
     },
-    [addToast]
+    [addToast],
   );
 
   const warning = useCallback(
-    (title: string, options?: Partial<Omit<Toast, "id" | "title" | "type">>) => {
+    (
+      title: string,
+      options?: Partial<Omit<Toast, "id" | "title" | "type">>,
+    ) => {
       return addToast({ title, type: "warning", ...options });
     },
-    [addToast]
+    [addToast],
   );
 
   const info = useCallback(
-    (title: string, options?: Partial<Omit<Toast, "id" | "title" | "type">>) => {
+    (
+      title: string,
+      options?: Partial<Omit<Toast, "id" | "title" | "type">>,
+    ) => {
       return addToast({ title, type: "info", ...options });
     },
-    [addToast]
+    [addToast],
   );
 
   return {
@@ -127,6 +141,25 @@ export function useToast() {
     info,
     remove: removeToast,
     clear: clearToasts,
+  };
+}
+
+/**
+ * Hook for accessing Toast context directly
+ * Used by Toast components
+ */
+export function useToastContext() {
+  const context = useContext(ToastContext);
+
+  if (!context) {
+    throw new Error("useToastContext must be used within a ToastProvider");
+  }
+
+  return {
+    toasts: context.toasts,
+    add: context.addToast,
+    remove: context.removeToast,
+    clear: context.clearToasts,
   };
 }
 
