@@ -9,9 +9,8 @@ Write-Host ""
 
 $ErrorActionPreference = "Continue"
 $PrereqPass = $true
-$HealthPass = $true
 
-function Check-Command {
+function Test-CommandExists {
     param([string]$Name, [string]$VersionCmd)
     try {
         $version = Invoke-Expression "$VersionCmd 2>&1" | Select-Object -First 1
@@ -23,10 +22,10 @@ function Check-Command {
     }
 }
 
-function Check-Service {
+function Test-ServiceHealth {
     param([string]$Name, [string]$Url, [int]$Timeout = 5)
     try {
-        $response = Invoke-WebRequest -Uri $Url -TimeoutSec $Timeout -UseBasicParsing -ErrorAction Stop
+        $null = Invoke-WebRequest -Uri $Url -TimeoutSec $Timeout -UseBasicParsing -ErrorAction Stop
         Write-Host "✓ $Name is healthy at $Url" -ForegroundColor Green
         return $true
     } catch {
@@ -38,12 +37,12 @@ function Check-Service {
 Write-Host "📋 Checking Prerequisites..." -ForegroundColor Yellow
 Write-Host "----------------------------"
 
-if (-not (Check-Command "Git" "git --version")) { $PrereqPass = $false }
-if (-not (Check-Command "Docker" "docker --version")) { $PrereqPass = $false }
-if (-not (Check-Command "Docker Compose" "docker-compose --version")) { $PrereqPass = $false }
-if (-not (Check-Command "Node.js" "node --version")) { $PrereqPass = $false }
-if (-not (Check-Command "npm" "npm --version")) { $PrereqPass = $false }
-if (-not (Check-Command "Python" "python --version")) { $PrereqPass = $false }
+if (-not (Test-CommandExists "Git" "git --version")) { $PrereqPass = $false }
+if (-not (Test-CommandExists "Docker" "docker --version")) { $PrereqPass = $false }
+if (-not (Test-CommandExists "Docker Compose" "docker-compose --version")) { $PrereqPass = $false }
+if (-not (Test-CommandExists "Node.js" "node --version")) { $PrereqPass = $false }
+if (-not (Test-CommandExists "npm" "npm --version")) { $PrereqPass = $false }
+if (-not (Test-CommandExists "Python" "python --version")) { $PrereqPass = $false }
 
 Write-Host ""
 

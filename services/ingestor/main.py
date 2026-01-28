@@ -406,6 +406,313 @@ async def ingest_resume(
         )
 
 
+# In-memory job storage (use Redis in production)
+jobs_storage: Dict[str, Dict[str, Any]] = {}
+resume_records: Dict[str, ParsedResume] = {}
+
+
+class JobStatus(BaseModel):
+    """Job status response"""
+    job_id: str
+    status: str  # pending, processing, completed, failed
+    progress: int = 0
+    result: Optional[ParsedResume] = None
+    error: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+
+
+class AIAnalysisResponse(BaseModel):
+    """AI Analysis response"""
+    parsed_id: str
+    analysis: Dict[str, Any]
+    recommendations: List[str]
+    score: Optional[float] = None
+    analyzed_at: datetime
+
+
+@app.post("/api/ingest/upload", response_model=IngestResponse, tags=["Ingest API"])
+async def api_upload_resume(
+    file: UploadFile = File(..., description="Resume file (PDF, DOCX, DOC, TXT)"),
+    background_tasks: BackgroundTasks = None,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Upload and parse a resume file
+    
+    رفع وتحليل ملف السيرة الذاتية
+    
+    - **file**: Resume file to process
+    - Returns job_id for status tracking
+    """
+    job_id = str(uuid.uuid4())
+    logger.info(f"API Upload: Starting job {job_id} for file: {file.filename}")
+    
+    # Initialize job status
+    jobs_storage[job_id] = {
+        "job_id": job_id,
+        "status": "processing",
+        "progress": 0,
+        "filename": file.filename,
+        "created_at": datetime.utcnow(),
+        "updated_at": datetime.utcnow()
+    }
+    
+    try:
+        # Validate file
+        validate_file(file)
+        jobs_storage[job_id]["progress"] = 10
+        
+        # Read file content
+        file_content = await file.read()
+        
+        # Check file size
+        if len(file_content) > MAX_FILE_SIZE:
+            jobs_storage[job_id]["status"] = "failed"
+            jobs_storage[job_id]["error"] = "File too large"
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": "file_too_large",
+                    "message_en": f"File size exceeds {MAX_FILE_SIZE // (1024*1024)}MB limit",
+                    "message_ar": f"حجم الملف يتجاوز الحد المسموح {MAX_FILE_SIZE // (1024*1024)} ميجابايت"
+                }
+            )
+        
+        jobs_storage[job_id]["progress"] = 30
+        
+        # Extract text
+        raw_text = await extract_text_from_file(file_content, file.filename)
+        jobs_storage[job_id]["progress"] = 50
+        
+        # Parse resume
+        parsed_content = await parse_resume_content(raw_text)
+        jobs_storage[job_id]["progress"] = 70
+        
+        # Upload to MinIO
+        file_url = await upload_to_minio(file_content, file.filename, job_id)
+        jobs_storage[job_id]["progress"] = 90
+        
+        # Build response
+        parsed_resume = ParsedResume(
+            id=job_id,
+            filename=file.filename,
+            file_url=file_url,
+            name=parsed_content.get("name"),
+            email=parsed_content.get("email"),
+            phone=parsed_content.get("phone"),
+            skills=parsed_content.get("skills", []),
+            experience=parsed_content.get("experience", []),
+            education=parsed_content.get("education", []),
+            total_experience_years=parsed_content.get("total_experience_years"),
+            raw_text=raw_text[:1000] if raw_text else None,
+            language=parsed_content.get("language"),
+            status="completed"
+        )
+        
+        # Store in memory
+        resume_records[job_id] = parsed_resume
+        jobs_storage[job_id]["status"] = "completed"
+        jobs_storage[job_id]["progress"] = 100
+        jobs_storage[job_id]["result"] = parsed_resume
+        jobs_storage[job_id]["updated_at"] = datetime.utcnow()
+        
+        # Send to Strapi in background
+        if background_tasks:
+            background_tasks.add_task(send_to_strapi, parsed_resume)
+        
+        logger.info(f"API Upload: Job {job_id} completed successfully")
+        
+        return IngestResponse(
+            success=True,
+            message="Resume uploaded and parsed successfully | تم رفع وتحليل السيرة الذاتية بنجاح",
+            data=parsed_resume,
+            job_id=job_id
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        jobs_storage[job_id]["status"] = "failed"
+        jobs_storage[job_id]["error"] = str(e)
+        jobs_storage[job_id]["updated_at"] = datetime.utcnow()
+        logger.error(f"API Upload: Job {job_id} failed: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "processing_error",
+                "message_en": f"Failed to process resume: {str(e)}",
+                "message_ar": f"فشل في معالجة السيرة الذاتية: {str(e)}",
+                "job_id": job_id
+            }
+        )
+
+
+@app.get("/api/ingest/status/{job_id}", response_model=JobStatus, tags=["Ingest API"])
+async def get_job_status(job_id: str):
+    """
+    Get the status of a resume processing job
+    
+    الحصول على حالة معالجة السيرة الذاتية
+    
+    - **job_id**: The job ID returned from upload
+    """
+    if job_id not in jobs_storage:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error": "job_not_found",
+                "message_en": f"Job {job_id} not found",
+                "message_ar": f"المهمة {job_id} غير موجودة"
+            }
+        )
+    
+    job = jobs_storage[job_id]
+    return JobStatus(
+        job_id=job["job_id"],
+        status=job["status"],
+        progress=job["progress"],
+        result=job.get("result"),
+        error=job.get("error"),
+        created_at=job["created_at"],
+        updated_at=job["updated_at"]
+    )
+
+
+@app.get("/api/resume-records/{record_id}", response_model=ParsedResume, tags=["Resume Records"])
+async def get_resume_record(
+    record_id: str,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Get a parsed resume record by ID
+    
+    الحصول على سجل السيرة الذاتية المحللة
+    
+    - **record_id**: The resume record ID
+    """
+    # Check local storage first
+    if record_id in resume_records:
+        return resume_records[record_id]
+    
+    # Try to fetch from Strapi
+    if STRAPI_API_TOKEN:
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get(
+                    f"{STRAPI_URL}/api/resume-records",
+                    headers={"Authorization": f"Bearer {STRAPI_API_TOKEN}"},
+                    params={"filters[external_id][$eq]": record_id}
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    if data.get("data") and len(data["data"]) > 0:
+                        record = data["data"][0]["attributes"]
+                        return ParsedResume(
+                            id=record.get("external_id", record_id),
+                            filename=record.get("filename", ""),
+                            file_url=record.get("file_url"),
+                            name=record.get("name"),
+                            email=record.get("email"),
+                            phone=record.get("phone"),
+                            skills=record.get("skills", []),
+                            experience=record.get("experience", []),
+                            education=record.get("education", []),
+                            total_experience_years=record.get("total_experience_years"),
+                            language=record.get("language"),
+                            status=record.get("status", "completed")
+                        )
+        except Exception as e:
+            logger.error(f"Failed to fetch from Strapi: {e}")
+    
+    raise HTTPException(
+        status_code=404,
+        detail={
+            "error": "record_not_found",
+            "message_en": f"Resume record {record_id} not found",
+            "message_ar": f"سجل السيرة الذاتية {record_id} غير موجود"
+        }
+    )
+
+
+@app.post("/api/ingest/analyze/{parsed_id}", response_model=AIAnalysisResponse, tags=["AI Analysis"])
+async def analyze_resume_with_ai(
+    parsed_id: str,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Analyze a parsed resume using AI
+    
+    تحليل السيرة الذاتية باستخدام الذكاء الاصطناعي
+    
+    - **parsed_id**: The parsed resume ID to analyze
+    
+    Returns AI-powered analysis including:
+    - Skills gap analysis
+    - Job matching recommendations
+    - Profile improvement suggestions
+    """
+    # Get the resume record
+    if parsed_id not in resume_records:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error": "record_not_found",
+                "message_en": f"Resume record {parsed_id} not found",
+                "message_ar": f"سجل السيرة الذاتية {parsed_id} غير موجود"
+            }
+        )
+    
+    resume = resume_records[parsed_id]
+    
+    # AI Analysis placeholder (integrate with OpenAI/Anthropic in production)
+    analysis = {
+        "profile_completeness": 75 if resume.email and resume.phone else 50,
+        "skills_count": len(resume.skills),
+        "experience_count": len(resume.experience),
+        "education_count": len(resume.education),
+        "language_detected": resume.language,
+        "estimated_level": "mid" if resume.total_experience_years and resume.total_experience_years >= 3 else "junior"
+    }
+    
+    recommendations = []
+    
+    if not resume.skills:
+        recommendations.append("أضف مهاراتك التقنية والشخصية | Add your technical and soft skills")
+    
+    if not resume.experience:
+        recommendations.append("أضف خبراتك العملية السابقة | Add your previous work experience")
+    
+    if not resume.education:
+        recommendations.append("أضف معلومات تعليمك | Add your education information")
+    
+    if len(resume.skills) < 5:
+        recommendations.append("حاول إضافة المزيد من المهارات ذات الصلة | Try adding more relevant skills")
+    
+    if not recommendations:
+        recommendations.append("سيرتك الذاتية جيدة! | Your resume looks good!")
+    
+    # Calculate score
+    score = analysis["profile_completeness"]
+    if resume.skills:
+        score += min(len(resume.skills) * 2, 15)
+    if resume.experience:
+        score += min(len(resume.experience) * 5, 15)
+    if resume.education:
+        score += min(len(resume.education) * 5, 10)
+    
+    score = min(score, 100)
+    
+    return AIAnalysisResponse(
+        parsed_id=parsed_id,
+        analysis=analysis,
+        recommendations=recommendations,
+        score=score,
+        analyzed_at=datetime.utcnow()
+    )
+
+
 @app.post("/ingest-audio", tags=["Ingest"])
 async def ingest_audio(
     file: UploadFile = File(..., description="Audio file for transcription"),

@@ -1,0 +1,78 @@
+{
+  "name": "apply-flow",
+  "version": "1.0.0",
+  "description": {
+    "en": "Job application workflow with quick apply and tracking",
+    "ar": "سير عمل التقديم على الوظائف مع التقديم السريع والتتبع"
+  },
+  "markets": ["jo", "sa", "ae"],
+  "status": "development",
+  "owner": "platform-team",
+  "frontend": {
+    "pages": [
+      "src/app/[locale]/jobs/[id]/apply/page.tsx",
+      "src/app/[locale]/me/applications/page.tsx",
+      "src/app/[locale]/me/applications/[appId]/page.tsx"
+    ],
+    "components": [
+      "src/components/apply/QuickApplyForm.tsx",
+      "src/components/apply/ApplicationForm.tsx",
+      "src/components/apply/ApplicationStatus.tsx",
+      "src/components/apply/ResumeSelector.tsx"
+    ]
+  },
+  "backend": {
+    "endpoints": [
+      {
+        "method": "POST",
+        "path": "/api/applications",
+        "auth": "required",
+        "role": "job_seeker",
+        "description": "Submit job application"
+      },
+      {
+        "method": "GET",
+        "path": "/api/applications",
+        "auth": "required",
+        "description": "List user applications"
+      },
+      {
+        "method": "GET",
+        "path": "/api/applications/{id}",
+        "auth": "required",
+        "description": "Get application details"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/applications/{id}/status",
+        "auth": "required",
+        "role": "employer",
+        "description": "Update application status"
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/applications/{id}",
+        "auth": "required",
+        "description": "Withdraw application"
+      }
+    ],
+    "services": ["strapi", "minio"]
+  },
+  "i18n_keys": [
+    "apply.title",
+    "apply.quickApply",
+    "apply.form.*",
+    "apply.status.*",
+    "applications.title",
+    "applications.list.*",
+    "applications.detail.*"
+  ],
+  "privacy": {
+    "data_collected": ["application_data", "resume_uploads", "cover_letters"],
+    "requires_explicit_consent": false
+  },
+  "dependencies": {
+    "features": ["job-posting", "cv-scan"],
+    "packages": ["react-hook-form", "zod", "@hookform/resolvers"]
+  }
+}

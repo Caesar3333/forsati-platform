@@ -186,21 +186,335 @@ services:
   #     - forsati-network
 
   # ===========================================
-  # Redis (Cache & Sessions) - Optional
+  # Redis (Cache & Queues)
   # ===========================================
-  # redis:
-  #   image: redis:7-alpine
-  #   container_name: forsati-redis
+  redis:
+    image: redis:7-alpine
+    container_name: forsati-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - forsati-network
+
+  # ===========================================
+  # Typesense (Search Engine)
+  # ===========================================
+  typesense:
+    image: typesense/typesense:0.25.2
+    container_name: forsati-typesense
+    restart: unless-stopped
+    environment:
+      TYPESENSE_API_KEY: ${TYPESENSE_API_KEY:-typesense_api_key}
+      TYPESENSE_DATA_DIR: /data
+    ports:
+      - "8108:8108"
+    volumes:
+      - typesense_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8108/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - forsati-network
+
+  # ===========================================
+  # Apache Tika (Document Parsing)
+  # ===========================================
+  tika:
+    image: apache/tika:latest
+    container_name: forsati-tika
+    restart: unless-stopped
+    ports:
+      - "9998:9998"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9998/tika"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - forsati-network
+
+  # ===========================================
+  # Celery Worker (Background Jobs)
+  # ===========================================
+  celery-worker:
+    build:
+      context: ./services/ingestor
+      dockerfile: Dockerfile
+    container_name: forsati-celery-worker
+    restart: unless-stopped
+    command: celery -A tasks worker --loglevel=info
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      STRAPI_URL: http://strapi:1337
+      STRAPI_API_TOKEN: ${STRAPI_API_TOKEN}
+      MINIO_ENDPOINT: minio
+      MINIO_PORT: 9000
+      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER}
+      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+      TIKA_URL: http://tika:9998
+      TYPESENSE_HOST: typesense
+      TYPESENSE_PORT: 8108
+      TYPESENSE_API_KEY: ${TYPESENSE_API_KEY:-typesense_api_key}
+    depends_on:
+      - redis
+      - tika
+      - typesense
+      - minio
+    networks:
+      - forsati-network
+
+  # ===========================================
+  # HumHub (Social Networking Engine)
+  # ===========================================
+  humhub:
+    image: mriedmann/humhub:stable
+    container_name: forsati-humhub
+    restart: unless-stopped
+    environment:
+      HUMHUB_DB_HOST: postgres
+      HUMHUB_DB_NAME: ${HUMHUB_DB_NAME:-humhub_db}
+      HUMHUB_DB_USER: ${POSTGRES_USER:-forsati}
+      HUMHUB_DB_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      HUMHUB_AUTO_INSTALL: "true"
+      HUMHUB_ADMIN_LOGIN: ${HUMHUB_ADMIN_LOGIN:-admin}
+      HUMHUB_ADMIN_EMAIL: ${HUMHUB_ADMIN_EMAIL:-admin@forsati.jo}
+      HUMHUB_ADMIN_PASSWORD: ${HUMHUB_ADMIN_PASSWORD:-changeme}
+      HUMHUB_NAME: "Forsati Community"
+      HUMHUB_EMAIL: "noreply@forsati.jo"
+      HUMHUB_MAILER_SYSTEM_EMAIL_ADDRESS: "noreply@forsati.jo"
+      HUMHUB_MAILER_SYSTEM_EMAIL_NAME: "Forsati"
+      HUMHUB_ANONYMOUS_REGISTRATION: "false"
+      # S3/MinIO Storage
+      HUMHUB_FILESYSTEM_S3_BUCKET: ${MINIO_BUCKET_HUMHUB:-forsati-humhub}
+      HUMHUB_FILESYSTEM_S3_ENDPOINT: http://minio:9000
+      HUMHUB_FILESYSTEM_S3_KEY: ${MINIO_ROOT_USER:-minioadmin}
+      HUMHUB_FILESYSTEM_S3_SECRET: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      HUMHUB_FILESYSTEM_S3_REGION: us-east-1
+      HUMHUB_FILESYSTEM_S3_USE_PATH_STYLE: "true"
+    ports:
+      - "8081:80"
+    volumes:
+      - humhub_config:/var/www/localhost/htdocs/protected/config
+      - humhub_uploads:/var/www/localhost/htdocs/uploads
+      - humhub_modules:/var/www/localhost/htdocs/protected/modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    networks:
+      - forsati-network
+
+  # ===========================================
+  # Matomo (Self-hosted Analytics)
+  # ===========================================
+  matomo:
+    image: matomo:latest
+    container_name: forsati-matomo
+    restart: unless-stopped
+    environment:
+      MATOMO_DATABASE_HOST: postgres
+      MATOMO_DATABASE_USERNAME: ${POSTGRES_USER:-forsati}
+      MATOMO_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      MATOMO_DATABASE_DBNAME: ${MATOMO_DB_NAME:-matomo_db}
+      MATOMO_DATABASE_ADAPTER: pdo_pgsql
+    ports:
+      - "8082:80"
+    volumes:
+      - matomo_data:/var/www/html
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - forsati-network
+
+  # ===========================================
+  # Prometheus (Metrics Collection)
+  # ===========================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: forsati-prometheus
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - forsati-network
+
+  # ===========================================
+  # Grafana (Dashboards & Visualization)
+  # ===========================================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: forsati-grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_SERVER_ROOT_URL: http://localhost:3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - forsati-network
+
+  # ===========================================
+  # Loki (Log Aggregation)
+  # ===========================================
+  loki:
+    image: grafana/loki:latest
+    container_name: forsati-loki
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - loki_data:/loki
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:3100/ready || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - forsati-network
+
+  # ===========================================
+  # MailHog (Dev Email Server)
+  # ===========================================
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: forsati-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI
+    networks:
+      - forsati-network
+
+  # ===========================================
+  # Jitsi Meet (Video Conferencing)
+  # ===========================================
+  jitsi-web:
+    image: jitsi/web:stable
+    container_name: forsati-jitsi-web
+    restart: unless-stopped
+    environment:
+      ENABLE_AUTH: "1"
+      ENABLE_GUESTS: "0"
+      AUTH_TYPE: jwt
+      JWT_APP_ID: ${JITSI_JWT_APP_ID:-forsati}
+      JWT_APP_SECRET: ${JITSI_JWT_SECRET:-jitsi_secret}
+      JWT_ACCEPTED_ISSUERS: ${JITSI_JWT_ISSUERS:-forsati}
+      JWT_ACCEPTED_AUDIENCES: ${JITSI_JWT_AUDIENCES:-forsati}
+      PUBLIC_URL: ${JITSI_PUBLIC_URL:-http://localhost:8443}
+      TZ: Asia/Amman
+    ports:
+      - "8443:80"
+    volumes:
+      - jitsi_web_config:/config
+      - jitsi_transcripts:/usr/share/jitsi-meet/transcripts
+    networks:
+      - forsati-network
+
+  jitsi-prosody:
+    image: jitsi/prosody:stable
+    container_name: forsati-jitsi-prosody
+    restart: unless-stopped
+    environment:
+      AUTH_TYPE: jwt
+      JWT_APP_ID: ${JITSI_JWT_APP_ID:-forsati}
+      JWT_APP_SECRET: ${JITSI_JWT_SECRET:-jitsi_secret}
+      PUBLIC_URL: ${JITSI_PUBLIC_URL:-http://localhost:8443}
+    volumes:
+      - jitsi_prosody_config:/config
+      - jitsi_prosody_plugins:/prosody-plugins-custom
+    networks:
+      - forsati-network
+
+  jitsi-jvb:
+    image: jitsi/jvb:stable
+    container_name: forsati-jitsi-jvb
+    restart: unless-stopped
+    environment:
+      PUBLIC_URL: ${JITSI_PUBLIC_URL:-http://localhost:8443}
+      JVB_PORT: 10000
+      JVB_STUN_SERVERS: stun.l.google.com:19302
+    ports:
+      - "10000:10000/udp"
+    volumes:
+      - jitsi_jvb_config:/config
+    depends_on:
+      - jitsi-prosody
+    networks:
+      - forsati-network
+
+  # ===========================================
+  # Rocket.Chat (Optional - Rich Messaging)
+  # ===========================================
+  # rocketchat:
+  #   image: rocket.chat:latest
+  #   container_name: forsati-rocketchat
   #   restart: unless-stopped
+  #   environment:
+  #     MONGO_URL: mongodb://mongo:27017/rocketchat
+  #     ROOT_URL: http://localhost:3030
+  #     PORT: 3000
+  #     OVERWRITE_SETTING_Show_Setup_Wizard: completed
   #   ports:
-  #     - "6379:6379"
+  #     - "3030:3000"
+  #   depends_on:
+  #     - mongo
+  #   networks:
+  #     - forsati-network
+
+  # mongo:
+  #   image: mongo:5.0
+  #   container_name: forsati-mongo
+  #   restart: unless-stopped
   #   volumes:
-  #     - redis_data:/data
-  #   healthcheck:
-  #     test: ["CMD", "redis-cli", "ping"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
+  #     - mongo_data:/data/db
   #   networks:
   #     - forsati-network
 
@@ -218,5 +532,19 @@ volumes:
   postgres_data:
   minio_data:
   strapi_data:
+  redis_data:
+  typesense_data:
+  humhub_config:
+  humhub_uploads:
+  humhub_modules:
+  matomo_data:
+  prometheus_data:
+  grafana_data:
+  loki_data:
+  jitsi_web_config:
+  jitsi_transcripts:
+  jitsi_prosody_config:
+  jitsi_prosody_plugins:
+  jitsi_jvb_config:
+  # mongo_data:
   # elasticsearch_data:
-  # redis_data:

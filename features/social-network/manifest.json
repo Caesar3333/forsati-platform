@@ -1,0 +1,118 @@
+{
+  "name": "social-network",
+  "version": "1.0.0",
+  "description": {
+    "en": "Professional social networking features including profiles, posts, follows, and messaging",
+    "ar": "ميزات الشبكات الاجتماعية المهنية بما في ذلك الملفات الشخصية والمنشورات والمتابعة والمراسلة"
+  },
+  "markets": ["jo", "sa", "ae"],
+  "status": "development",
+  "owner": "platform-team",
+  "frontend": {
+    "pages": [
+      "src/app/[locale]/profile/[userId]/page.tsx",
+      "src/app/[locale]/profile/edit/page.tsx",
+      "src/app/[locale]/feed/page.tsx",
+      "src/app/[locale]/network/page.tsx",
+      "src/app/[locale]/messages/page.tsx",
+      "src/app/[locale]/messages/[conversationId]/page.tsx"
+    ],
+    "components": [
+      "src/components/profile/ProfileCard.tsx",
+      "src/components/profile/ProfileEditor.tsx",
+      "src/components/profile/SkillsSection.tsx",
+      "src/components/profile/ExperienceSection.tsx",
+      "src/components/profile/EducationSection.tsx",
+      "src/components/profile/PortfolioSection.tsx",
+      "src/components/feed/PostCard.tsx",
+      "src/components/feed/PostComposer.tsx",
+      "src/components/feed/ActivityFeed.tsx",
+      "src/components/network/ConnectionCard.tsx",
+      "src/components/network/FollowButton.tsx",
+      "src/components/messages/ConversationList.tsx",
+      "src/components/messages/ChatWindow.tsx"
+    ]
+  },
+  "backend": {
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/profiles/{userId}",
+        "auth": "optional",
+        "description": "Get user profile"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/profiles/{userId}",
+        "auth": "required",
+        "description": "Update user profile"
+      },
+      {
+        "method": "POST",
+        "path": "/api/profiles/import-resume",
+        "auth": "required",
+        "description": "Import parsed resume data to profile"
+      },
+      {
+        "method": "GET",
+        "path": "/api/feed",
+        "auth": "required",
+        "description": "Get activity feed"
+      },
+      {
+        "method": "POST",
+        "path": "/api/posts",
+        "auth": "required",
+        "description": "Create new post"
+      },
+      {
+        "method": "POST",
+        "path": "/api/follow/{userId}",
+        "auth": "required",
+        "description": "Follow a user"
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/follow/{userId}",
+        "auth": "required",
+        "description": "Unfollow a user"
+      },
+      {
+        "method": "GET",
+        "path": "/api/messages",
+        "auth": "required",
+        "description": "Get conversations"
+      },
+      {
+        "method": "POST",
+        "path": "/api/messages",
+        "auth": "required",
+        "description": "Send message"
+      }
+    ],
+    "services": ["humhub", "strapi", "redis"]
+  },
+  "i18n_keys": [
+    "profile.*",
+    "feed.*",
+    "posts.*",
+    "network.*",
+    "messages.*",
+    "connections.*"
+  ],
+  "privacy": {
+    "data_collected": ["profile_views", "post_interactions", "messages", "connections"],
+    "requires_explicit_consent": false,
+    "pii_fields": ["phone", "email", "location"]
+  },
+  "dependencies": {
+    "features": ["cv-scan"],
+    "packages": ["@tanstack/react-query", "socket.io-client", "zustand"]
+  },
+  "external_services": {
+    "humhub": {
+      "description": "Social networking engine",
+      "integration": "REST API + SSO"
+    }
+  }
+}
