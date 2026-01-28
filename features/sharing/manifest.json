@@ -1,0 +1,55 @@
+{
+  "name": "sharing",
+  "version": "1.0.0",
+  "description": {
+    "en": "Social sharing functionality for jobs and opportunities",
+    "ar": "وظيفة المشاركة الاجتماعية للوظائف والفرص"
+  },
+  "markets": ["jo", "sa", "ae"],
+  "status": "development",
+  "owner": "platform-team",
+  "frontend": {
+    "pages": [],
+    "components": [
+      "src/components/shared/ShareButtons.tsx",
+      "src/components/shared/ShareModal.tsx",
+      "src/components/shared/CopyLinkButton.tsx"
+    ]
+  },
+  "backend": {
+    "endpoints": [
+      {
+        "method": "POST",
+        "path": "/api/share/track",
+        "auth": "optional",
+        "description": "Track share analytics"
+      },
+      {
+        "method": "GET",
+        "path": "/api/share/og/{type}/{id}",
+        "auth": "public",
+        "description": "Generate Open Graph metadata"
+      }
+    ],
+    "services": ["strapi"]
+  },
+  "i18n_keys": [
+    "share.title",
+    "share.whatsapp",
+    "share.twitter",
+    "share.linkedin",
+    "share.facebook",
+    "share.telegram",
+    "share.email",
+    "share.copyLink",
+    "share.copied"
+  ],
+  "privacy": {
+    "data_collected": ["share_clicks", "referral_source"],
+    "requires_explicit_consent": false
+  },
+  "dependencies": {
+    "features": [],
+    "packages": []
+  }
+}
