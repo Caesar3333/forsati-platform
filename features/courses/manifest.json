@@ -1,0 +1,80 @@
+{
+  "name": "courses",
+  "version": "1.0.0",
+  "description": {
+    "en": "Online courses and training programs discovery",
+    "ar": "اكتشاف الدورات التدريبية والبرامج التعليمية عبر الإنترنت"
+  },
+  "markets": ["jo", "sa", "ae"],
+  "status": "development",
+  "owner": "platform-team",
+  "frontend": {
+    "pages": [
+      "src/app/[locale]/courses/page.tsx",
+      "src/app/[locale]/courses/[id]/page.tsx",
+      "src/app/[locale]/org/[orgId]/courses/new/page.tsx"
+    ],
+    "components": [
+      "src/components/opportunities/OpportunityCard.tsx",
+      "src/components/opportunities/OpportunityFilters.tsx",
+      "src/components/courses/CourseDetail.tsx",
+      "src/components/courses/CourseForm.tsx",
+      "src/components/courses/CourseCurriculum.tsx",
+      "src/components/courses/CourseReviews.tsx"
+    ]
+  },
+  "backend": {
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/courses",
+        "auth": "optional",
+        "description": "List courses"
+      },
+      {
+        "method": "GET",
+        "path": "/api/courses/{id}",
+        "auth": "optional",
+        "description": "Get course details"
+      },
+      {
+        "method": "POST",
+        "path": "/api/courses",
+        "auth": "required",
+        "role": "organization",
+        "description": "Create course listing"
+      },
+      {
+        "method": "POST",
+        "path": "/api/courses/{id}/enroll",
+        "auth": "required",
+        "description": "Enroll in course"
+      },
+      {
+        "method": "POST",
+        "path": "/api/courses/{id}/review",
+        "auth": "required",
+        "description": "Submit course review"
+      }
+    ],
+    "services": ["strapi", "typesense"]
+  },
+  "i18n_keys": [
+    "courses.title",
+    "courses.subtitle",
+    "courses.card.*",
+    "courses.detail.*",
+    "courses.filters.*",
+    "courses.curriculum.*",
+    "courses.reviews.*",
+    "courses.enroll.*"
+  ],
+  "privacy": {
+    "data_collected": ["course_views", "enrollments", "reviews"],
+    "requires_explicit_consent": false
+  },
+  "dependencies": {
+    "features": [],
+    "packages": ["@tanstack/react-query", "next-intl"]
+  }
+}

@@ -1,0 +1,292 @@
+{
+  "common": {
+    "appName": "فرصتي",
+    "tagline": "منصة التوظيف الذكية",
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ",
+    "success": "تم بنجاح",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "view": "عرض",
+    "close": "إغلاق",
+    "search": "بحث",
+    "filter": "تصفية",
+    "sort": "ترتيب",
+    "all": "الكل",
+    "none": "لا شيء",
+    "yes": "نعم",
+    "no": "لا",
+    "or": "أو",
+    "and": "و",
+    "required": "مطلوب",
+    "optional": "اختياري"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "jobs": "فرص عمل",
+    "volunteering": "فرص تطوع",
+    "scholarships": "منح دراسية",
+    "courses": "دورات تدريبية",
+    "about": "عن فرصتي",
+    "contact": "تواصل معنا",
+    "help": "المساعدة",
+    "faq": "الأسئلة الشائعة"
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "register": "إنشاء حساب",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "fullName": "الاسم الكامل",
+    "phone": "رقم الهاتف",
+    "rememberMe": "تذكرني",
+    "agreeTerms": "أوافق على شروط الاستخدام وسياسة الخصوصية",
+    "alreadyHaveAccount": "لديك حساب بالفعل؟",
+    "dontHaveAccount": "ليس لديك حساب؟",
+    "loginWith": "تسجيل الدخول باستخدام",
+    "registerWith": "إنشاء حساب باستخدام",
+    "orContinueWith": "أو المتابعة باستخدام",
+    "google": "جوجل",
+    "linkedin": "لينكد إن",
+    "accountType": "نوع الحساب",
+    "candidate": "باحث عن عمل",
+    "recruiter": "جهة توظيف"
+  },
+  "hero": {
+    "badge": "منصة التوظيف الذكية #1 في الأردن",
+    "title": "ابحث عن فرصتك المثالية",
+    "titleHighlight": "بالذكاء الاصطناعي",
+    "subtitle": "حمّل سيرتك الذاتية واحصل على تحليل فوري، اقتراحات للتحسين، ومطابقة ذكية مع آلاف الفرص",
+    "searchPlaceholder": "ابحث عن وظيفة، شركة، أو مهارة...",
+    "searchBtn": "ابحث",
+    "orUploadCV": "أو حمّل سيرتك الذاتية"
+  },
+  "cvScan": {
+    "title": "افحص سيرتك الذاتية",
+    "description": "حمّل سيرتك الذاتية واحصل على تحليل مدعوم بالذكاء الاصطناعي",
+    "dropzoneLabel": "اسحب وأفلت ملف السيرة الذاتية هنا",
+    "dropzoneAlt": "أو انقر لاختيار ملف",
+    "supportedFormats": "PDF, DOC, DOCX - الحد الأقصى 10MB",
+    "voiceTitle": "سجّل بصوتك",
+    "voiceDescription": "أخبرنا عن نفسك وخبراتك بصوتك",
+    "startRecording": "ابدأ التسجيل",
+    "stopRecording": "أوقف التسجيل",
+    "analyzing": "جاري التحليل...",
+    "parsing": "جاري قراءة السيرة الذاتية...",
+    "uploadSuccess": "تم رفع الملف بنجاح!",
+    "uploadError": "حدث خطأ أثناء رفع الملف",
+    "scanNow": "افحص الآن",
+    "features": {
+      "analysis": "تحليل المهارات والخبرات",
+      "suggestions": "اقتراحات للتحسين",
+      "matching": "مطابقة مع الفرص المناسبة"
+    },
+    "consent": {
+      "title": "موافقة على التحليل بالذكاء الاصطناعي",
+      "description": "للحصول على تحليل متقدم واقتراحات مخصصة، نحتاج موافقتك على معالجة بياناتك بالذكاء الاصطناعي.",
+      "checkbox": "أوافق على تحليل سيرتي الذاتية بالذكاء الاصطناعي",
+      "privacy": "بياناتك محمية ولن تُشارك مع أي طرف ثالث دون إذنك.",
+      "redactPII": "إخفاء المعلومات الشخصية",
+      "redactPIIDescription": "إزالة الاسم والبريد والهاتف قبل التحليل",
+      "privacyNotice": "بياناتك تُعالج بشكل آمن ولا تُشارك أبداً دون إذنك الصريح.",
+      "noConsentWarning": "بدون الموافقة، سيتم إجراء تحليل أساسي فقط. لن تتوفر الاقتراحات المدعومة بالذكاء الاصطناعي."
+    },
+    "preview": {
+      "title": "معاينة السيرة الذاتية",
+      "edit": "تعديل",
+      "contactInfo": "معلومات الاتصال",
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "skills": "المهارات",
+      "experience": "الخبرات",
+      "education": "التعليم",
+      "notProvided": "غير متوفر",
+      "noSkillsFound": "لم يتم العثور على مهارات",
+      "noExperienceFound": "لم يتم العثور على خبرات",
+      "noEducationFound": "لم يتم العثور على معلومات التعليم",
+      "addSkillPlaceholder": "أضف مهارة...",
+      "years": "سنوات",
+      "present": "حتى الآن"
+    },
+    "actions": {
+      "quickApply": "تقديم سريع",
+      "generateCover": "إنشاء رسالة تغطية",
+      "saveProfile": "حفظ في الملف الشخصي",
+      "downloadPDF": "تحميل PDF محسّن",
+      "analyze": "تحليل بالذكاء الاصطناعي",
+      "backToUpload": "رفع ملف آخر"
+    },
+    "analysis": {
+      "title": "نتائج التحليل",
+      "score": "النتيجة",
+      "suggestions": "اقتراحات للتحسين",
+      "keywords": "كلمات مفتاحية"
+    },
+    "errors": {
+      "fileRequired": "يرجى اختيار ملف",
+      "invalidFormat": "نوع الملف غير مدعوم",
+      "fileTooLarge": "حجم الملف كبير جداً",
+      "uploadFailed": "فشل رفع الملف",
+      "parseFailed": "فشل تحليل الملف",
+      "consentRequired": "الموافقة مطلوبة لتحليل الذكاء الاصطناعي"
+    }
+  },
+  "jobs": {
+    "title": "فرص العمل",
+    "searchPlaceholder": "ابحث عن وظيفة...",
+    "filters": {
+      "title": "تصفية النتائج",
+      "type": "نوع العمل",
+      "category": "التصنيف",
+      "location": "الموقع",
+      "salary": "الراتب",
+      "experience": "الخبرة",
+      "datePosted": "تاريخ النشر"
+    },
+    "types": {
+      "fullTime": "دوام كامل",
+      "partTime": "دوام جزئي",
+      "contract": "عقد",
+      "internship": "تدريب",
+      "remote": "عن بُعد",
+      "hybrid": "هجين"
+    },
+    "experience": {
+      "entry": "حديث التخرج",
+      "junior": "مبتدئ (1-2 سنة)",
+      "mid": "متوسط (3-5 سنوات)",
+      "senior": "خبير (5+ سنوات)",
+      "lead": "قيادي"
+    },
+    "card": {
+      "postedAgo": "نُشرت قبل {time}",
+      "applicants": "{count} متقدم",
+      "apply": "قدّم الآن",
+      "save": "حفظ",
+      "share": "مشاركة",
+      "salary": "الراتب",
+      "negotiable": "قابل للتفاوض",
+      "confidential": "سري"
+    },
+    "detail": {
+      "description": "وصف الوظيفة",
+      "requirements": "المتطلبات",
+      "benefits": "المزايا",
+      "aboutCompany": "عن الشركة",
+      "similarJobs": "وظائف مشابهة"
+    },
+    "empty": {
+      "title": "لا توجد نتائج",
+      "description": "جرّب تغيير معايير البحث أو التصفية"
+    }
+  },
+  "companies": {
+    "title": "الشركات",
+    "searchPlaceholder": "ابحث عن شركة...",
+    "size": {
+      "startup": "ناشئة (1-10)",
+      "small": "صغيرة (11-50)",
+      "medium": "متوسطة (51-200)",
+      "large": "كبيرة (201-1000)",
+      "enterprise": "عملاقة (1000+)"
+    },
+    "industries": {
+      "tech": "تكنولوجيا المعلومات",
+      "health": "الصحة",
+      "education": "التعليم",
+      "finance": "المالية والبنوك",
+      "retail": "التجزئة",
+      "manufacturing": "الصناعة",
+      "hospitality": "الضيافة",
+      "construction": "البناء والتشييد"
+    }
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "welcome": "مرحباً، {name}!",
+    "overview": "نظرة عامة",
+    "applications": "طلباتي",
+    "savedJobs": "الوظائف المحفوظة",
+    "messages": "الرسائل",
+    "interviews": "المقابلات",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "personalInfo": "المعلومات الشخصية",
+    "experience": "الخبرات",
+    "education": "التعليم",
+    "skills": "المهارات",
+    "languages": "اللغات",
+    "certifications": "الشهادات",
+    "portfolio": "أعمالي",
+    "cv": "السيرة الذاتية",
+    "completeness": "اكتمال الملف الشخصي",
+    "addExperience": "إضافة خبرة",
+    "addEducation": "إضافة تعليم",
+    "addSkill": "إضافة مهارة",
+    "uploadCV": "رفع السيرة الذاتية"
+  },
+  "footer": {
+    "about": "عن فرصتي",
+    "aboutText": "فرصتي هي منصة التوظيف الذكية الأولى في الأردن، تربط الباحثين عن عمل بأفضل الفرص باستخدام الذكاء الاصطناعي.",
+    "quickLinks": "روابط سريعة",
+    "forCandidates": "للباحثين عن عمل",
+    "forEmployers": "لأصحاب العمل",
+    "resources": "الموارد",
+    "support": "الدعم",
+    "contact": "تواصل معنا",
+    "email": "info@forsati.jo",
+    "phone": "+962 6 XXX XXXX",
+    "address": "عمّان، الأردن",
+    "social": "تابعنا",
+    "newsletter": "النشرة البريدية",
+    "newsletterText": "اشترك للحصول على أحدث الفرص",
+    "subscribe": "اشترك",
+    "copyright": "© {year} فرصتي. جميع الحقوق محفوظة.",
+    "terms": "شروط الاستخدام",
+    "privacy": "سياسة الخصوصية"
+  },
+  "errors": {
+    "404": {
+      "title": "الصفحة غير موجودة",
+      "description": "عذراً، الصفحة التي تبحث عنها غير موجودة.",
+      "backHome": "العودة للرئيسية"
+    },
+    "500": {
+      "title": "خطأ في الخادم",
+      "description": "عذراً، حدث خطأ غير متوقع. يرجى المحاولة لاحقاً.",
+      "retry": "إعادة المحاولة"
+    },
+    "network": {
+      "title": "خطأ في الاتصال",
+      "description": "تحقق من اتصالك بالإنترنت وحاول مرة أخرى."
+    }
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "email": "البريد الإلكتروني غير صالح",
+    "phone": "رقم الهاتف غير صالح",
+    "minLength": "يجب أن يكون {min} أحرف على الأقل",
+    "maxLength": "يجب ألا يتجاوز {max} حرفاً",
+    "passwordMismatch": "كلمات المرور غير متطابقة",
+    "passwordWeak": "كلمة المرور ضعيفة"
+  },
+  "time": {
+    "justNow": "الآن",
+    "minutesAgo": "قبل {count} دقيقة",
+    "hoursAgo": "قبل {count} ساعة",
+    "daysAgo": "قبل {count} يوم",
+    "weeksAgo": "قبل {count} أسبوع",
+    "monthsAgo": "قبل {count} شهر"
+  }
+}

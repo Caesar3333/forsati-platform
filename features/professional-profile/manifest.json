@@ -1,0 +1,199 @@
+{
+  "name": "professional-profile",
+  "version": "1.0.0",
+  "description": {
+    "en": "Professional profile management with resume import, portfolio, and verification badges",
+    "ar": "إدارة الملف الشخصي المهني مع استيراد السيرة الذاتية والبورتفوليو وشارات التحقق"
+  },
+  "markets": ["jo", "sa", "ae"],
+  "status": "development",
+  "owner": "platform-team",
+  "frontend": {
+    "pages": [
+      "src/app/[locale]/profile/[userId]/page.tsx",
+      "src/app/[locale]/profile/edit/page.tsx",
+      "src/app/[locale]/profile/portfolio/page.tsx",
+      "src/app/[locale]/profile/settings/page.tsx"
+    ],
+    "components": [
+      "src/components/profile/ProfileHeader.tsx",
+      "src/components/profile/ProfileStats.tsx",
+      "src/components/profile/EmploymentStatus.tsx",
+      "src/components/profile/SkillsManager.tsx",
+      "src/components/profile/ExperienceEditor.tsx",
+      "src/components/profile/EducationEditor.tsx",
+      "src/components/profile/CertificationsList.tsx",
+      "src/components/profile/PortfolioGallery.tsx",
+      "src/components/profile/VerifiedBadges.tsx",
+      "src/components/profile/ResumeImportModal.tsx",
+      "src/components/profile/ProfileVisibilitySettings.tsx"
+    ]
+  },
+  "backend": {
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/profiles/{userId}",
+        "auth": "optional",
+        "description": "Get full profile with visibility filtering"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/profiles/{userId}",
+        "auth": "required",
+        "description": "Update profile sections"
+      },
+      {
+        "method": "POST",
+        "path": "/api/profiles/{userId}/import-resume",
+        "auth": "required",
+        "description": "Import parsed resume data"
+      },
+      {
+        "method": "GET",
+        "path": "/api/profiles/{userId}/portfolio",
+        "auth": "optional",
+        "description": "Get portfolio projects"
+      },
+      {
+        "method": "POST",
+        "path": "/api/profiles/{userId}/portfolio",
+        "auth": "required",
+        "description": "Add portfolio project"
+      },
+      {
+        "method": "POST",
+        "path": "/api/profiles/{userId}/verify/{type}",
+        "auth": "required",
+        "description": "Request verification (email, phone, education, employment)"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/profiles/{userId}/visibility",
+        "auth": "required",
+        "description": "Update profile visibility settings"
+      },
+      {
+        "method": "GET",
+        "path": "/api/profiles/{userId}/token",
+        "auth": "required",
+        "description": "Generate shareable profile token for employers"
+      }
+    ],
+    "services": ["strapi", "humhub", "minio"]
+  },
+  "i18n_keys": [
+    "profile.title",
+    "profile.edit.*",
+    "profile.status.*",
+    "profile.skills.*",
+    "profile.experience.*",
+    "profile.education.*",
+    "profile.certifications.*",
+    "profile.portfolio.*",
+    "profile.badges.*",
+    "profile.visibility.*",
+    "profile.import.*"
+  ],
+  "privacy": {
+    "data_collected": ["profile_data", "employment_history", "education_history", "skills", "portfolio"],
+    "requires_explicit_consent": false,
+    "pii_fields": ["full_name", "email", "phone", "location", "national_id"]
+  },
+  "profile_schema": {
+    "basic_info": {
+      "full_name": "string",
+      "headline": "string:50",
+      "summary": "richtext",
+      "avatar_url": "string",
+      "cover_url": "string"
+    },
+    "employment_status": {
+      "type": "enum",
+      "values": ["employed", "seeking", "open_to_work", "student", "new_graduate", "freelance"]
+    },
+    "location": {
+      "primary_location": "string",
+      "willing_to_relocate": "boolean",
+      "preferred_locations": "string[]"
+    },
+    "contact": {
+      "email": "string:verified",
+      "phone": "string:encrypted",
+      "linkedin_url": "string",
+      "website_url": "string"
+    },
+    "professional": {
+      "current_employer": "string",
+      "current_title": "string",
+      "years_experience": "integer"
+    },
+    "skills": {
+      "type": "array",
+      "item": {
+        "name": "string",
+        "level": "enum:beginner,intermediate,advanced,expert",
+        "endorsed_count": "integer"
+      }
+    },
+    "experiences": {
+      "type": "array",
+      "item": {
+        "company": "string",
+        "title": "string",
+        "location": "string",
+        "start_date": "date",
+        "end_date": "date|null",
+        "description": "text",
+        "skills_used": "string[]"
+      }
+    },
+    "education": {
+      "type": "array",
+      "item": {
+        "institution": "string",
+        "degree": "string",
+        "field": "string",
+        "start_year": "integer",
+        "end_year": "integer",
+        "gpa": "float|null"
+      }
+    },
+    "certifications": {
+      "type": "array",
+      "item": {
+        "name": "string",
+        "issuer": "string",
+        "issue_date": "date",
+        "expiry_date": "date|null",
+        "credential_url": "string",
+        "credential_id": "string"
+      }
+    },
+    "portfolio_projects": {
+      "type": "array",
+      "item": {
+        "title": "string",
+        "description": "text",
+        "role": "string",
+        "year": "integer",
+        "media_urls": "string[]",
+        "repo_url": "string",
+        "live_url": "string",
+        "technologies": "string[]"
+      }
+    },
+    "verified_badges": {
+      "type": "array",
+      "item": {
+        "type": "enum:email,phone,education,employment",
+        "verified_at": "datetime",
+        "verifier": "string"
+      }
+    }
+  },
+  "dependencies": {
+    "features": ["cv-scan"],
+    "packages": ["react-hook-form", "zod", "@tanstack/react-query"]
+  }
+}

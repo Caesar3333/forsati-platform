@@ -1,0 +1,653 @@
+openapi: 3.0.3
+info:
+  title: Forsati Ingestor API
+  description: |
+    API for CV/Resume ingestion, parsing, and analysis.
+    
+    ## Features
+    - Resume upload (PDF, DOCX, images)
+    - Voice-to-text transcription
+    - AI-powered parsing and analysis
+    - Job matching recommendations
+    
+    ## Authentication
+    All endpoints require a valid JWT token from Keycloak in the Authorization header.
+  version: 1.0.0
+  contact:
+    name: Forsati Platform
+    url: https://forsati.jo
+    email: api@forsati.jo
+  license:
+    name: Proprietary
+    url: https://forsati.jo/terms
+
+servers:
+  - url: https://api.forsati.jo/ingest
+    description: Production
+  - url: https://staging-api.forsati.jo/ingest
+    description: Staging
+  - url: http://localhost:8000
+    description: Local Development
+
+tags:
+  - name: Upload
+    description: File upload operations
+  - name: Status
+    description: Job status tracking
+  - name: Resume
+    description: Resume record operations
+  - name: Analysis
+    description: AI-powered analysis
+
+paths:
+  /api/ingest/upload:
+    post:
+      tags:
+        - Upload
+      summary: Upload a resume file
+      description: |
+        Upload a resume file for processing. Supports PDF, DOCX, DOC, RTF, TXT, and image formats.
+        Returns a job ID for tracking the processing status.
+        
+        ## Consent
+        - `consentToAI: true` enables AI-powered analysis
+        - `redactPII: true` removes personal info before AI processing
+      operationId: uploadResume
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The resume file to upload
+                type:
+                  type: string
+                  enum: [resume, audio, photo]
+                  default: resume
+                  description: Type of upload
+                locale:
+                  type: string
+                  enum: [ar, en]
+                  default: ar
+                  description: Preferred language for parsing
+                mode:
+                  type: string
+                  enum: [parse, analyze]
+                  default: parse
+                  description: Processing mode
+                consentToAI:
+                  type: boolean
+                  default: false
+                  description: User consent for AI analysis (required for analyze mode)
+                redactPII:
+                  type: boolean
+                  default: false
+                  description: Remove PII before AI processing
+                context:
+                  type: string
+                  description: Optional context for parsing (e.g., target job)
+            examples:
+              basic:
+                summary: Basic upload
+                value:
+                  file: "(binary)"
+                  mode: "parse"
+              withConsent:
+                summary: Upload with AI consent
+                value:
+                  file: "(binary)"
+                  mode: "analyze"
+                  consentToAI: true
+                  redactPII: false
+      responses:
+        "200":
+          description: Upload successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadResponse"
+              examples:
+                success:
+                  summary: Successful upload
+                  value:
+                    success: true
+                    message: "Resume uploaded successfully | تم رفع السيرة الذاتية بنجاح"
+                    job_id: "550e8400-e29b-41d4-a716-446655440000"
+                    data:
+                      id: "550e8400-e29b-41d4-a716-446655440000"
+                      filename: "resume.pdf"
+                      status: "completed"
+        "400":
+          description: Invalid file or parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                invalidFile:
+                  summary: Invalid file type
+                  value:
+                    error: "invalid_file_type"
+                    message_en: "File type not allowed. Allowed: PDF, DOCX, DOC, TXT"
+                    message_ar: "نوع الملف غير مسموح. المسموح: PDF, DOCX, DOC, TXT"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "413":
+          description: File too large (max 10MB)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                tooLarge:
+                  summary: File too large
+                  value:
+                    error: "file_too_large"
+                    message_en: "File size exceeds 10MB limit"
+                    message_ar: "حجم الملف يتجاوز الحد المسموح 10 ميجابايت"
+        "415":
+          description: Unsupported file type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/ingest/upload/audio:
+    post:
+      tags:
+        - Upload
+      summary: Upload audio for transcription
+      description: |
+        Upload audio recording for voice-to-text transcription.
+        Supports WebM, MP3, WAV, OGG formats.
+      operationId: uploadAudio
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                locale:
+                  type: string
+                  enum: [ar, en]
+                  default: ar
+      responses:
+        "200":
+          description: Upload successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /api/ingest/status/{jobId}:
+    get:
+      tags:
+        - Status
+      summary: Get job processing status
+      description: Poll this endpoint to check the status of an upload job.
+      operationId: getJobStatus
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The job ID returned from upload
+      responses:
+        "200":
+          description: Job status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobStatus"
+        "404":
+          description: Job not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /api/resume-records/{id}:
+    get:
+      tags:
+        - Resume
+      summary: Get parsed resume record
+      description: Retrieve the parsed resume data after processing is complete.
+      operationId: getResumeRecord
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Parsed resume data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParsedResume"
+        "404":
+          description: Resume not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /api/ingest/analyze/{parsedId}:
+    post:
+      tags:
+        - Analysis
+      summary: Analyze resume with AI (requires consent)
+      description: |
+        Perform AI-powered analysis on a parsed resume.
+        
+        **IMPORTANT: Requires explicit user consent**
+        
+        Either:
+        - Set `X-AI-Consent: granted` header, OR
+        - Include `consent: true` in request body
+        
+        Returns skill gap analysis, profile score, and improvement suggestions.
+      operationId: analyzeResume
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: parsedId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The parsed resume ID from upload
+        - name: X-AI-Consent
+          in: header
+          required: false
+          schema:
+            type: string
+            enum: [granted]
+          description: Explicit consent header for AI processing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                consent:
+                  type: boolean
+                  description: Explicit consent for AI analysis (alternative to header)
+                redactPII:
+                  type: boolean
+                  default: false
+                  description: Remove personal info before AI processing
+                targetRole:
+                  type: string
+                  description: Target job role for skill gap analysis
+                targetIndustry:
+                  type: string
+                  description: Target industry
+                location:
+                  type: string
+                  description: Preferred work location
+            examples:
+              withConsent:
+                summary: Analysis with consent
+                value:
+                  consent: true
+                  redactPII: false
+                  targetRole: "Software Engineer"
+      responses:
+        "200":
+          description: Analysis results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalysisResult"
+              examples:
+                success:
+                  summary: Successful analysis
+                  value:
+                    success: true
+                    message_en: "AI analysis completed successfully"
+                    message_ar: "اكتمل تحليل الذكاء الاصطناعي بنجاح"
+                    analysis_id: "550e8400-e29b-41d4-a716-446655440000"
+                    score: 78
+                    analysis:
+                      profile_completeness: 85
+                      skills_count: 12
+                      experience_count: 3
+                    recommendations:
+                      - "أضف المزيد من المهارات التقنية | Add more technical skills"
+                    keywords: ["JavaScript", "React", "Node.js"]
+                    consent_recorded: true
+        "403":
+          description: Consent required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                consentRequired:
+                  summary: Missing consent
+                  value:
+                    error: "consent_required"
+                    message_en: "Explicit consent is required for AI analysis"
+                    message_ar: "الموافقة الصريحة مطلوبة لتحليل الذكاء الاصطناعي"
+        "404":
+          description: Resume not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from Keycloak
+
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+  schemas:
+    UploadResponse:
+      type: object
+      required:
+        - jobId
+        - message
+      properties:
+        jobId:
+          type: string
+          format: uuid
+          description: Unique job identifier for status tracking
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        message:
+          type: string
+          example: "Upload successful. Processing started."
+
+    JobStatus:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [pending, processing, completed, failed]
+          description: Current processing status
+        parsedId:
+          type: string
+          format: uuid
+          description: ID of parsed resume (when completed)
+        progress:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Processing progress percentage
+        error:
+          type: string
+          description: Error message (when failed)
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ParsedResume:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "أحمد محمد"
+        nameEn:
+          type: string
+          example: "Ahmad Mohammad"
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          example: "+962791234567"
+        location:
+          type: object
+          properties:
+            city:
+              type: string
+            country:
+              type: string
+        summary:
+          type: string
+          description: Professional summary
+        skills:
+          type: array
+          items:
+            type: string
+          example: ["JavaScript", "React", "Node.js"]
+        languages:
+          type: array
+          items:
+            type: object
+            properties:
+              language:
+                type: string
+              proficiency:
+                type: string
+                enum: [native, fluent, intermediate, basic]
+        experience:
+          type: array
+          items:
+            $ref: "#/components/schemas/Experience"
+        education:
+          type: array
+          items:
+            $ref: "#/components/schemas/Education"
+        certifications:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              issuer:
+                type: string
+              date:
+                type: string
+        rawText:
+          type: string
+          description: Raw extracted text
+        sourceType:
+          type: string
+          enum: [pdf, docx, image, audio]
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Parsing confidence score
+        createdAt:
+          type: string
+          format: date-time
+
+    Experience:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Software Engineer"
+        company:
+          type: string
+          example: "Tech Corp"
+        location:
+          type: string
+        startDate:
+          type: string
+          example: "2020-01"
+        endDate:
+          type: string
+          example: "2023-06"
+          nullable: true
+        current:
+          type: boolean
+        description:
+          type: string
+        achievements:
+          type: array
+          items:
+            type: string
+
+    Education:
+      type: object
+      properties:
+        degree:
+          type: string
+          example: "Bachelor's"
+        field:
+          type: string
+          example: "Computer Science"
+        institution:
+          type: string
+        location:
+          type: string
+        year:
+          type: integer
+        gpa:
+          type: number
+
+    AnalysisResult:
+      type: object
+      properties:
+        overallScore:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Overall resume quality score
+        skillGaps:
+          type: array
+          items:
+            type: object
+            properties:
+              skill:
+                type: string
+              importance:
+                type: string
+                enum: [critical, important, nice-to-have]
+              resources:
+                type: array
+                items:
+                  type: string
+        salaryEstimate:
+          type: object
+          properties:
+            min:
+              type: integer
+            max:
+              type: integer
+            currency:
+              type: string
+              default: JOD
+            confidence:
+              type: number
+        improvements:
+          type: array
+          items:
+            type: object
+            properties:
+              section:
+                type: string
+              suggestion:
+                type: string
+              priority:
+                type: string
+                enum: [high, medium, low]
+        matchingJobs:
+          type: array
+          items:
+            type: object
+            properties:
+              jobId:
+                type: string
+              title:
+                type: string
+              company:
+                type: string
+              matchScore:
+                type: integer
+                minimum: 0
+                maximum: 100
+        marketInsights:
+          type: object
+          properties:
+            demandLevel:
+              type: string
+              enum: [high, medium, low]
+            growthTrend:
+              type: string
+              enum: [growing, stable, declining]
+            topSkillsInDemand:
+              type: array
+              items:
+                type: string
+
+    Error:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          example: "VALIDATION_ERROR"
+        message:
+          type: string
+          example: "Invalid file type. Supported formats: PDF, DOCX, DOC, RTF, TXT"
+        details:
+          type: object
+          additionalProperties: true

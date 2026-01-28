@@ -1,0 +1,97 @@
+# Forsati Platform - Prometheus Configuration
+# تكوين Prometheus لمنصة فرصتي
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'forsati-platform'
+
+# Alertmanager configuration (optional)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - alertmanager:9093
+
+# Rule files
+# rule_files:
+#   - "alerts/*.yml"
+
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Node Exporter (if deployed)
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  # Redis
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+
+  # PostgreSQL (requires postgres_exporter)
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+
+  # Strapi (custom metrics endpoint)
+  - job_name: 'strapi'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['strapi:1337']
+
+  # Ingestor Service
+  - job_name: 'ingestor'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['ingestor:8000']
+
+  # Keycloak
+  - job_name: 'keycloak'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['keycloak:8080']
+
+  # Typesense
+  - job_name: 'typesense'
+    metrics_path: '/metrics.json'
+    static_configs:
+      - targets: ['typesense:8108']
+
+  # MinIO
+  - job_name: 'minio'
+    metrics_path: '/minio/v2/metrics/cluster'
+    scheme: http
+    static_configs:
+      - targets: ['minio:9000']
+
+  # Loki
+  - job_name: 'loki'
+    static_configs:
+      - targets: ['loki:3100']
+
+  # Grafana
+  - job_name: 'grafana'
+    static_configs:
+      - targets: ['grafana:3000']
+
+  # Docker containers (requires cadvisor)
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+
+  # HumHub (custom metrics if implemented)
+  - job_name: 'humhub'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['humhub:80']
+
+  # Celery workers (via flower or custom)
+  - job_name: 'celery'
+    static_configs:
+      - targets: ['flower:5555']

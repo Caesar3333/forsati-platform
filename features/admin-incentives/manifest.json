@@ -1,0 +1,211 @@
+{
+  "name": "admin-incentives-system",
+  "version": "1.0.0",
+  "description": "نظام الحوافز والإدارة - Admin Incentives & Control System",
+  "features": [
+    {
+      "id": "gift-codes",
+      "name": "Gift Codes System",
+      "nameAr": "نظام أكواد الهدايا",
+      "description": "Promotional codes for credits, free features, discounts, and loyalty points",
+      "components": [
+        "frontend/web/src/services/admin/giftCodeService.ts",
+        "frontend/web/src/app/api/admin/giftcodes/route.ts",
+        "frontend/web/src/app/api/giftcodes/redeem/route.ts"
+      ],
+      "codeTypes": [
+        { "type": "credit", "description": "Account credit balance" },
+        { "type": "free_post", "description": "Free job posts" },
+        { "type": "free_scan", "description": "Free CV scans" },
+        { "type": "discount", "description": "Percentage discount" },
+        { "type": "points", "description": "Loyalty points" },
+        { "type": "premium_trial", "description": "Premium subscription trial" }
+      ]
+    },
+    {
+      "id": "loyalty-program",
+      "name": "Loyalty Points Program",
+      "nameAr": "برنامج نقاط الولاء",
+      "description": "Points earning, redemption, and tier system",
+      "components": [
+        "frontend/web/src/services/admin/loyaltyPointsService.ts",
+        "frontend/web/src/app/api/points/route.ts"
+      ],
+      "tiers": [
+        { "tier": "bronze", "threshold": 0, "bonus": 0 },
+        { "tier": "silver", "threshold": 500, "bonus": 10 },
+        { "tier": "gold", "threshold": 2000, "bonus": 25 },
+        { "tier": "platinum", "threshold": 5000, "bonus": 50 }
+      ],
+      "earningActions": [
+        { "action": "signup", "points": 100 },
+        { "action": "profile_complete", "points": 200 },
+        { "action": "upload_cv", "points": 50 },
+        { "action": "cv_scan", "points": 25 },
+        { "action": "apply_job", "points": 10 },
+        { "action": "referral_confirmed", "points": 500 },
+        { "action": "first_interview", "points": 100 },
+        { "action": "job_hired", "points": 1000 }
+      ]
+    },
+    {
+      "id": "feature-flags",
+      "name": "Feature Flags System",
+      "nameAr": "نظام أعلام الميزات",
+      "description": "Toggle features globally or by user segment",
+      "components": [
+        "frontend/web/src/services/admin/featureFlagsService.ts",
+        "frontend/web/src/app/api/featureflags/route.ts",
+        "frontend/web/src/app/api/admin/featureflags/route.ts",
+        "frontend/web/src/app/api/admin/featureflags/[key]/route.ts"
+      ],
+      "categories": ["core", "ai", "social", "monetization", "experimental"]
+    },
+    {
+      "id": "quotas",
+      "name": "Resource Quotas",
+      "nameAr": "حصص الموارد",
+      "description": "Free tier limits per user role",
+      "components": [
+        "frontend/web/src/services/admin/quotasService.ts"
+      ],
+      "resources": [
+        { "resource": "cv_scan", "candidateLimit": 3 },
+        { "resource": "cover_letter", "candidateLimit": 2 },
+        { "resource": "job_post", "companyLimit": 5 },
+        { "resource": "candidate_search", "companyLimit": 50 },
+        { "resource": "message", "candidateLimit": 20, "companyLimit": 100 },
+        { "resource": "ai_match", "candidateLimit": 10, "companyLimit": 50 }
+      ]
+    },
+    {
+      "id": "super-admin-dashboard",
+      "name": "Super Admin Dashboard",
+      "nameAr": "لوحة تحكم المشرف العام",
+      "description": "Central control panel for all platform settings",
+      "components": [
+        "frontend/web/src/app/[locale]/admin/page.tsx"
+      ],
+      "tabs": ["overview", "giftcodes", "loyalty", "features", "quotas", "settings"]
+    },
+    {
+      "id": "marketing-microcopy",
+      "name": "Marketing Microcopy",
+      "nameAr": "نصوص التسويق",
+      "description": "Bilingual marketing text and UI copy",
+      "components": [
+        "frontend/web/src/constants/marketing.ts"
+      ],
+      "sections": [
+        "heroBanners",
+        "signupIncentives",
+        "loyaltyProgram",
+        "giftCodePromos",
+        "upgradePrompts",
+        "emailCopy",
+        "notifications",
+        "featureTooltips",
+        "emptyStates"
+      ]
+    }
+  ],
+  "userPersonas": [
+    {
+      "role": "candidate",
+      "roles": ["candidate", "student", "new_graduate", "freelancer"],
+      "freeQuotas": {
+        "cv_scan": 3,
+        "cover_letter": 2,
+        "ai_match": 10,
+        "message": 20
+      },
+      "signupBonus": {
+        "points": 100,
+        "freeScan": 3,
+        "coverLetter": 2
+      }
+    },
+    {
+      "role": "company",
+      "roles": ["company", "recruiter"],
+      "freeQuotas": {
+        "job_post": 5,
+        "candidate_search": 50,
+        "message": 100,
+        "ai_match": 50
+      },
+      "signupBonus": {
+        "freeJobPosts": 5,
+        "candidateSearches": 50
+      }
+    },
+    {
+      "role": "reviewer",
+      "roles": ["reviewer", "trainer", "coach"],
+      "features": ["training_sessions", "coupon_distribution", "review_tools"]
+    },
+    {
+      "role": "admin",
+      "roles": ["admin", "super_admin"],
+      "features": ["full_dashboard_access", "user_management", "analytics"]
+    }
+  ],
+  "markets": ["jo", "sa", "ae", "eg", "lb", "ps", "iq", "kw", "qa", "bh", "om", "global"],
+  "strapiContentTypes": [
+    {
+      "name": "gift-code",
+      "fields": ["code", "type", "value", "maxUses", "usedCount", "expiresAt", "isActive", "targetRoles", "targetMarkets", "campaign"]
+    },
+    {
+      "name": "gift-code-redemption",
+      "fields": ["giftCode", "user", "redeemedAt", "appliedBenefit"]
+    },
+    {
+      "name": "loyalty-account",
+      "fields": ["user", "balance", "lifetimeEarned", "lifetimeRedeemed", "tier"]
+    },
+    {
+      "name": "loyalty-transaction",
+      "fields": ["user", "amount", "type", "reason", "description", "bonusAmount"]
+    },
+    {
+      "name": "feature-flag",
+      "fields": ["key", "name", "nameAr", "description", "enabled", "rolloutPercentage", "category", "activeForRoles", "activeForMarkets", "dependencies"]
+    },
+    {
+      "name": "quota-policy",
+      "fields": ["role", "resource", "limit", "period", "isEnabled"]
+    },
+    {
+      "name": "user-quota",
+      "fields": ["user", "resource", "used", "bonus", "resetsAt"]
+    }
+  ],
+  "kpis": [
+    {
+      "metric": "gift_code_redemption_rate",
+      "formula": "redeemed_codes / total_codes",
+      "target": ">= 30%"
+    },
+    {
+      "metric": "points_engagement",
+      "formula": "users_with_points_activity / total_users",
+      "target": ">= 50%"
+    },
+    {
+      "metric": "tier_progression",
+      "formula": "users_silver_or_above / total_users",
+      "target": ">= 20%"
+    },
+    {
+      "metric": "feature_adoption",
+      "formula": "users_using_feature / users_with_access",
+      "target": ">= 40%"
+    },
+    {
+      "metric": "quota_upgrade_conversion",
+      "formula": "users_upgraded_after_quota_limit / users_hit_quota_limit",
+      "target": ">= 10%"
+    }
+  ]
+}

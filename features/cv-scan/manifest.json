@@ -1,0 +1,237 @@
+{
+  "feature": "cv-scan",
+  "version": "1.0.0",
+  "description": {
+    "en": "CV/Resume scanning, parsing, and AI analysis with consent gating",
+    "ar": "مسح وتحليل السيرة الذاتية بالذكاء الاصطناعي مع بوابة الموافقة"
+  },
+  "markets": ["jo", "sa", "ae"],
+  "market_defaults": {
+    "jo": {
+      "currency": "JOD",
+      "timezone": "Asia/Amman",
+      "phone_pattern": "^\\+?962[0-9]{8,9}$",
+      "locale": "ar-JO",
+      "data_residency": "jordan"
+    },
+    "sa": {
+      "currency": "SAR",
+      "timezone": "Asia/Riyadh",
+      "phone_pattern": "^\\+?966[0-9]{9}$",
+      "locale": "ar-SA",
+      "data_residency": "saudi"
+    },
+    "ae": {
+      "currency": "AED",
+      "timezone": "Asia/Dubai",
+      "phone_pattern": "^\\+?971[0-9]{9}$",
+      "locale": "ar-AE",
+      "data_residency": "uae"
+    }
+  },
+  "frontend": {
+    "pages": [],
+    "components": [
+      {
+        "name": "CVScanModal",
+        "path": "src/components/cv-scan/CVScanModal.tsx",
+        "description": {
+          "en": "Modal for CV upload with parsing preview and AI consent",
+          "ar": "نافذة رفع السيرة الذاتية مع معاينة التحليل والموافقة على الذكاء الاصطناعي"
+        }
+      },
+      {
+        "name": "CVScanHero",
+        "path": "src/components/cv-scan/CVScanHero.tsx",
+        "description": {
+          "en": "Hero section with inline CV upload on homepage",
+          "ar": "قسم البطل مع رفع السيرة الذاتية المدمج في الصفحة الرئيسية"
+        }
+      },
+      {
+        "name": "ConsentCheckbox",
+        "path": "src/components/cv-scan/ConsentCheckbox.tsx",
+        "description": {
+          "en": "Explicit consent checkbox for AI analysis",
+          "ar": "مربع الموافقة الصريحة لتحليل الذكاء الاصطناعي"
+        }
+      },
+      {
+        "name": "ParsedResumePreview",
+        "path": "src/components/cv-scan/ParsedResumePreview.tsx",
+        "description": {
+          "en": "Editable preview of parsed resume data",
+          "ar": "معاينة قابلة للتعديل للسيرة الذاتية المحللة"
+        }
+      }
+    ],
+    "hooks": [
+      {
+        "name": "useCVUpload",
+        "path": "src/hooks/useCVUpload.ts",
+        "description": {
+          "en": "Hook for CV upload with polling and consent management",
+          "ar": "Hook لرفع السيرة الذاتية مع الاستعلام وإدارة الموافقة"
+        }
+      }
+    ]
+  },
+  "backend": {
+    "endpoints": [
+      {
+        "method": "POST",
+        "path": "/api/ingest/upload",
+        "description": {
+          "en": "Upload CV file with consent flag",
+          "ar": "رفع ملف السيرة الذاتية مع علامة الموافقة"
+        },
+        "auth_required": false,
+        "request_body": {
+          "file": "File (PDF, DOCX, DOC, TXT)",
+          "mode": "string (parse | analyze)",
+          "context": "string? (optional context)",
+          "consentToAI": "boolean (required for analyze mode)"
+        },
+        "response": {
+          "jobId": "string",
+          "status": "string (pending | processing | completed | failed)"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/ingest/status/{jobId}",
+        "description": {
+          "en": "Get CV processing status",
+          "ar": "الحصول على حالة معالجة السيرة الذاتية"
+        },
+        "auth_required": false,
+        "response": {
+          "jobId": "string",
+          "status": "string",
+          "progress": "number (0-100)",
+          "parsedId": "string? (when completed)"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/resume-records/{id}",
+        "description": {
+          "en": "Get parsed resume record",
+          "ar": "الحصول على سجل السيرة الذاتية المحللة"
+        },
+        "auth_required": true,
+        "response": {
+          "parsed_json": "object",
+          "metadata": "object"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/api/ingest/analyze/{parsedId}",
+        "description": {
+          "en": "AI analysis of parsed resume (requires consent)",
+          "ar": "تحليل الذكاء الاصطناعي للسيرة الذاتية (يتطلب موافقة)"
+        },
+        "auth_required": true,
+        "consent_required": true,
+        "response": {
+          "analysisId": "string",
+          "score": "number",
+          "breakdown": "object",
+          "suggestions": "string[]",
+          "keywords": "string[]"
+        }
+      }
+    ],
+    "services": [
+      {
+        "name": "ingestor",
+        "type": "docker",
+        "port": 8000,
+        "health_endpoint": "/health"
+      }
+    ]
+  },
+  "i18n": {
+    "keys": [
+      "cvScan.title",
+      "cvScan.subtitle",
+      "cvScan.uploadButton",
+      "cvScan.dragDrop",
+      "cvScan.supportedFormats",
+      "cvScan.processing",
+      "cvScan.parsing",
+      "cvScan.completed",
+      "cvScan.failed",
+      "cvScan.consent.title",
+      "cvScan.consent.description",
+      "cvScan.consent.checkbox",
+      "cvScan.consent.privacy",
+      "cvScan.preview.title",
+      "cvScan.preview.edit",
+      "cvScan.preview.name",
+      "cvScan.preview.email",
+      "cvScan.preview.phone",
+      "cvScan.preview.skills",
+      "cvScan.preview.experience",
+      "cvScan.preview.education",
+      "cvScan.actions.quickApply",
+      "cvScan.actions.generateCover",
+      "cvScan.actions.saveProfile",
+      "cvScan.actions.downloadPDF",
+      "cvScan.actions.analyze",
+      "cvScan.analysis.title",
+      "cvScan.analysis.score",
+      "cvScan.analysis.suggestions",
+      "cvScan.analysis.keywords",
+      "cvScan.errors.fileRequired",
+      "cvScan.errors.invalidFormat",
+      "cvScan.errors.fileTooLarge",
+      "cvScan.errors.uploadFailed",
+      "cvScan.errors.parseFailed",
+      "cvScan.errors.consentRequired"
+    ]
+  },
+  "privacy": {
+    "data_collected": [
+      "resume_file",
+      "parsed_contact_info",
+      "parsed_skills",
+      "parsed_experience",
+      "parsed_education"
+    ],
+    "ai_processing": {
+      "requires_explicit_consent": true,
+      "redaction_option": true,
+      "data_retention": "user_controlled"
+    },
+    "third_party_services": []
+  },
+  "dependencies": {
+    "frontend": [
+      "react-dropzone",
+      "lucide-react"
+    ],
+    "backend": [
+      "python-multipart",
+      "PyPDF2",
+      "python-docx",
+      "httpx"
+    ]
+  },
+  "tests": {
+    "unit": [
+      "useCVUpload.test.ts",
+      "ConsentCheckbox.test.tsx",
+      "CVScanModal.test.tsx"
+    ],
+    "e2e": [
+      "cv-upload-flow.spec.ts",
+      "cv-consent-gating.spec.ts",
+      "cv-quick-apply.spec.ts"
+    ]
+  },
+  "created_at": "2026-01-28T00:00:00Z",
+  "updated_at": "2026-01-28T00:00:00Z",
+  "author": "Forsati Engineering Team"
+}

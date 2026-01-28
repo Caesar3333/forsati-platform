@@ -1,0 +1,70 @@
+{
+  "name": "volunteering",
+  "version": "1.0.0",
+  "description": {
+    "en": "Volunteering opportunities listing and management",
+    "ar": "قائمة فرص التطوع وإدارتها"
+  },
+  "markets": ["jo", "sa", "ae"],
+  "status": "development",
+  "owner": "platform-team",
+  "frontend": {
+    "pages": [
+      "src/app/[locale]/volunteering/page.tsx",
+      "src/app/[locale]/volunteering/[id]/page.tsx",
+      "src/app/[locale]/org/[orgId]/volunteering/new/page.tsx"
+    ],
+    "components": [
+      "src/components/opportunities/OpportunityCard.tsx",
+      "src/components/opportunities/OpportunityFilters.tsx",
+      "src/components/volunteering/VolunteeringDetail.tsx",
+      "src/components/volunteering/VolunteeringForm.tsx"
+    ]
+  },
+  "backend": {
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/volunteering",
+        "auth": "optional",
+        "description": "List volunteering opportunities"
+      },
+      {
+        "method": "GET",
+        "path": "/api/volunteering/{id}",
+        "auth": "optional",
+        "description": "Get volunteering opportunity details"
+      },
+      {
+        "method": "POST",
+        "path": "/api/volunteering",
+        "auth": "required",
+        "role": "organization",
+        "description": "Create volunteering opportunity"
+      },
+      {
+        "method": "POST",
+        "path": "/api/volunteering/{id}/apply",
+        "auth": "required",
+        "description": "Apply for volunteering opportunity"
+      }
+    ],
+    "services": ["strapi", "typesense"]
+  },
+  "i18n_keys": [
+    "volunteering.title",
+    "volunteering.subtitle",
+    "volunteering.card.*",
+    "volunteering.detail.*",
+    "volunteering.filters.*",
+    "volunteering.apply.*"
+  ],
+  "privacy": {
+    "data_collected": ["volunteer_views", "applications"],
+    "requires_explicit_consent": false
+  },
+  "dependencies": {
+    "features": [],
+    "packages": ["@tanstack/react-query", "next-intl"]
+  }
+}

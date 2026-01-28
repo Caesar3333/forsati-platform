@@ -1,0 +1,262 @@
+﻿git : warning: in the working copy of 'frontend/web/package.json', LF will be replaced by CRLF the next time Git touches it
+At line:1 char:40
++ ... "C:\Users\LENOVO\forsati-platform"; git diff --name-only 2>&1 | Out-F ...
++                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: in the... Git touches it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+warning: in the working copy of 'frontend/web/pnpm-lock.yaml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/auth/login/LoginClient.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/auth/login/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/auth/register/RegisterClient.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/auth/register/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/courses/CoursesListClient.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/courses/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/jobs/JobsListClient.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/jobs/[id]/JobDetailClient.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/jobs/[id]/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/jobs/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/layout.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/me/dashboard/DashboardClient.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/me/dashboard/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/org/[orgId]/dashboard/OrgDashboardClient.tsx', LF will be replaced by CRLF the next time Git 
+touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/org/[orgId]/dashboard/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/scholarships/ScholarshipsListClient.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/scholarships/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/volunteering/VolunteeringListClient.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/[locale]/volunteering/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/api/applications/email-forward/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/api/applications/quick/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/api/applications/whatsapp/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/api/auth/[...nextauth]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/api/ingest/analyze/[parsedId]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/api/ingest/status/[jobId]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/api/ingest/upload/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/api/opportunities/[id]/application-link/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/api/opportunities/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/api/opportunities/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/api/resume-records/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/app/api/saved-jobs/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/Button.test.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/apply/QuickApplyForm.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/cv-scan/CVScanHero.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/cv-scan/CVScanModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/cv-scan/ConsentCheckbox.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/cv-scan/ParsedResumePreview.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/cv-scan/index.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/jobs/FeaturedJobs.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/jobs/JobCard.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/layout/Footer.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/layout/Header.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/layout/LanguageSwitcher.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/layout/MobileMenu.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/layout/UserMenu.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/layout/index.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/notifications/ToastProvider.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/opportunities/OpportunityCard.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/opportunities/OpportunityFilters.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/shared/ShareButtons.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/ui/Badge.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/ui/Button.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/ui/Button/Button.stories.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/ui/Button/Button.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/ui/Button/index.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/ui/Card.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/ui/Input.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/ui/Modal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/ui/Pagination.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/ui/SearchBar.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/ui/Toast.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/components/ui/index.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/hooks/index.ts', LF will be replaced by CRLF the next time Git touches it
+frontend/web/package.json
+frontend/web/pnpm-lock.yaml
+frontend/web/src/app/[locale]/auth/login/LoginClient.tsx
+frontend/web/src/app/[locale]/auth/login/page.tsx
+frontend/web/src/app/[locale]/auth/register/RegisterClient.tsx
+frontend/web/src/app/[locale]/auth/register/page.tsx
+frontend/web/src/app/[locale]/courses/CoursesListClient.tsx
+frontend/web/src/app/[locale]/courses/page.tsx
+frontend/web/src/app/[locale]/jobs/JobsListClient.tsx
+frontend/web/src/app/[locale]/jobs/[id]/JobDetailClient.tsx
+frontend/web/src/app/[locale]/jobs/[id]/page.tsx
+frontend/web/src/app/[locale]/jobs/page.tsx
+frontend/web/src/app/[locale]/me/dashboard/DashboardClient.tsx
+frontend/web/src/app/[locale]/me/dashboard/page.tsx
+frontend/web/src/app/[locale]/org/[orgId]/dashboard/OrgDashboardClient.tsx
+frontend/web/src/app/[locale]/org/[orgId]/dashboard/page.tsx
+frontend/web/src/app/[locale]/scholarships/ScholarshipsListClient.tsx
+frontend/web/src/app/[locale]/scholarships/page.tsx
+frontend/web/src/app/[locale]/volunteering/VolunteeringListClient.tsx
+frontend/web/src/app/[locale]/volunteering/page.tsx
+frontend/web/src/app/api/applications/email-forward/route.ts
+frontend/web/src/app/api/applications/quick/route.ts
+frontend/web/src/app/api/applications/whatsapp/route.ts
+frontend/web/src/app/api/auth/[...nextauth]/route.ts
+frontend/web/src/app/api/ingest/analyze/[parsedId]/route.ts
+frontend/web/src/app/api/ingest/status/[jobId]/route.ts
+frontend/web/src/app/api/ingest/upload/route.ts
+frontend/web/src/app/api/opportunities/[id]/application-link/route.ts
+frontend/web/src/app/api/opportunities/[id]/route.ts
+frontend/web/src/app/api/opportunities/route.ts
+frontend/web/src/app/api/resume-records/[id]/route.ts
+frontend/web/src/app/api/saved-jobs/route.ts
+frontend/web/src/components/Button.test.tsx
+frontend/web/src/components/apply/QuickApplyForm.tsx
+frontend/web/src/components/cv-scan/CVScanHero.tsx
+frontend/web/src/components/cv-scan/CVScanModal.tsx
+frontend/web/src/components/cv-scan/ConsentCheckbox.tsx
+frontend/web/src/components/cv-scan/ParsedResumePreview.tsx
+frontend/web/src/components/jobs/FeaturedJobs.tsx
+frontend/web/src/components/jobs/JobCard.tsx
+frontend/web/src/components/layout/Footer.tsx
+frontend/web/src/components/layout/Header.tsx
+frontend/web/src/components/layout/LanguageSwitcher.tsx
+frontend/web/src/components/layout/MobileMenu.tsx
+frontend/web/src/components/layout/UserMenu.tsx
+frontend/web/src/components/notifications/ToastProvider.tsx
+frontend/web/src/components/opportunities/OpportunityCard.tsx
+frontend/web/src/components/opportunities/OpportunityFilters.tsx
+frontend/web/src/components/shared/ShareButtons.tsx
+frontend/web/src/components/ui/Badge.tsx
+frontend/web/src/components/ui/Button.tsx
+frontend/web/src/components/ui/Button/Button.stories.tsx
+frontend/web/src/components/ui/Button/Button.tsx
+frontend/web/src/components/ui/Button/index.ts
+frontend/web/src/components/ui/Card.tsx
+frontend/web/src/components/ui/Input.tsx
+frontend/web/src/components/ui/Modal.tsx
+frontend/web/src/components/ui/Pagination.tsx
+frontend/web/src/components/ui/SearchBar.tsx
+frontend/web/src/components/ui/Toast.tsx
+frontend/web/src/hooks/useAnalytics.ts
+frontend/web/src/hooks/useCVUpload.ts
+frontend/web/src/hooks/useClipboard.ts
+frontend/web/src/services/apply/emailTemplates.ts
+frontend/web/src/services/apply/types.ts
+frontend/web/src/services/notifications/notificationService.ts
+frontend/web/src/services/privacy/consentService.ts
+frontend/web/src/services/profile/resumeToProfileMapper.ts
+frontend/web/src/services/search/searchService.ts
+frontend/web/src/styles/globals.css
+frontend/web/src/test/setup.ts
+frontend/web/src/test/utils.tsx
+warning: in the working copy of 'frontend/web/src/hooks/useAnalytics.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/hooks/useCVUpload.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/hooks/useClipboard.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/i18n/config.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/middleware.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/services/apply/emailTemplates.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/services/apply/types.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/services/notifications/notificationService.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/services/privacy/consentService.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/services/profile/resumeToProfileMapper.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/services/search/searchService.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/styles/globals.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/test/setup.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/web/src/test/utils.tsx', LF will be replaced by CRLF the next time Git touches it
+  M   f r o n t e n d / w e b / p a c k a g e . j s o n  
+   M   f r o n t e n d / w e b / p n p m - l o c k . y a m l  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / a u t h / l o g i n / L o g i n C l i e n t . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / a u t h / l o g i n / p a g e . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / a u t h / r e g i s t e r / R e g i s t e r C l i e n t . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / a u t h / r e g i s t e r / p a g e . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / c o u r s e s / C o u r s e s L i s t C l i e n t . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / c o u r s e s / p a g e . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / j o b s / J o b s L i s t C l i e n t . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / j o b s / [ i d ] / J o b D e t a i l C l i e n t . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / j o b s / [ i d ] / p a g e . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / j o b s / p a g e . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / l a y o u t . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / m e / d a s h b o a r d / D a s h b o a r d C l i e n t . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / m e / d a s h b o a r d / p a g e . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / o r g / [ o r g I d ] / d a s h b o a r d / O r g D a s h b o a r d C l i e n t . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / o r g / [ o r g I d ] / d a s h b o a r d / p a g e . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / p a g e . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / s c h o l a r s h i p s / S c h o l a r s h i p s L i s t C l i e n t . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / s c h o l a r s h i p s / p a g e . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / v o l u n t e e r i n g / V o l u n t e e r i n g L i s t C l i e n t . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / v o l u n t e e r i n g / p a g e . t s x  
+   M   f r o n t e n d / w e b / s r c / a p p / a p i / a p p l i c a t i o n s / e m a i l - f o r w a r d / r o u t e . t s  
+   M   f r o n t e n d / w e b / s r c / a p p / a p i / a p p l i c a t i o n s / q u i c k / r o u t e . t s  
+   M   f r o n t e n d / w e b / s r c / a p p / a p i / a p p l i c a t i o n s / w h a t s a p p / r o u t e . t s  
+   M   f r o n t e n d / w e b / s r c / a p p / a p i / a u t h / [ . . . n e x t a u t h ] / r o u t e . t s  
+   M   f r o n t e n d / w e b / s r c / a p p / a p i / i n g e s t / a n a l y z e / [ p a r s e d I d ] / r o u t e . t s  
+   M   f r o n t e n d / w e b / s r c / a p p / a p i / i n g e s t / s t a t u s / [ j o b I d ] / r o u t e . t s  
+   M   f r o n t e n d / w e b / s r c / a p p / a p i / i n g e s t / u p l o a d / r o u t e . t s  
+   M   f r o n t e n d / w e b / s r c / a p p / a p i / o p p o r t u n i t i e s / [ i d ] / a p p l i c a t i o n - l i n k / r o u t e . t s  
+   M   f r o n t e n d / w e b / s r c / a p p / a p i / o p p o r t u n i t i e s / [ i d ] / r o u t e . t s  
+   M   f r o n t e n d / w e b / s r c / a p p / a p i / o p p o r t u n i t i e s / r o u t e . t s  
+   M   f r o n t e n d / w e b / s r c / a p p / a p i / r e s u m e - r e c o r d s / [ i d ] / r o u t e . t s  
+   M   f r o n t e n d / w e b / s r c / a p p / a p i / s a v e d - j o b s / r o u t e . t s  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / B u t t o n . t e s t . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / a p p l y / Q u i c k A p p l y F o r m . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / c v - s c a n / C V S c a n H e r o . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / c v - s c a n / C V S c a n M o d a l . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / c v - s c a n / C o n s e n t C h e c k b o x . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / c v - s c a n / P a r s e d R e s u m e P r e v i e w . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / c v - s c a n / i n d e x . t s  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / j o b s / F e a t u r e d J o b s . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / j o b s / J o b C a r d . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / l a y o u t / F o o t e r . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / l a y o u t / H e a d e r . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / l a y o u t / L a n g u a g e S w i t c h e r . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / l a y o u t / M o b i l e M e n u . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / l a y o u t / U s e r M e n u . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / l a y o u t / i n d e x . t s  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / n o t i f i c a t i o n s / T o a s t P r o v i d e r . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / o p p o r t u n i t i e s / O p p o r t u n i t y C a r d . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / o p p o r t u n i t i e s / O p p o r t u n i t y F i l t e r s . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / s h a r e d / S h a r e B u t t o n s . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / u i / B a d g e . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / u i / B u t t o n . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / u i / B u t t o n / B u t t o n . s t o r i e s . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / u i / B u t t o n / B u t t o n . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / u i / B u t t o n / i n d e x . t s  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / u i / C a r d . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / u i / I n p u t . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / u i / M o d a l . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / u i / P a g i n a t i o n . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / u i / S e a r c h B a r . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / u i / T o a s t . t s x  
+   M   f r o n t e n d / w e b / s r c / c o m p o n e n t s / u i / i n d e x . t s  
+   M   f r o n t e n d / w e b / s r c / h o o k s / i n d e x . t s  
+   M   f r o n t e n d / w e b / s r c / h o o k s / u s e A n a l y t i c s . t s  
+ R     f r o n t e n d / w e b / s r c / h o o k s / u s e A u t h . t s   - >   f r o n t e n d / w e b / s r c / h o o k s / u s e A u t h . t s x  
+   M   f r o n t e n d / w e b / s r c / h o o k s / u s e C V U p l o a d . t s  
+   M   f r o n t e n d / w e b / s r c / h o o k s / u s e C l i p b o a r d . t s  
+ R     f r o n t e n d / w e b / s r c / h o o k s / u s e T o a s t . t s   - >   f r o n t e n d / w e b / s r c / h o o k s / u s e T o a s t . t s x  
+   M   f r o n t e n d / w e b / s r c / i 1 8 n / c o n f i g . t s  
+   M   f r o n t e n d / w e b / s r c / m i d d l e w a r e . t s  
+   M   f r o n t e n d / w e b / s r c / s e r v i c e s / a p p l y / e m a i l T e m p l a t e s . t s  
+   M   f r o n t e n d / w e b / s r c / s e r v i c e s / a p p l y / t y p e s . t s  
+   M   f r o n t e n d / w e b / s r c / s e r v i c e s / n o t i f i c a t i o n s / n o t i f i c a t i o n S e r v i c e . t s  
+   M   f r o n t e n d / w e b / s r c / s e r v i c e s / p r i v a c y / c o n s e n t S e r v i c e . t s  
+   M   f r o n t e n d / w e b / s r c / s e r v i c e s / p r o f i l e / r e s u m e T o P r o f i l e M a p p e r . t s  
+   M   f r o n t e n d / w e b / s r c / s e r v i c e s / s e a r c h / s e a r c h S e r v i c e . t s  
+   M   f r o n t e n d / w e b / s r c / s t y l e s / g l o b a l s . c s s  
+   M   f r o n t e n d / w e b / s r c / t e s t / s e t u p . t s  
+   M   f r o n t e n d / w e b / s r c / t e s t / u t i l s . t s x  
+ ? ?   . g i t h u b / w o r k f l o w s / a d m i n - c i . y m l  
+ ? ?   d o c s / a p i / a d m i n - o p e n a p i . y a m l  
+ ? ?   f e a t u r e s / a d m i n - i n c e n t i v e s /  
+ ? ?   f r o n t e n d / w e b / e 2 e / a d m i n /  
+ ? ?   f r o n t e n d / w e b / e s l i n t . c o n f i g . m j s  
+ ? ?   f r o n t e n d / w e b / m e s s a g e s / a d m i n . a r . j s o n  
+ ? ?   f r o n t e n d / w e b / m e s s a g e s / a d m i n . e n . j s o n  
+ ? ?   f r o n t e n d / w e b / s r c / a p p / [ l o c a l e ] / a d m i n /  
+ ? ?   f r o n t e n d / w e b / s r c / a p p / a p i / a d m i n /  
+ ? ?   f r o n t e n d / w e b / s r c / a p p / a p i / f e a t u r e f l a g s /  
+ ? ?   f r o n t e n d / w e b / s r c / a p p / a p i / g i f t c o d e s /  
+ ? ?   f r o n t e n d / w e b / s r c / a p p / a p i / p o i n t s /  
+ ? ?   f r o n t e n d / w e b / s r c / c o m p o n e n t s / a d m i n /  
+ ? ?   f r o n t e n d / w e b / s r c / c o n s t a n t s /  
+ ? ?   f r o n t e n d / w e b / s r c / s e r v i c e s / a d m i n /  
+ ? ?   f r o n t e n d / w e b / s r c / t y p e s /  
+ ? ?   i n f r a / d b /  
+ ? ?   r e p o r t s / a u d i t - 2 0 2 6 0 1 2 8 - 1 8 3 4 3 0 /  
+ ? ?   s c r i p t s / a u d i t _ a n d _ f i x . s h  
+ ? ?   s e r v i c e s / i n g e s t o r / . v e n v /  
+ 

@@ -1,0 +1,292 @@
+{
+  "common": {
+    "appName": "Forsati",
+    "tagline": "Smart Employment Platform",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "all": "All",
+    "none": "None",
+    "yes": "Yes",
+    "no": "No",
+    "or": "or",
+    "and": "and",
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "navigation": {
+    "home": "Home",
+    "jobs": "Jobs",
+    "volunteering": "Volunteering",
+    "scholarships": "Scholarships",
+    "courses": "Courses",
+    "about": "About Forsati",
+    "contact": "Contact Us",
+    "help": "Help",
+    "faq": "FAQ"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "forgotPassword": "Forgot Password?",
+    "resetPassword": "Reset Password",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "rememberMe": "Remember Me",
+    "agreeTerms": "I agree to the Terms of Service and Privacy Policy",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "loginWith": "Login with",
+    "registerWith": "Register with",
+    "orContinueWith": "Or continue with",
+    "google": "Google",
+    "linkedin": "LinkedIn",
+    "accountType": "Account Type",
+    "candidate": "Job Seeker",
+    "recruiter": "Employer"
+  },
+  "hero": {
+    "badge": "#1 Smart Employment Platform in Jordan",
+    "title": "Find Your Perfect Opportunity",
+    "titleHighlight": "with AI",
+    "subtitle": "Upload your CV and get instant analysis, improvement suggestions, and smart matching with thousands of opportunities",
+    "searchPlaceholder": "Search for a job, company, or skill...",
+    "searchBtn": "Search",
+    "orUploadCV": "Or upload your CV"
+  },
+  "cvScan": {
+    "title": "Scan Your CV",
+    "description": "Upload your CV and get AI-powered analysis",
+    "dropzoneLabel": "Drag and drop your CV file here",
+    "dropzoneAlt": "or click to select a file",
+    "supportedFormats": "PDF, DOC, DOCX - Max 10MB",
+    "voiceTitle": "Record Your Voice",
+    "voiceDescription": "Tell us about yourself and your experience",
+    "startRecording": "Start Recording",
+    "stopRecording": "Stop Recording",
+    "analyzing": "Analyzing...",
+    "parsing": "Reading your CV...",
+    "uploadSuccess": "File uploaded successfully!",
+    "uploadError": "Error uploading file",
+    "scanNow": "Scan Now",
+    "features": {
+      "analysis": "Skills & experience analysis",
+      "suggestions": "Improvement suggestions",
+      "matching": "Match with suitable opportunities"
+    },
+    "consent": {
+      "title": "AI Analysis Consent",
+      "description": "For advanced analysis and personalized suggestions, we need your consent to process your data with AI.",
+      "checkbox": "I consent to AI analysis of my CV",
+      "privacy": "Your data is protected and will not be shared with third parties without your permission.",
+      "redactPII": "Redact personal information",
+      "redactPIIDescription": "Remove name, email, and phone before AI analysis",
+      "privacyNotice": "Your data is processed securely and never shared without your explicit permission.",
+      "noConsentWarning": "Without consent, only basic parsing will be performed. AI-powered suggestions will not be available."
+    },
+    "preview": {
+      "title": "Parsed Resume",
+      "edit": "Edit",
+      "contactInfo": "Contact Information",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "skills": "Skills",
+      "experience": "Experience",
+      "education": "Education",
+      "notProvided": "Not provided",
+      "noSkillsFound": "No skills found",
+      "noExperienceFound": "No experience found",
+      "noEducationFound": "No education found",
+      "addSkillPlaceholder": "Add a skill...",
+      "years": "years",
+      "present": "Present"
+    },
+    "actions": {
+      "quickApply": "Quick Apply",
+      "generateCover": "Generate Cover Letter",
+      "saveProfile": "Save to Profile",
+      "downloadPDF": "Download Improved PDF",
+      "analyze": "Analyze with AI",
+      "backToUpload": "Upload Another File"
+    },
+    "analysis": {
+      "title": "Analysis Results",
+      "score": "Score",
+      "suggestions": "Improvement Suggestions",
+      "keywords": "Keywords"
+    },
+    "errors": {
+      "fileRequired": "Please select a file",
+      "invalidFormat": "Invalid file format",
+      "fileTooLarge": "File too large",
+      "uploadFailed": "Upload failed",
+      "parseFailed": "Parse failed",
+      "consentRequired": "Consent required for AI analysis"
+    }
+  },
+  "jobs": {
+    "title": "Job Opportunities",
+    "searchPlaceholder": "Search for a job...",
+    "filters": {
+      "title": "Filter Results",
+      "type": "Job Type",
+      "category": "Category",
+      "location": "Location",
+      "salary": "Salary",
+      "experience": "Experience",
+      "datePosted": "Date Posted"
+    },
+    "types": {
+      "fullTime": "Full-time",
+      "partTime": "Part-time",
+      "contract": "Contract",
+      "internship": "Internship",
+      "remote": "Remote",
+      "hybrid": "Hybrid"
+    },
+    "experience": {
+      "entry": "Entry Level",
+      "junior": "Junior (1-2 years)",
+      "mid": "Mid-level (3-5 years)",
+      "senior": "Senior (5+ years)",
+      "lead": "Lead"
+    },
+    "card": {
+      "postedAgo": "Posted {time} ago",
+      "applicants": "{count} applicants",
+      "apply": "Apply Now",
+      "save": "Save",
+      "share": "Share",
+      "salary": "Salary",
+      "negotiable": "Negotiable",
+      "confidential": "Confidential"
+    },
+    "detail": {
+      "description": "Job Description",
+      "requirements": "Requirements",
+      "benefits": "Benefits",
+      "aboutCompany": "About the Company",
+      "similarJobs": "Similar Jobs"
+    },
+    "empty": {
+      "title": "No Results Found",
+      "description": "Try changing your search or filter criteria"
+    }
+  },
+  "companies": {
+    "title": "Companies",
+    "searchPlaceholder": "Search for a company...",
+    "size": {
+      "startup": "Startup (1-10)",
+      "small": "Small (11-50)",
+      "medium": "Medium (51-200)",
+      "large": "Large (201-1000)",
+      "enterprise": "Enterprise (1000+)"
+    },
+    "industries": {
+      "tech": "Information Technology",
+      "health": "Healthcare",
+      "education": "Education",
+      "finance": "Finance & Banking",
+      "retail": "Retail",
+      "manufacturing": "Manufacturing",
+      "hospitality": "Hospitality",
+      "construction": "Construction"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome, {name}!",
+    "overview": "Overview",
+    "applications": "My Applications",
+    "savedJobs": "Saved Jobs",
+    "messages": "Messages",
+    "interviews": "Interviews",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "profile": {
+    "title": "Profile",
+    "personalInfo": "Personal Information",
+    "experience": "Experience",
+    "education": "Education",
+    "skills": "Skills",
+    "languages": "Languages",
+    "certifications": "Certifications",
+    "portfolio": "Portfolio",
+    "cv": "Resume/CV",
+    "completeness": "Profile Completeness",
+    "addExperience": "Add Experience",
+    "addEducation": "Add Education",
+    "addSkill": "Add Skill",
+    "uploadCV": "Upload CV"
+  },
+  "footer": {
+    "about": "About Forsati",
+    "aboutText": "Forsati is Jordan's first AI-powered employment platform, connecting job seekers with the best opportunities using artificial intelligence.",
+    "quickLinks": "Quick Links",
+    "forCandidates": "For Job Seekers",
+    "forEmployers": "For Employers",
+    "resources": "Resources",
+    "support": "Support",
+    "contact": "Contact Us",
+    "email": "info@forsati.jo",
+    "phone": "+962 6 XXX XXXX",
+    "address": "Amman, Jordan",
+    "social": "Follow Us",
+    "newsletter": "Newsletter",
+    "newsletterText": "Subscribe to get the latest opportunities",
+    "subscribe": "Subscribe",
+    "copyright": "© {year} Forsati. All rights reserved.",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy"
+  },
+  "errors": {
+    "404": {
+      "title": "Page Not Found",
+      "description": "Sorry, the page you're looking for doesn't exist.",
+      "backHome": "Back to Home"
+    },
+    "500": {
+      "title": "Server Error",
+      "description": "Sorry, an unexpected error occurred. Please try again later.",
+      "retry": "Retry"
+    },
+    "network": {
+      "title": "Connection Error",
+      "description": "Check your internet connection and try again."
+    }
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Invalid email address",
+    "phone": "Invalid phone number",
+    "minLength": "Must be at least {min} characters",
+    "maxLength": "Must not exceed {max} characters",
+    "passwordMismatch": "Passwords do not match",
+    "passwordWeak": "Password is too weak"
+  },
+  "time": {
+    "justNow": "Just now",
+    "minutesAgo": "{count} minutes ago",
+    "hoursAgo": "{count} hours ago",
+    "daysAgo": "{count} days ago",
+    "weeksAgo": "{count} weeks ago",
+    "monthsAgo": "{count} months ago"
+  }
+}

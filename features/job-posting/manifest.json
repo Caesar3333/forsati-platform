@@ -1,0 +1,80 @@
+{
+  "name": "job-posting",
+  "version": "1.0.0",
+  "description": {
+    "en": "Job posting & listing feature for employers and job seekers",
+    "ar": "ميزة نشر وإدراج الوظائف لأصحاب العمل والباحثين عن عمل"
+  },
+  "markets": ["jo", "sa", "ae"],
+  "status": "development",
+  "owner": "platform-team",
+  "frontend": {
+    "pages": [
+      "src/app/[locale]/jobs/page.tsx",
+      "src/app/[locale]/jobs/[id]/page.tsx",
+      "src/app/[locale]/org/[orgId]/jobs/new/page.tsx",
+      "src/app/[locale]/org/[orgId]/jobs/[jobId]/edit/page.tsx"
+    ],
+    "components": [
+      "src/components/jobs/JobCard.tsx",
+      "src/components/jobs/JobList.tsx",
+      "src/components/jobs/JobDetail.tsx",
+      "src/components/jobs/JobFilters.tsx",
+      "src/components/jobs/JobPostForm.tsx"
+    ]
+  },
+  "backend": {
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/opportunities",
+        "auth": "optional",
+        "description": "List job opportunities with filters"
+      },
+      {
+        "method": "GET",
+        "path": "/api/opportunities/{id}",
+        "auth": "optional",
+        "description": "Get job details"
+      },
+      {
+        "method": "POST",
+        "path": "/api/opportunities",
+        "auth": "required",
+        "role": "employer",
+        "description": "Create new job posting"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/opportunities/{id}",
+        "auth": "required",
+        "role": "employer",
+        "description": "Update job posting"
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/opportunities/{id}",
+        "auth": "required",
+        "role": "employer",
+        "description": "Delete job posting"
+      }
+    ],
+    "services": ["strapi", "typesense"]
+  },
+  "i18n_keys": [
+    "jobs.title",
+    "jobs.subtitle",
+    "jobs.card.*",
+    "jobs.detail.*",
+    "jobs.filters.*",
+    "jobs.post.*"
+  ],
+  "privacy": {
+    "data_collected": ["job_views", "search_queries"],
+    "requires_explicit_consent": false
+  },
+  "dependencies": {
+    "features": [],
+    "packages": ["@tanstack/react-query", "next-intl"]
+  }
+}
