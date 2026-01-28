@@ -29,7 +29,7 @@ interface OrgDashboardClientProps {
 export function OrgDashboardClient({
   locale,
   organization,
-  user,
+  user: _user,
 }: OrgDashboardClientProps) {
   const t = useTranslations("orgDashboard");
   const isRTL = locale === "ar";

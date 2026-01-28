@@ -4,7 +4,7 @@ import { Cairo, Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { locales, isValidLocale, type Locale } from "@/i18n/config";
+import { locales, isValidLocale } from "@/i18n/config";
 import "@/styles/globals.css";
 
 // Arabic font

@@ -21,6 +21,17 @@
     "test:a11y": "playwright test e2e/accessibility.spec.ts",
     "lighthouse": "lhci autorun"
   },
+  "pnpm": {
+    "overrides": {
+      "ws": "^8.17.1",
+      "tar-fs": "^3.1.1",
+      "tar": "^7.5.4",
+      "glob": "^10.5.0",
+      "cookie": "^0.7.0",
+      "tmp": "^0.2.4",
+      "esbuild": "^0.25.0"
+    }
+  },
   "dependencies": {
     "@ant-design/icons": "^6.1.0",
     "@headlessui/react": "^2.2.9",
@@ -44,14 +55,14 @@
     "dayjs": "^1.11.19",
     "framer-motion": "^11.0.0",
     "lucide-react": "^0.356.0",
-    "next": "^14.2.0",
+    "next": "^14.2.28",
     "next-auth": "^4.24.0",
     "next-intl": "^3.9.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.51.0",
-    "react-pdf": "^7.7.0",
+    "react-pdf": "^9.2.1",
     "react-toastify": "^11.0.5",
     "react-window": "^2.2.5",
     "tailwind-merge": "^2.2.0",
@@ -76,7 +87,7 @@
     "autoprefixer": "^10.4.0",
     "axe-core": "^4.11.1",
     "eslint": "^8.57.0",
-    "eslint-config-next": "^14.2.0",
+    "eslint-config-next": "^14.2.28",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",

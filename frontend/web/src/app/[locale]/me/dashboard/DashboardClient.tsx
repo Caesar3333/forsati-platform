@@ -23,7 +23,7 @@ interface DashboardClientProps {
 export function DashboardClient({ locale, user }: DashboardClientProps) {
   const t = useTranslations("dashboard");
   const isRTL = locale === "ar";
-  const [activeTab, setActiveTab] = useState<
+  const [_activeTab, _setActiveTab] = useState<
     "overview" | "applications" | "saved" | "profile"
   >("overview");
 

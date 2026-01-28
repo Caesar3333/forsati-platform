@@ -58,7 +58,7 @@ export default async function JobPage({ params }: JobPageProps) {
 
   try {
     job = await getJob(params.id);
-  } catch (error) {
+  } catch (_error) {
     notFound();
   }
 

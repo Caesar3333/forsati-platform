@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";
 import {
@@ -27,7 +27,6 @@ import {
   Users,
   Shield,
   Bell,
-  FileText,
   Download,
 } from "lucide-react";
 
@@ -49,7 +48,7 @@ interface DashboardStats {
 // ============================================
 
 export default function SuperAdminDashboard() {
-  const t = useTranslations("admin");
+  const _t = useTranslations("admin");
   const [activeTab, setActiveTab] = useState("overview");
   const [stats, setStats] = useState<DashboardStats>({
     totalUsers: 0,
@@ -253,8 +252,15 @@ function OverviewTab({ stats }: { stats: DashboardStats }) {
 // Gift Codes Tab
 // ============================================
 
+interface GiftCode {
+  id: string;
+  code: string;
+  type: string;
+  status: string;
+}
+
 function GiftCodesTab() {
-  const [codes, setCodes] = useState<any[]>([]);
+  const [_codes, _setCodes] = useState<GiftCode[]>([]);
 
   return (
     <div className="space-y-6">

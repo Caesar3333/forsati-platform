@@ -1,5 +1,4 @@
-# Step: Setup Dependencies & Manifests Report
-# خطوة: تقرير إعداد الاعتماديات والمانيفستات
+# Step: Setup Dependencies & Manifests Report | خطوة: تقرير إعداد الاعتماديات والمانيفستات
 
 ---
 
@@ -12,6 +11,7 @@
 ## Summary | ملخص
 
 ### English
+
 This step establishes the foundational infrastructure, frontend packages, UI components, and feature manifests for the Forsati platform. It includes:
 
 1. **Docker Infrastructure**: Added Redis, Typesense, Apache Tika, and Celery worker services to docker-compose.yml for caching, search, document extraction, and background processing.
@@ -27,6 +27,7 @@ This step establishes the foundational infrastructure, frontend packages, UI com
 6. **Configuration**: Updated .env.example with all required environment variables and added CI workflow for automated testing.
 
 ### العربية
+
 تُنشئ هذه الخطوة البنية التحتية الأساسية وحزم الواجهة الأمامية ومكونات UI وملفات المانيفست لمنصة فرصتي. تشمل:
 
 1. **بنية Docker التحتية**: إضافة خدمات Redis و Typesense و Apache Tika و Celery worker إلى docker-compose.yml للتخزين المؤقت والبحث واستخراج المستندات ومعالجة الخلفية.

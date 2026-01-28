@@ -19,6 +19,23 @@ interface CourseFilters {
   isFree?: boolean;
 }
 
+interface Course {
+  id: string;
+  title: string;
+  description?: string;
+  organization: {
+    name: string;
+    logo?: string;
+  };
+  provider?: string;
+  level?: string;
+  price?: number;
+  isFree?: boolean;
+  thumbnail?: string;
+  url?: string;
+  duration?: string;
+}
+
 interface CoursesListClientProps {
   locale: "ar" | "en";
   initialFilters: CourseFilters;
@@ -93,7 +110,7 @@ export function CoursesListClient({
         ) : (
           <>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {data?.courses.map((course: any) => (
+              {data?.courses.map((course: Course) => (
                 <OpportunityCard
                   key={course.id}
                   opportunity={course}

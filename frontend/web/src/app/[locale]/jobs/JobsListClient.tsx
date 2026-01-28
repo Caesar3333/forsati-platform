@@ -8,20 +8,15 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Search,
-  Filter,
   MapPin,
   Building2,
-  Clock,
   Briefcase,
-  Bookmark,
   ChevronLeft,
   ChevronRight,
-  X,
   SlidersHorizontal,
 } from "lucide-react";
 import { cn, formatCurrency, debounce } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Header } from "@/components/layout/Header";
@@ -134,7 +129,7 @@ export function JobsListClient({
   initialFilters = {},
 }: JobsListClientProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const _searchParams = useSearchParams();
   const t = translations[locale];
   const isRTL = locale === "ar";
   const { trackSearch } = useAnalytics();

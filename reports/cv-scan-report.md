@@ -1,5 +1,4 @@
-# CV Scan Feature Implementation Report
-# تقرير تنفيذ ميزة مسح السيرة الذاتية
+# CV Scan Feature Implementation Report | تقرير تنفيذ ميزة مسح السيرة الذاتية
 
 ---
 
@@ -15,7 +14,7 @@ Implemented the CV Scan feature with full AI consent gating as per Forsati Platf
 
 ## Branch | الفرع
 
-```
+```text
 feature/cv-scan
 ```
 
@@ -25,26 +24,26 @@ feature/cv-scan
 
 ### New Files | ملفات جديدة
 
-| Path | Description (EN) | الوصف (AR) |
-|------|------------------|------------|
-| `features/cv-scan/manifest.json` | Feature manifest with markets, endpoints, i18n keys | بيان الميزة مع الأسواق والنقاط النهائية ومفاتيح الترجمة |
-| `src/components/cv-scan/ConsentCheckbox.tsx` | AI consent component with PII redaction option | مكون الموافقة على الذكاء الاصطناعي مع خيار إخفاء البيانات الشخصية |
-| `src/components/cv-scan/ParsedResumePreview.tsx` | Editable preview of parsed resume data | معاينة قابلة للتعديل لبيانات السيرة الذاتية المُحللة |
-| `src/hooks/useCVUpload.ts` | Hook for CV upload with polling and consent | Hook لتحميل السيرة الذاتية مع الاستعلام والموافقة |
-| `src/app/api/ingest/upload/route.ts` | Proxy to Ingestor with consent logging | وكيل للمُحلل مع تسجيل الموافقة |
-| `src/app/api/ingest/status/[jobId]/route.ts` | Status polling proxy | وكيل استعلام الحالة |
-| `src/app/api/resume-records/[id]/route.ts` | Protected resume records endpoint | نقطة نهائية محمية لسجلات السيرة الذاتية |
-| `src/app/api/ingest/analyze/[parsedId]/route.ts` | AI analysis endpoint (requires consent) | نقطة نهائية للتحليل بالذكاء الاصطناعي (تتطلب الموافقة) |
+| Path                                            | Description (EN)                                        | الوصف (AR)                                                  |
+| ----------------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------- |
+| `features/cv-scan/manifest.json`                | Feature manifest with markets, endpoints, i18n keys     | بيان الميزة مع الأسواق والنقاط النهائية ومفاتيح الترجمة     |
+| `src/components/cv-scan/ConsentCheckbox.tsx`    | AI consent component with PII redaction option          | مكون الموافقة على الذكاء الاصطناعي مع خيار إخفاء البيانات الشخصية |
+| `src/components/cv-scan/ParsedResumePreview.tsx`| Editable preview of parsed resume data                  | معاينة قابلة للتعديل لبيانات السيرة الذاتية المُحللة        |
+| `src/hooks/useCVUpload.ts`                      | Hook for CV upload with polling and consent             | Hook لتحميل السيرة الذاتية مع الاستعلام والموافقة          |
+| `src/app/api/ingest/upload/route.ts`            | Proxy to Ingestor with consent logging                  | وكيل للمُحلل مع تسجيل الموافقة                             |
+| `src/app/api/ingest/status/[jobId]/route.ts`    | Status polling proxy                                    | وكيل استعلام الحالة                                         |
+| `src/app/api/resume-records/[id]/route.ts`      | Protected resume records endpoint                       | نقطة نهائية محمية لسجلات السيرة الذاتية                     |
+| `src/app/api/ingest/analyze/[parsedId]/route.ts`| AI analysis endpoint (requires consent)                 | نقطة نهائية للتحليل بالذكاء الاصطناعي (تتطلب الموافقة)     |
 
 ### Modified Files | ملفات مُعدّلة
 
-| Path | Changes (EN) | التغييرات (AR) |
-|------|--------------|----------------|
-| `src/components/cv-scan/CVScanModal.tsx` | Added consent integration, view modes | إضافة تكامل الموافقة، أوضاع العرض |
-| `messages/ar.json` | Added cvScan i18n keys | إضافة مفاتيح ترجمة cvScan |
-| `messages/en.json` | Added cvScan i18n keys | إضافة مفاتيح ترجمة cvScan |
-| `docs/api/ingestor-openapi.yaml` | Added consent fields and error responses | إضافة حقول الموافقة واستجابات الخطأ |
-| `frontend/web/.env.example` | Added INGESTOR_API_URL, MINIO_RESUME_BUCKET | إضافة متغيرات البيئة الجديدة |
+| Path                                 | Changes (EN)                                     | التغييرات (AR)                             |
+| ------------------------------------ | ------------------------------------------------ | ------------------------------------------ |
+| `src/components/cv-scan/CVScanModal.tsx` | Added consent integration, view modes        | إضافة تكامل الموافقة، أوضاع العرض          |
+| `messages/ar.json`                   | Added cvScan i18n keys                           | إضافة مفاتيح ترجمة cvScan                   |
+| `messages/en.json`                   | Added cvScan i18n keys                           | إضافة مفاتيح ترجمة cvScan                   |
+| `docs/api/ingestor-openapi.yaml`     | Added consent fields and error responses         | إضافة حقول الموافقة واستجابات الخطأ         |
+| `frontend/web/.env.example`          | Added INGESTOR_API_URL, MINIO_RESUME_BUCKET       | إضافة متغيرات البيئة الجديدة               |
 
 ---
 
@@ -272,24 +271,24 @@ feature/cv-scan
 
 ### Unit Tests | اختبارات الوحدة
 
-| Test File | Description (EN) | الوصف (AR) |
-|-----------|------------------|------------|
-| `ConsentCheckbox.test.tsx` | Test consent state, PII redaction toggle | اختبار حالة الموافقة، تبديل إخفاء البيانات |
-| `useCVUpload.test.ts` | Test upload, polling, abort functionality | اختبار التحميل، الاستعلام، الإلغاء |
-| `ParsedResumePreview.test.tsx` | Test editing, skill management | اختبار التعديل، إدارة المهارات |
+| Test File                           | Description (EN)                              | الوصف (AR)                                 |
+| ----------------------------------- | --------------------------------------------- | ------------------------------------------ |
+| `ConsentCheckbox.test.tsx`          | Test consent state, PII redaction toggle      | اختبار حالة الموافقة، تبديل إخفاء البيانات |
+| `useCVUpload.test.ts`               | Test upload, polling, abort functionality     | اختبار التحميل، الاستعلام، الإلغاء         |
+| `ParsedResumePreview.test.tsx`      | Test editing, skill management                | اختبار التعديل، إدارة المهارات             |
 
 ### Integration Tests | اختبارات التكامل
 
-| Test File | Description (EN) | الوصف (AR) |
-|-----------|------------------|------------|
-| `cv-scan-flow.test.tsx` | Full upload → parse → analyze flow | تدفق التحميل الكامل → التحليل → التحليل بالذكاء الاصطناعي |
-| `consent-gating.test.tsx` | Verify consent is required for AI analysis | التحقق من طلب الموافقة للتحليل |
+| Test File                           | Description (EN)                              | الوصف (AR)                                 |
+| ----------------------------------- | --------------------------------------------- | ------------------------------------------ |
+| `cv-scan-flow.test.tsx`             | Full upload → parse → analyze flow            | تدفق التحميل الكامل → التحليل → التحليل بالذكاء الاصطناعي |
+| `consent-gating.test.tsx`           | Verify consent is required for AI analysis    | التحقق من طلب الموافقة للتحليل             |
 
 ### E2E Tests | اختبارات شاملة
 
-| Test File | Description (EN) | الوصف (AR) |
-|-----------|------------------|------------|
-| `e2e/cv-scan.spec.ts` | Full user journey with consent flow | رحلة المستخدم الكاملة مع تدفق الموافقة |
+| Test File                           | Description (EN)                              | الوصف (AR)                                 |
+| ----------------------------------- | --------------------------------------------- | ------------------------------------------ |
+| `e2e/cv-scan.spec.ts`               | Full user journey with consent flow           | رحلة المستخدم الكاملة مع تدفق الموافقة     |
 
 ---
 
@@ -352,29 +351,29 @@ pnpm dev
 
 ### Access Application | الوصول للتطبيق
 
-- **Frontend:** http://localhost:3000
-- **Ingestor API:** http://localhost:8000
-- **MinIO Console:** http://localhost:9001
-- **Keycloak:** http://localhost:8080
+- **Frontend:** <http://localhost:3000>
+- **Ingestor API:** <http://localhost:8000>
+- **MinIO Console:** <http://localhost:9001>
+- **Keycloak:** <http://localhost:8080>
 
 ---
 
 ## Environment Variables Required | متغيرات البيئة المطلوبة
 
-| Variable | Description (EN) | الوصف (AR) |
-|----------|------------------|------------|
-| `NEXTAUTH_SECRET` | Session encryption key | مفتاح تشفير الجلسة |
-| `KEYCLOAK_ISSUER` | Keycloak realm URL | رابط نطاق Keycloak |
-| `KEYCLOAK_CLIENT_ID` | Keycloak client ID | معرف عميل Keycloak |
-| `KEYCLOAK_CLIENT_SECRET` | Keycloak client secret | سر عميل Keycloak |
-| `INGESTOR_API_URL` | Ingestor service URL | رابط خدمة المُحلل |
-| `INGESTOR_API_KEY` | Ingestor API key | مفتاح API للمُحلل |
-| `MINIO_ENDPOINT` | MinIO server endpoint | نقطة نهاية خادم MinIO |
-| `MINIO_ACCESS_KEY` | MinIO access key | مفتاح وصول MinIO |
-| `MINIO_SECRET_KEY` | MinIO secret key | مفتاح سر MinIO |
-| `MINIO_RESUME_BUCKET` | Bucket for CV uploads | حاوية السير الذاتية |
-| `STRAPI_URL` | Strapi CMS URL | رابط Strapi CMS |
-| `STRAPI_API_TOKEN` | Strapi API token | رمز API لـ Strapi |
+| Variable                | Description (EN)            | الوصف (AR)                     |
+| ----------------------- | --------------------------- | ------------------------------ |
+| `NEXTAUTH_SECRET`       | Session encryption key      | مفتاح تشفير الجلسة              |
+| `KEYCLOAK_ISSUER`       | Keycloak realm URL          | رابط نطاق Keycloak             |
+| `KEYCLOAK_CLIENT_ID`    | Keycloak client ID          | معرف عميل Keycloak             |
+| `KEYCLOAK_CLIENT_SECRET`| Keycloak client secret      | سر عميل Keycloak               |
+| `INGESTOR_API_URL`      | Ingestor service URL        | رابط خدمة المُحلل               |
+| `INGESTOR_API_KEY`      | Ingestor API key            | مفتاح API للمُحلل               |
+| `MINIO_ENDPOINT`        | MinIO server endpoint       | نقطة نهاية خادم MinIO          |
+| `MINIO_ACCESS_KEY`      | MinIO access key            | مفتاح وصول MinIO               |
+| `MINIO_SECRET_KEY`      | MinIO secret key            | مفتاح سر MinIO                 |
+| `MINIO_RESUME_BUCKET`   | Bucket for CV uploads       | حاوية السير الذاتية             |
+| `STRAPI_URL`            | Strapi CMS URL              | رابط Strapi CMS                |
+| `STRAPI_API_TOKEN`      | Strapi API token            | رمز API لـ Strapi              |
 
 ---
 

@@ -3,6 +3,7 @@
 
 import { Metadata } from "next";
 import { JobsListClient } from "./JobsListClient";
+import type { JobType } from "@/lib/opportunities";
 
 interface JobsPageProps {
   params: {
@@ -43,7 +44,7 @@ export default function JobsPage({ params, searchParams }: JobsPageProps) {
       initialFilters={{
         page: searchParams.page ? parseInt(searchParams.page) : 1,
         search: searchParams.search,
-        type: searchParams.type as any,
+        type: searchParams.type as JobType | undefined,
         location: searchParams.location,
         category: searchParams.category,
       }}

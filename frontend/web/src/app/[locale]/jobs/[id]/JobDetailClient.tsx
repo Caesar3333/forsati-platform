@@ -13,7 +13,6 @@ import {
   Building2,
   Clock,
   Briefcase,
-  DollarSign,
   Users,
   Eye,
   Bookmark,
@@ -23,9 +22,8 @@ import {
   CheckCircle,
   AlertCircle,
   Calendar,
-  GraduationCap,
 } from "lucide-react";
-import { cn, formatCurrency } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
@@ -159,12 +157,12 @@ const translations = {
 };
 
 export function JobDetailClient({ job, locale }: JobDetailClientProps) {
-  const router = useRouter();
+  const _router = useRouter();
   const t = translations[locale];
   const isRTL = locale === "ar";
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
 
-  const { isAuthenticated, loginWithRedirect, user } = useAuth();
+  const { isAuthenticated, loginWithRedirect, user: _user } = useAuth();
   const { success, error: showError } = useToast();
   const { copyJobLink } = useCopyJobLink();
   const { trackJobView, trackApplyStart, track } = useAnalytics();
@@ -214,7 +212,7 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
         track("job.save", { jobId: job.id });
         success(isRTL ? "تم حفظ الوظيفة" : "Job saved");
       }
-    } catch (err) {
+    } catch (_err) {
       showError(isRTL ? "حدث خطأ" : "An error occurred");
     } finally {
       setIsLoadingSave(false);
