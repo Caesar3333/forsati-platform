@@ -8,7 +8,7 @@ import { Button } from "./ui/Button";
 describe("Button", () => {
   it("renders with default props", () => {
     render(<Button>Click me</Button>);
-    
+
     const button = screen.getByRole("button", { name: /click me/i });
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass("bg-primary-500");
@@ -36,25 +36,29 @@ describe("Button", () => {
   it("handles click events", () => {
     const handleClick = vi.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
-    
+
     fireEvent.click(screen.getByRole("button"));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
   it("can be disabled", () => {
     const handleClick = vi.fn();
-    render(<Button disabled onClick={handleClick}>Disabled</Button>);
-    
+    render(
+      <Button disabled onClick={handleClick}>
+        Disabled
+      </Button>,
+    );
+
     const button = screen.getByRole("button");
     expect(button).toBeDisabled();
-    
+
     fireEvent.click(button);
     expect(handleClick).not.toHaveBeenCalled();
   });
 
   it("shows loading state", () => {
     render(<Button loading>Loading</Button>);
-    
+
     const button = screen.getByRole("button");
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
@@ -69,9 +73,9 @@ describe("Button", () => {
     render(
       <Button asChild>
         <a href="/test">Link Button</a>
-      </Button>
+      </Button>,
     );
-    
+
     const link = screen.getByRole("link", { name: /link button/i });
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute("href", "/test");
@@ -79,7 +83,7 @@ describe("Button", () => {
 
   it("supports RTL direction", () => {
     render(<Button>زر</Button>, { locale: "ar" });
-    
+
     const button = screen.getByRole("button");
     expect(button).toBeInTheDocument();
   });

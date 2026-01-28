@@ -19,8 +19,13 @@ interface CoursesPageProps {
   };
 }
 
-export async function generateMetadata({ params }: CoursesPageProps): Promise<Metadata> {
-  const t = await getTranslations({ locale: params.locale, namespace: "courses" });
+export async function generateMetadata({
+  params,
+}: CoursesPageProps): Promise<Metadata> {
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: "courses",
+  });
 
   return {
     title: t("meta.title"),
@@ -32,7 +37,10 @@ export async function generateMetadata({ params }: CoursesPageProps): Promise<Me
   };
 }
 
-export default function CoursesPage({ params, searchParams }: CoursesPageProps) {
+export default function CoursesPage({
+  params,
+  searchParams,
+}: CoursesPageProps) {
   return (
     <CoursesListClient
       locale={params.locale}
@@ -42,7 +50,7 @@ export default function CoursesPage({ params, searchParams }: CoursesPageProps) 
         category: searchParams.category,
         provider: searchParams.provider,
         level: searchParams.level,
-        isFree: searchParams.isFree === 'true',
+        isFree: searchParams.isFree === "true",
       }}
     />
   );

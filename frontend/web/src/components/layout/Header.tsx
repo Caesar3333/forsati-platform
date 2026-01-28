@@ -171,7 +171,7 @@ export function Header({ locale, user, market = "jo" }: HeaderProps) {
     <header
       className={cn(
         "sticky top-0 z-50 w-full border-b border-border bg-surface/95 backdrop-blur supports-[backdrop-filter]:bg-surface/60",
-        isRTL && "font-arabic"
+        isRTL && "font-arabic",
       )}
       dir={isRTL ? "rtl" : "ltr"}
     >
@@ -196,7 +196,7 @@ export function Header({ locale, user, market = "jo" }: HeaderProps) {
                   href="/"
                   className={cn(
                     "px-3 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors",
-                    pathname === "/" && "text-primary-500"
+                    pathname === "/" && "text-primary-500",
                   )}
                 >
                   {t.home}
@@ -287,7 +287,7 @@ export function Header({ locale, user, market = "jo" }: HeaderProps) {
                   href="/volunteering"
                   className={cn(
                     "flex items-center gap-1 px-3 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors",
-                    pathname.startsWith("/volunteering") && "text-primary-500"
+                    pathname.startsWith("/volunteering") && "text-primary-500",
                   )}
                 >
                   <Heart className="h-4 w-4" />
@@ -301,7 +301,7 @@ export function Header({ locale, user, market = "jo" }: HeaderProps) {
                   href="/scholarships"
                   className={cn(
                     "flex items-center gap-1 px-3 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors",
-                    pathname.startsWith("/scholarships") && "text-primary-500"
+                    pathname.startsWith("/scholarships") && "text-primary-500",
                   )}
                 >
                   <GraduationCap className="h-4 w-4" />
@@ -315,7 +315,7 @@ export function Header({ locale, user, market = "jo" }: HeaderProps) {
                   href="/courses"
                   className={cn(
                     "flex items-center gap-1 px-3 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors",
-                    pathname.startsWith("/courses") && "text-primary-500"
+                    pathname.startsWith("/courses") && "text-primary-500",
                   )}
                 >
                   <BookOpen className="h-4 w-4" />

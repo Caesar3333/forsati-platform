@@ -42,7 +42,8 @@ const translations = {
   },
   en: {
     title: "Latest Opportunities",
-    subtitle: "Discover thousands of opportunities from top companies in Jordan",
+    subtitle:
+      "Discover thousands of opportunities from top companies in Jordan",
     viewAll: "View All Jobs",
     apply: "Apply Now",
     save: "Save",
@@ -265,10 +266,7 @@ export function FeaturedJobs({ locale }: FeaturedJobsProps) {
   };
 
   return (
-    <section
-      className="py-16 lg:py-24 bg-white"
-      dir={isRTL ? "rtl" : "ltr"}
-    >
+    <section className="py-16 lg:py-24 bg-white" dir={isRTL ? "rtl" : "ltr"}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
@@ -286,7 +284,7 @@ export function FeaturedJobs({ locale }: FeaturedJobsProps) {
                 disabled={currentIndex === 0}
                 className={cn(
                   "p-2 rounded-lg border border-border hover:bg-neutral-100 transition-colors",
-                  currentIndex === 0 && "opacity-50 cursor-not-allowed"
+                  currentIndex === 0 && "opacity-50 cursor-not-allowed",
                 )}
                 aria-label="Previous"
               >
@@ -301,7 +299,7 @@ export function FeaturedJobs({ locale }: FeaturedJobsProps) {
                 disabled={currentIndex >= maxIndex}
                 className={cn(
                   "p-2 rounded-lg border border-border hover:bg-neutral-100 transition-colors",
-                  currentIndex >= maxIndex && "opacity-50 cursor-not-allowed"
+                  currentIndex >= maxIndex && "opacity-50 cursor-not-allowed",
                 )}
                 aria-label="Next"
               >
@@ -323,114 +321,128 @@ export function FeaturedJobs({ locale }: FeaturedJobsProps) {
 
         {/* Jobs Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockJobs.slice(currentIndex, currentIndex + visibleJobs).map((job, index) => (
-            <motion.div
-              key={job.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-            >
-              <Card variant="interactive" className="h-full">
-                <CardContent className="p-5">
-                  {/* Header */}
-                  <div className="flex items-start justify-between gap-3 mb-4">
-                    <div className="flex items-start gap-3">
-                      {/* Company Logo */}
-                      <div className="h-12 w-12 rounded-lg bg-primary-100 flex items-center justify-center shrink-0">
-                        <Building2 className="h-6 w-6 text-primary-600" />
+          {mockJobs
+            .slice(currentIndex, currentIndex + visibleJobs)
+            .map((job, index) => (
+              <motion.div
+                key={job.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+              >
+                <Card variant="interactive" className="h-full">
+                  <CardContent className="p-5">
+                    {/* Header */}
+                    <div className="flex items-start justify-between gap-3 mb-4">
+                      <div className="flex items-start gap-3">
+                        {/* Company Logo */}
+                        <div className="h-12 w-12 rounded-lg bg-primary-100 flex items-center justify-center shrink-0">
+                          <Building2 className="h-6 w-6 text-primary-600" />
+                        </div>
+                        <div className="min-w-0">
+                          <h3 className="font-semibold text-foreground truncate">
+                            {job.title[locale]}
+                          </h3>
+                          <p className="text-sm text-muted truncate">
+                            {job.company.name}
+                          </p>
+                        </div>
                       </div>
-                      <div className="min-w-0">
-                        <h3 className="font-semibold text-foreground truncate">
-                          {job.title[locale]}
-                        </h3>
-                        <p className="text-sm text-muted truncate">
-                          {job.company.name}
-                        </p>
-                      </div>
+                      <button
+                        className="p-2 text-muted hover:text-primary-500 transition-colors shrink-0"
+                        aria-label={t.save}
+                      >
+                        <Bookmark className="h-5 w-5" />
+                      </button>
                     </div>
-                    <button
-                      className="p-2 text-muted hover:text-primary-500 transition-colors shrink-0"
-                      aria-label={t.save}
-                    >
-                      <Bookmark className="h-5 w-5" />
-                    </button>
-                  </div>
 
-                  {/* Badges */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {job.isNew && (
-                      <Badge variant="success" size="sm">
-                        {t.new}
-                      </Badge>
-                    )}
-                    {job.isFeatured && (
-                      <Badge variant="primary" size="sm">
-                        {t.featured}
-                      </Badge>
-                    )}
-                    {job.isUrgent && (
-                      <Badge variant="danger" size="sm">
-                        {t.urgent}
-                      </Badge>
-                    )}
-                  </div>
-
-                  {/* Details */}
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center gap-2 text-sm text-muted">
-                      <MapPin className="h-4 w-4 shrink-0" />
-                      {job.location[locale]}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-muted">
-                      <Briefcase className="h-4 w-4 shrink-0" />
-                      {job.type[locale]}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-muted">
-                      <Clock className="h-4 w-4 shrink-0" />
-                      {t.postedAgo.replace("{time}", job.postedAt)}
-                    </div>
-                  </div>
-
-                  {/* Salary */}
-                  <div className="mb-4 p-3 bg-neutral-50 rounded-lg">
-                    <p className="text-xs text-muted mb-1">{t.salary}</p>
-                    <p className="font-semibold text-foreground">
-                      {job.salary.negotiable ? (
-                        t.negotiable
-                      ) : (
-                        <>
-                          {formatCurrency(job.salary.min, job.salary.currency, locale)} -{" "}
-                          {formatCurrency(job.salary.max, job.salary.currency, locale)}
-                          <span className="text-sm font-normal text-muted">
-                            {t.perMonth}
-                          </span>
-                        </>
+                    {/* Badges */}
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {job.isNew && (
+                        <Badge variant="success" size="sm">
+                          {t.new}
+                        </Badge>
                       )}
-                    </p>
-                  </div>
+                      {job.isFeatured && (
+                        <Badge variant="primary" size="sm">
+                          {t.featured}
+                        </Badge>
+                      )}
+                      {job.isUrgent && (
+                        <Badge variant="danger" size="sm">
+                          {t.urgent}
+                        </Badge>
+                      )}
+                    </div>
 
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {job.tags.slice(0, 3).map((tag) => (
-                      <Badge key={tag} variant="default" size="sm">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
+                    {/* Details */}
+                    <div className="space-y-2 mb-4">
+                      <div className="flex items-center gap-2 text-sm text-muted">
+                        <MapPin className="h-4 w-4 shrink-0" />
+                        {job.location[locale]}
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-muted">
+                        <Briefcase className="h-4 w-4 shrink-0" />
+                        {job.type[locale]}
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-muted">
+                        <Clock className="h-4 w-4 shrink-0" />
+                        {t.postedAgo.replace("{time}", job.postedAt)}
+                      </div>
+                    </div>
 
-                  {/* Footer */}
-                  <div className="flex items-center justify-between pt-4 border-t border-border">
-                    <p className="text-xs text-muted">
-                      {t.applicants.replace("{count}", String(job.applicants))}
-                    </p>
-                    <Button variant="primary" size="sm" asChild>
-                      <Link href={`/jobs/${job.id}`}>{t.apply}</Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                    {/* Salary */}
+                    <div className="mb-4 p-3 bg-neutral-50 rounded-lg">
+                      <p className="text-xs text-muted mb-1">{t.salary}</p>
+                      <p className="font-semibold text-foreground">
+                        {job.salary.negotiable ? (
+                          t.negotiable
+                        ) : (
+                          <>
+                            {formatCurrency(
+                              job.salary.min,
+                              job.salary.currency,
+                              locale,
+                            )}{" "}
+                            -{" "}
+                            {formatCurrency(
+                              job.salary.max,
+                              job.salary.currency,
+                              locale,
+                            )}
+                            <span className="text-sm font-normal text-muted">
+                              {t.perMonth}
+                            </span>
+                          </>
+                        )}
+                      </p>
+                    </div>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {job.tags.slice(0, 3).map((tag) => (
+                        <Badge key={tag} variant="default" size="sm">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex items-center justify-between pt-4 border-t border-border">
+                      <p className="text-xs text-muted">
+                        {t.applicants.replace(
+                          "{count}",
+                          String(job.applicants),
+                        )}
+                      </p>
+                      <Button variant="primary" size="sm" asChild>
+                        <Link href={`/jobs/${job.id}`}>{t.apply}</Link>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
         </div>
 
         {/* Mobile Navigation Dots */}
@@ -444,11 +456,11 @@ export function FeaturedJobs({ locale }: FeaturedJobsProps) {
                   "h-2 rounded-full transition-all",
                   index === currentIndex
                     ? "w-6 bg-primary-500"
-                    : "w-2 bg-neutral-300"
+                    : "w-2 bg-neutral-300",
                 )}
                 aria-label={`Go to slide ${index + 1}`}
               />
-            )
+            ),
           )}
         </div>
       </div>

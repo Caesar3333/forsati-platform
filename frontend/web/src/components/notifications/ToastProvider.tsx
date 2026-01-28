@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { ToastContainer, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface ToastProviderProps {
-  locale: 'ar' | 'en';
+  locale: "ar" | "en";
 }
 
 export default function ToastProvider({ locale }: ToastProviderProps) {
-  const isRTL = locale === 'ar';
+  const isRTL = locale === "ar";
 
   return (
     <ToastContainer
-      position={isRTL ? 'top-left' : 'top-right'}
+      position={isRTL ? "top-left" : "top-right"}
       autoClose={5000}
       hideProgressBar={false}
       newestOnTop

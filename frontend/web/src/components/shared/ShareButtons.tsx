@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useTranslations } from 'next-intl';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 // TODO: Add analytics tracking for shares
 // TODO: Implement native share API for mobile
@@ -11,20 +11,20 @@ interface ShareButtonsProps {
   url: string;
   title: string;
   description?: string;
-  locale: 'ar' | 'en';
-  variant?: 'horizontal' | 'vertical';
-  size?: 'sm' | 'md' | 'lg';
+  locale: "ar" | "en";
+  variant?: "horizontal" | "vertical";
+  size?: "sm" | "md" | "lg";
 }
 
 export default function ShareButtons({
   url,
   title,
-  description = '',
+  description = "",
   locale,
-  variant = 'horizontal',
-  size = 'md',
+  variant = "horizontal",
+  size = "md",
 }: ShareButtonsProps) {
-  const t = useTranslations('share');
+  const t = useTranslations("share");
   const [showCopyTooltip, setShowCopyTooltip] = useState(false);
 
   const encodedUrl = encodeURIComponent(url);
@@ -32,16 +32,16 @@ export default function ShareButtons({
   const encodedDescription = encodeURIComponent(description);
 
   const sizeClasses = {
-    sm: 'w-8 h-8 text-sm',
-    md: 'w-10 h-10 text-base',
-    lg: 'w-12 h-12 text-lg',
+    sm: "w-8 h-8 text-sm",
+    md: "w-10 h-10 text-base",
+    lg: "w-12 h-12 text-lg",
   };
 
   const platforms = [
     {
-      name: 'whatsapp',
-      label: 'WhatsApp',
-      color: 'bg-green-500 hover:bg-green-600',
+      name: "whatsapp",
+      label: "WhatsApp",
+      color: "bg-green-500 hover:bg-green-600",
       url: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`,
       icon: (
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -50,9 +50,9 @@ export default function ShareButtons({
       ),
     },
     {
-      name: 'twitter',
-      label: 'X (Twitter)',
-      color: 'bg-black hover:bg-gray-800',
+      name: "twitter",
+      label: "X (Twitter)",
+      color: "bg-black hover:bg-gray-800",
       url: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
       icon: (
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -61,9 +61,9 @@ export default function ShareButtons({
       ),
     },
     {
-      name: 'linkedin',
-      label: 'LinkedIn',
-      color: 'bg-blue-600 hover:bg-blue-700',
+      name: "linkedin",
+      label: "LinkedIn",
+      color: "bg-blue-600 hover:bg-blue-700",
       url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
       icon: (
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -72,9 +72,9 @@ export default function ShareButtons({
       ),
     },
     {
-      name: 'facebook',
-      label: 'Facebook',
-      color: 'bg-blue-500 hover:bg-blue-600',
+      name: "facebook",
+      label: "Facebook",
+      color: "bg-blue-500 hover:bg-blue-600",
       url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
       icon: (
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -83,9 +83,9 @@ export default function ShareButtons({
       ),
     },
     {
-      name: 'telegram',
-      label: 'Telegram',
-      color: 'bg-sky-500 hover:bg-sky-600',
+      name: "telegram",
+      label: "Telegram",
+      color: "bg-sky-500 hover:bg-sky-600",
       url: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`,
       icon: (
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -99,10 +99,10 @@ export default function ShareButtons({
     try {
       await navigator.clipboard.writeText(url);
       setShowCopyTooltip(true);
-      toast.success(t('copied'));
+      toast.success(t("copied"));
       setTimeout(() => setShowCopyTooltip(false), 2000);
     } catch (err) {
-      toast.error(t('copyFailed'));
+      toast.error(t("copyFailed"));
     }
   };
 
@@ -124,11 +124,13 @@ export default function ShareButtons({
     <div className="space-y-3">
       {/* Label */}
       <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-        {t('label')}
+        {t("label")}
       </p>
 
       {/* Share Buttons */}
-      <div className={`flex gap-2 ${variant === 'vertical' ? 'flex-col' : 'flex-wrap'}`}>
+      <div
+        className={`flex gap-2 ${variant === "vertical" ? "flex-col" : "flex-wrap"}`}
+      >
         {platforms.map((platform) => (
           <a
             key={platform.name}
@@ -137,7 +139,7 @@ export default function ShareButtons({
             rel="noopener noreferrer"
             className={`${sizeClasses[size]} ${platform.color} text-white rounded-full flex items-center justify-center transition-transform hover:scale-110`}
             title={platform.label}
-            aria-label={t('shareOn', { platform: platform.label })}
+            aria-label={t("shareOn", { platform: platform.label })}
           >
             {platform.icon}
           </a>
@@ -147,29 +149,49 @@ export default function ShareButtons({
         <button
           onClick={copyToClipboard}
           className={`${sizeClasses[size]} bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full flex items-center justify-center transition-transform hover:scale-110 relative`}
-          title={t('copyLink')}
-          aria-label={t('copyLink')}
+          title={t("copyLink")}
+          aria-label={t("copyLink")}
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+            />
           </svg>
           {showCopyTooltip && (
             <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap">
-              {t('copied')}
+              {t("copied")}
             </span>
           )}
         </button>
 
         {/* Native Share (Mobile) */}
-        {typeof navigator !== 'undefined' && navigator.share && (
+        {typeof navigator !== "undefined" && navigator.share && (
           <button
             onClick={handleNativeShare}
             className={`${sizeClasses[size]} bg-emerald-500 hover:bg-emerald-600 text-white rounded-full flex items-center justify-center transition-transform hover:scale-110`}
-            title={t('shareMore')}
-            aria-label={t('shareMore')}
+            title={t("shareMore")}
+            aria-label={t("shareMore")}
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+              />
             </svg>
           </button>
         )}

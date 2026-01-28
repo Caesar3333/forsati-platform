@@ -124,26 +124,33 @@ export function createNoopAnalytics(): AnalyticsProvider {
  * Analytics hook for tracking events
  */
 export function useAnalytics() {
-  const track = useCallback((event: AnalyticsEvent, properties?: EventProperties) => {
-    if (!analytics) {
-      // Fallback to console in development
-      if (process.env.NODE_ENV === "development") {
-        console.log("[Analytics] Track:", event, properties);
+  const track = useCallback(
+    (event: AnalyticsEvent, properties?: EventProperties) => {
+      if (!analytics) {
+        // Fallback to console in development
+        if (process.env.NODE_ENV === "development") {
+          console.log("[Analytics] Track:", event, properties);
+        }
+        return;
       }
-      return;
-    }
 
-    // Add common properties
-    const enrichedProperties = {
-      ...properties,
-      timestamp: new Date().toISOString(),
-      locale: typeof document !== "undefined" ? document.documentElement.lang : "ar",
-      url: typeof window !== "undefined" ? window.location.href : undefined,
-      userAgent: typeof navigator !== "undefined" ? navigator.userAgent : undefined,
-    };
+      // Add common properties
+      const enrichedProperties = {
+        ...properties,
+        timestamp: new Date().toISOString(),
+        locale:
+          typeof document !== "undefined"
+            ? document.documentElement.lang
+            : "ar",
+        url: typeof window !== "undefined" ? window.location.href : undefined,
+        userAgent:
+          typeof navigator !== "undefined" ? navigator.userAgent : undefined,
+      };
 
-    analytics.track(event, enrichedProperties);
-  }, []);
+      analytics.track(event, enrichedProperties);
+    },
+    [],
+  );
 
   const page = useCallback((name?: string, properties?: EventProperties) => {
     if (!analytics) {
@@ -155,55 +162,80 @@ export function useAnalytics() {
 
     analytics.page(name, {
       ...properties,
-      locale: typeof document !== "undefined" ? document.documentElement.lang : "ar",
+      locale:
+        typeof document !== "undefined" ? document.documentElement.lang : "ar",
     });
   }, []);
 
-  const identify = useCallback((userId: string, traits?: Record<string, unknown>) => {
-    if (!analytics) {
-      if (process.env.NODE_ENV === "development") {
-        console.log("[Analytics] Identify:", userId, traits);
+  const identify = useCallback(
+    (userId: string, traits?: Record<string, unknown>) => {
+      if (!analytics) {
+        if (process.env.NODE_ENV === "development") {
+          console.log("[Analytics] Identify:", userId, traits);
+        }
+        return;
       }
-      return;
-    }
 
-    analytics.identify(userId, traits);
-  }, []);
+      analytics.identify(userId, traits);
+    },
+    [],
+  );
 
   // Convenience methods for common events
   const trackResumeUpload = useCallback(
-    (properties: { fileType: string; fileSize: number; mode: "resume" | "audio" | "photo" }) => {
+    (properties: {
+      fileType: string;
+      fileSize: number;
+      mode: "resume" | "audio" | "photo";
+    }) => {
       track("resume.upload_start", properties);
     },
-    [track]
+    [track],
   );
 
   const trackJobView = useCallback(
-    (properties: { jobId: string; jobTitle: string; company: string; source?: string }) => {
+    (properties: {
+      jobId: string;
+      jobTitle: string;
+      company: string;
+      source?: string;
+    }) => {
       track("job.view", properties);
     },
-    [track]
+    [track],
   );
 
   const trackApplyStart = useCallback(
-    (properties: { jobId: string; jobTitle: string; method: "quick" | "full" }) => {
+    (properties: {
+      jobId: string;
+      jobTitle: string;
+      method: "quick" | "full";
+    }) => {
       track("apply.start", properties);
     },
-    [track]
+    [track],
   );
 
   const trackSearch = useCallback(
-    (properties: { query: string; filters?: Record<string, unknown>; resultsCount: number }) => {
+    (properties: {
+      query: string;
+      filters?: Record<string, unknown>;
+      resultsCount: number;
+    }) => {
       track("search.query", properties);
     },
-    [track]
+    [track],
   );
 
   const trackError = useCallback(
-    (properties: { errorCode?: string; errorMessage: string; endpoint?: string }) => {
+    (properties: {
+      errorCode?: string;
+      errorMessage: string;
+      endpoint?: string;
+    }) => {
       track("error.api", properties);
     },
-    [track]
+    [track],
   );
 
   return {

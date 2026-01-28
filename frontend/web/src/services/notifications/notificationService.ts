@@ -9,45 +9,45 @@
  * - SMS notifications (optional)
  */
 
-import { z } from 'zod';
+import { z } from "zod";
 
 // ============================================
 // Types & Schemas | الأنواع والمخططات
 // ============================================
 
 export const NotificationTypeSchema = z.enum([
-  'application_received',      // تم استلام الطلب
-  'application_viewed',        // تم عرض الطلب
-  'application_status_change', // تغيير حالة الطلب
-  'interview_scheduled',       // تمت جدولة المقابلة
-  'interview_reminder',        // تذكير بالمقابلة
-  'message_received',          // رسالة جديدة
-  'profile_viewed',            // تم عرض الملف الشخصي
-  'job_recommendation',        // توصية وظيفية
-  'scholarship_deadline',      // موعد نهائي للمنحة
-  'course_reminder',           // تذكير بالدورة
-  'system_announcement',       // إعلان النظام
-  'verification_complete',     // اكتمال التحقق
-  'badge_earned',              // شارة مكتسبة
+  "application_received", // تم استلام الطلب
+  "application_viewed", // تم عرض الطلب
+  "application_status_change", // تغيير حالة الطلب
+  "interview_scheduled", // تمت جدولة المقابلة
+  "interview_reminder", // تذكير بالمقابلة
+  "message_received", // رسالة جديدة
+  "profile_viewed", // تم عرض الملف الشخصي
+  "job_recommendation", // توصية وظيفية
+  "scholarship_deadline", // موعد نهائي للمنحة
+  "course_reminder", // تذكير بالدورة
+  "system_announcement", // إعلان النظام
+  "verification_complete", // اكتمال التحقق
+  "badge_earned", // شارة مكتسبة
 ]);
 
 export type NotificationType = z.infer<typeof NotificationTypeSchema>;
 
 export const NotificationChannelSchema = z.enum([
-  'email',
-  'push',
-  'in_app',
-  'sms',
-  'whatsapp',
+  "email",
+  "push",
+  "in_app",
+  "sms",
+  "whatsapp",
 ]);
 
 export type NotificationChannel = z.infer<typeof NotificationChannelSchema>;
 
 export const NotificationPrioritySchema = z.enum([
-  'low',
-  'normal',
-  'high',
-  'urgent',
+  "low",
+  "normal",
+  "high",
+  "urgent",
 ]);
 
 export type NotificationPriority = z.infer<typeof NotificationPrioritySchema>;
@@ -111,159 +111,159 @@ export const notificationTemplates: Record<
 > = {
   application_received: {
     title: {
-      en: 'Application Received',
-      ar: 'تم استلام طلبك',
+      en: "Application Received",
+      ar: "تم استلام طلبك",
     },
     body: {
-      en: 'Your application for {{jobTitle}} at {{company}} has been received.',
-      ar: 'تم استلام طلبك لوظيفة {{jobTitle}} في {{company}}.',
+      en: "Your application for {{jobTitle}} at {{company}} has been received.",
+      ar: "تم استلام طلبك لوظيفة {{jobTitle}} في {{company}}.",
     },
-    defaultChannels: ['email', 'push', 'in_app'],
-    priority: 'normal',
+    defaultChannels: ["email", "push", "in_app"],
+    priority: "normal",
   },
   application_viewed: {
     title: {
-      en: 'Your Application Was Viewed',
-      ar: 'تم عرض طلبك',
+      en: "Your Application Was Viewed",
+      ar: "تم عرض طلبك",
     },
     body: {
-      en: '{{company}} viewed your application for {{jobTitle}}.',
-      ar: 'قامت {{company}} بعرض طلبك لوظيفة {{jobTitle}}.',
+      en: "{{company}} viewed your application for {{jobTitle}}.",
+      ar: "قامت {{company}} بعرض طلبك لوظيفة {{jobTitle}}.",
     },
-    defaultChannels: ['push', 'in_app'],
-    priority: 'normal',
+    defaultChannels: ["push", "in_app"],
+    priority: "normal",
   },
   application_status_change: {
     title: {
-      en: 'Application Status Update',
-      ar: 'تحديث حالة الطلب',
+      en: "Application Status Update",
+      ar: "تحديث حالة الطلب",
     },
     body: {
-      en: 'Your application for {{jobTitle}} has been {{status}}.',
-      ar: 'تم {{status}} طلبك لوظيفة {{jobTitle}}.',
+      en: "Your application for {{jobTitle}} has been {{status}}.",
+      ar: "تم {{status}} طلبك لوظيفة {{jobTitle}}.",
     },
-    defaultChannels: ['email', 'push', 'in_app'],
-    priority: 'high',
+    defaultChannels: ["email", "push", "in_app"],
+    priority: "high",
   },
   interview_scheduled: {
     title: {
-      en: 'Interview Scheduled',
-      ar: 'تمت جدولة المقابلة',
+      en: "Interview Scheduled",
+      ar: "تمت جدولة المقابلة",
     },
     body: {
-      en: 'Your interview with {{company}} is scheduled for {{date}} at {{time}}.',
-      ar: 'تمت جدولة مقابلتك مع {{company}} في {{date}} الساعة {{time}}.',
+      en: "Your interview with {{company}} is scheduled for {{date}} at {{time}}.",
+      ar: "تمت جدولة مقابلتك مع {{company}} في {{date}} الساعة {{time}}.",
     },
-    defaultChannels: ['email', 'push', 'in_app', 'sms'],
-    priority: 'high',
+    defaultChannels: ["email", "push", "in_app", "sms"],
+    priority: "high",
   },
   interview_reminder: {
     title: {
-      en: 'Interview Reminder',
-      ar: 'تذكير بالمقابلة',
+      en: "Interview Reminder",
+      ar: "تذكير بالمقابلة",
     },
     body: {
-      en: 'Reminder: Your interview with {{company}} is {{timeUntil}}.',
-      ar: 'تذكير: مقابلتك مع {{company}} بعد {{timeUntil}}.',
+      en: "Reminder: Your interview with {{company}} is {{timeUntil}}.",
+      ar: "تذكير: مقابلتك مع {{company}} بعد {{timeUntil}}.",
     },
-    defaultChannels: ['push', 'sms'],
-    priority: 'urgent',
+    defaultChannels: ["push", "sms"],
+    priority: "urgent",
   },
   message_received: {
     title: {
-      en: 'New Message',
-      ar: 'رسالة جديدة',
+      en: "New Message",
+      ar: "رسالة جديدة",
     },
     body: {
-      en: 'You have a new message from {{senderName}}.',
-      ar: 'لديك رسالة جديدة من {{senderName}}.',
+      en: "You have a new message from {{senderName}}.",
+      ar: "لديك رسالة جديدة من {{senderName}}.",
     },
-    defaultChannels: ['push', 'in_app'],
-    priority: 'normal',
+    defaultChannels: ["push", "in_app"],
+    priority: "normal",
   },
   profile_viewed: {
     title: {
-      en: 'Profile Viewed',
-      ar: 'تم عرض ملفك الشخصي',
+      en: "Profile Viewed",
+      ar: "تم عرض ملفك الشخصي",
     },
     body: {
-      en: '{{viewerName}} from {{company}} viewed your profile.',
-      ar: 'قام {{viewerName}} من {{company}} بعرض ملفك الشخصي.',
+      en: "{{viewerName}} from {{company}} viewed your profile.",
+      ar: "قام {{viewerName}} من {{company}} بعرض ملفك الشخصي.",
     },
-    defaultChannels: ['in_app'],
-    priority: 'low',
+    defaultChannels: ["in_app"],
+    priority: "low",
   },
   job_recommendation: {
     title: {
-      en: 'Job Recommendation',
-      ar: 'توصية وظيفية',
+      en: "Job Recommendation",
+      ar: "توصية وظيفية",
     },
     body: {
-      en: 'We found a job that matches your profile: {{jobTitle}} at {{company}}.',
-      ar: 'وجدنا وظيفة تناسب ملفك الشخصي: {{jobTitle}} في {{company}}.',
+      en: "We found a job that matches your profile: {{jobTitle}} at {{company}}.",
+      ar: "وجدنا وظيفة تناسب ملفك الشخصي: {{jobTitle}} في {{company}}.",
     },
-    defaultChannels: ['email', 'push'],
-    priority: 'normal',
+    defaultChannels: ["email", "push"],
+    priority: "normal",
   },
   scholarship_deadline: {
     title: {
-      en: 'Scholarship Deadline',
-      ar: 'موعد نهائي للمنحة',
+      en: "Scholarship Deadline",
+      ar: "موعد نهائي للمنحة",
     },
     body: {
-      en: 'The deadline for {{scholarshipName}} is {{daysLeft}} days away.',
-      ar: 'الموعد النهائي لـ {{scholarshipName}} بعد {{daysLeft}} أيام.',
+      en: "The deadline for {{scholarshipName}} is {{daysLeft}} days away.",
+      ar: "الموعد النهائي لـ {{scholarshipName}} بعد {{daysLeft}} أيام.",
     },
-    defaultChannels: ['email', 'push'],
-    priority: 'high',
+    defaultChannels: ["email", "push"],
+    priority: "high",
   },
   course_reminder: {
     title: {
-      en: 'Course Reminder',
-      ar: 'تذكير بالدورة',
+      en: "Course Reminder",
+      ar: "تذكير بالدورة",
     },
     body: {
-      en: 'Your course {{courseName}} starts in {{timeUntil}}.',
-      ar: 'دورتك {{courseName}} تبدأ بعد {{timeUntil}}.',
+      en: "Your course {{courseName}} starts in {{timeUntil}}.",
+      ar: "دورتك {{courseName}} تبدأ بعد {{timeUntil}}.",
     },
-    defaultChannels: ['push', 'in_app'],
-    priority: 'normal',
+    defaultChannels: ["push", "in_app"],
+    priority: "normal",
   },
   system_announcement: {
     title: {
-      en: 'Announcement',
-      ar: 'إعلان',
+      en: "Announcement",
+      ar: "إعلان",
     },
     body: {
-      en: '{{message}}',
-      ar: '{{message}}',
+      en: "{{message}}",
+      ar: "{{message}}",
     },
-    defaultChannels: ['in_app'],
-    priority: 'normal',
+    defaultChannels: ["in_app"],
+    priority: "normal",
   },
   verification_complete: {
     title: {
-      en: 'Verification Complete',
-      ar: 'اكتمل التحقق',
+      en: "Verification Complete",
+      ar: "اكتمل التحقق",
     },
     body: {
-      en: 'Your {{verificationType}} has been verified successfully.',
-      ar: 'تم التحقق من {{verificationType}} بنجاح.',
+      en: "Your {{verificationType}} has been verified successfully.",
+      ar: "تم التحقق من {{verificationType}} بنجاح.",
     },
-    defaultChannels: ['email', 'push', 'in_app'],
-    priority: 'normal',
+    defaultChannels: ["email", "push", "in_app"],
+    priority: "normal",
   },
   badge_earned: {
     title: {
-      en: 'New Badge Earned!',
-      ar: 'شارة جديدة!',
+      en: "New Badge Earned!",
+      ar: "شارة جديدة!",
     },
     body: {
-      en: 'Congratulations! You earned the {{badgeName}} badge.',
-      ar: 'تهانينا! حصلت على شارة {{badgeName}}.',
+      en: "Congratulations! You earned the {{badgeName}} badge.",
+      ar: "تهانينا! حصلت على شارة {{badgeName}}.",
     },
-    defaultChannels: ['push', 'in_app'],
-    priority: 'low',
+    defaultChannels: ["push", "in_app"],
+    priority: "low",
   },
 };
 
@@ -276,20 +276,22 @@ class NotificationService {
   private vapidPublicKey: string;
 
   constructor() {
-    this.apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337';
-    this.vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || '';
+    this.apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
+    this.vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "";
   }
 
   /**
    * Send notification to user
    * إرسال إشعار للمستخدم
    */
-  async send(payload: NotificationPayload): Promise<{ success: boolean; messageId?: string }> {
+  async send(
+    payload: NotificationPayload,
+  ): Promise<{ success: boolean; messageId?: string }> {
     try {
       const response = await fetch(`${this.apiUrl}/api/notifications/send`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
@@ -301,7 +303,7 @@ class NotificationService {
       const data = await response.json();
       return { success: true, messageId: data.messageId };
     } catch (error) {
-      console.error('Failed to send notification:', error);
+      console.error("Failed to send notification:", error);
       return { success: false };
     }
   }
@@ -311,11 +313,13 @@ class NotificationService {
    * إرسال إشعارات جماعية
    */
   async sendBulk(
-    payloads: NotificationPayload[]
+    payloads: NotificationPayload[],
   ): Promise<{ success: boolean; sent: number; failed: number }> {
     const results = await Promise.allSettled(payloads.map((p) => this.send(p)));
-    
-    const sent = results.filter((r) => r.status === 'fulfilled' && r.value.success).length;
+
+    const sent = results.filter(
+      (r) => r.status === "fulfilled" && r.value.success,
+    ).length;
     const failed = results.length - sent;
 
     return { success: failed === 0, sent, failed };
@@ -325,27 +329,35 @@ class NotificationService {
    * Schedule notification for later
    * جدولة إشعار لوقت لاحق
    */
-  async schedule(payload: NotificationPayload, scheduledAt: Date): Promise<{ success: boolean; jobId?: string }> {
+  async schedule(
+    payload: NotificationPayload,
+    scheduledAt: Date,
+  ): Promise<{ success: boolean; jobId?: string }> {
     try {
-      const response = await fetch(`${this.apiUrl}/api/notifications/schedule`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${this.apiUrl}/api/notifications/schedule`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...payload,
+            scheduledAt: scheduledAt.toISOString(),
+          }),
         },
-        body: JSON.stringify({
-          ...payload,
-          scheduledAt: scheduledAt.toISOString(),
-        }),
-      });
+      );
 
       if (!response.ok) {
-        throw new Error(`Failed to schedule notification: ${response.statusText}`);
+        throw new Error(
+          `Failed to schedule notification: ${response.statusText}`,
+        );
       }
 
       const data = await response.json();
       return { success: true, jobId: data.jobId };
     } catch (error) {
-      console.error('Failed to schedule notification:', error);
+      console.error("Failed to schedule notification:", error);
       return { success: false };
     }
   }
@@ -356,13 +368,16 @@ class NotificationService {
    */
   async cancelScheduled(jobId: string): Promise<{ success: boolean }> {
     try {
-      const response = await fetch(`${this.apiUrl}/api/notifications/schedule/${jobId}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `${this.apiUrl}/api/notifications/schedule/${jobId}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       return { success: response.ok };
     } catch (error) {
-      console.error('Failed to cancel scheduled notification:', error);
+      console.error("Failed to cancel scheduled notification:", error);
       return { success: false };
     }
   }
@@ -371,17 +386,21 @@ class NotificationService {
    * Get user's notification preferences
    * الحصول على تفضيلات إشعارات المستخدم
    */
-  async getPreferences(userId: string): Promise<NotificationPreferences | null> {
+  async getPreferences(
+    userId: string,
+  ): Promise<NotificationPreferences | null> {
     try {
-      const response = await fetch(`${this.apiUrl}/api/users/${userId}/notification-preferences`);
-      
+      const response = await fetch(
+        `${this.apiUrl}/api/users/${userId}/notification-preferences`,
+      );
+
       if (!response.ok) {
         return null;
       }
 
       return await response.json();
     } catch (error) {
-      console.error('Failed to get notification preferences:', error);
+      console.error("Failed to get notification preferences:", error);
       return null;
     }
   }
@@ -392,20 +411,23 @@ class NotificationService {
    */
   async updatePreferences(
     userId: string,
-    preferences: Partial<NotificationPreferences>
+    preferences: Partial<NotificationPreferences>,
   ): Promise<{ success: boolean }> {
     try {
-      const response = await fetch(`${this.apiUrl}/api/users/${userId}/notification-preferences`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${this.apiUrl}/api/users/${userId}/notification-preferences`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(preferences),
         },
-        body: JSON.stringify(preferences),
-      });
+      );
 
       return { success: response.ok };
     } catch (error) {
-      console.error('Failed to update notification preferences:', error);
+      console.error("Failed to update notification preferences:", error);
       return { success: false };
     }
   }
@@ -416,8 +438,10 @@ class NotificationService {
    */
   async getUnreadCount(userId: string): Promise<number> {
     try {
-      const response = await fetch(`${this.apiUrl}/api/users/${userId}/notifications/unread-count`);
-      
+      const response = await fetch(
+        `${this.apiUrl}/api/users/${userId}/notifications/unread-count`,
+      );
+
       if (!response.ok) {
         return 0;
       }
@@ -425,7 +449,7 @@ class NotificationService {
       const data = await response.json();
       return data.count;
     } catch (error) {
-      console.error('Failed to get unread count:', error);
+      console.error("Failed to get unread count:", error);
       return 0;
     }
   }
@@ -436,13 +460,16 @@ class NotificationService {
    */
   async markAsRead(notificationId: string): Promise<{ success: boolean }> {
     try {
-      const response = await fetch(`${this.apiUrl}/api/notifications/${notificationId}/read`, {
-        method: 'POST',
-      });
+      const response = await fetch(
+        `${this.apiUrl}/api/notifications/${notificationId}/read`,
+        {
+          method: "POST",
+        },
+      );
 
       return { success: response.ok };
     } catch (error) {
-      console.error('Failed to mark as read:', error);
+      console.error("Failed to mark as read:", error);
       return { success: false };
     }
   }
@@ -453,13 +480,16 @@ class NotificationService {
    */
   async markAllAsRead(userId: string): Promise<{ success: boolean }> {
     try {
-      const response = await fetch(`${this.apiUrl}/api/users/${userId}/notifications/mark-all-read`, {
-        method: 'POST',
-      });
+      const response = await fetch(
+        `${this.apiUrl}/api/users/${userId}/notifications/mark-all-read`,
+        {
+          method: "POST",
+        },
+      );
 
       return { success: response.ok };
     } catch (error) {
-      console.error('Failed to mark all as read:', error);
+      console.error("Failed to mark all as read:", error);
       return { success: false };
     }
   }
@@ -474,8 +504,11 @@ class WebPushService {
   private supported: boolean;
 
   constructor() {
-    this.vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || '';
-    this.supported = typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window;
+    this.vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "";
+    this.supported =
+      typeof window !== "undefined" &&
+      "serviceWorker" in navigator &&
+      "PushManager" in window;
   }
 
   /**
@@ -492,7 +525,7 @@ class WebPushService {
    */
   async requestPermission(): Promise<NotificationPermission> {
     if (!this.supported) {
-      return 'denied';
+      return "denied";
     }
 
     return await Notification.requestPermission();
@@ -502,9 +535,9 @@ class WebPushService {
    * Get current permission status
    * الحصول على حالة الإذن الحالية
    */
-  getPermissionStatus(): NotificationPermission | 'unsupported' {
+  getPermissionStatus(): NotificationPermission | "unsupported" {
     if (!this.supported) {
-      return 'unsupported';
+      return "unsupported";
     }
 
     return Notification.permission;
@@ -515,13 +548,13 @@ class WebPushService {
    * الاشتراك في إشعارات Push
    */
   async subscribe(): Promise<PushSubscription | null> {
-    if (!this.supported || Notification.permission !== 'granted') {
+    if (!this.supported || Notification.permission !== "granted") {
       return null;
     }
 
     try {
       const registration = await navigator.serviceWorker.ready;
-      
+
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: this.urlBase64ToUint8Array(this.vapidPublicKey),
@@ -529,19 +562,19 @@ class WebPushService {
 
       // Convert to our PushSubscription type
       const subscriptionJson = subscription.toJSON();
-      
+
       return {
-        userId: '', // Will be set by backend
+        userId: "", // Will be set by backend
         endpoint: subscription.endpoint,
         keys: {
-          p256dh: subscriptionJson.keys?.p256dh || '',
-          auth: subscriptionJson.keys?.auth || '',
+          p256dh: subscriptionJson.keys?.p256dh || "",
+          auth: subscriptionJson.keys?.auth || "",
         },
         userAgent: navigator.userAgent,
         createdAt: new Date(),
       };
     } catch (error) {
-      console.error('Failed to subscribe to push:', error);
+      console.error("Failed to subscribe to push:", error);
       return null;
     }
   }
@@ -558,14 +591,14 @@ class WebPushService {
     try {
       const registration = await navigator.serviceWorker.ready;
       const subscription = await registration.pushManager.getSubscription();
-      
+
       if (subscription) {
         return await subscription.unsubscribe();
       }
-      
+
       return true;
     } catch (error) {
-      console.error('Failed to unsubscribe from push:', error);
+      console.error("Failed to unsubscribe from push:", error);
       return false;
     }
   }
@@ -574,8 +607,10 @@ class WebPushService {
    * Convert VAPID key to Uint8Array
    */
   private urlBase64ToUint8Array(base64String: string): Uint8Array {
-    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding)
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
 
     const rawData = window.atob(base64);
     const outputArray = new Uint8Array(rawData.length);
@@ -610,19 +645,21 @@ class EmailService {
   private apiUrl: string;
 
   constructor() {
-    this.apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337';
+    this.apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
   }
 
   /**
    * Send email
    * إرسال بريد إلكتروني
    */
-  async send(payload: EmailPayload): Promise<{ success: boolean; messageId?: string }> {
+  async send(
+    payload: EmailPayload,
+  ): Promise<{ success: boolean; messageId?: string }> {
     try {
       const response = await fetch(`${this.apiUrl}/api/email/send`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
@@ -634,7 +671,7 @@ class EmailService {
       const data = await response.json();
       return { success: true, messageId: data.messageId };
     } catch (error) {
-      console.error('Failed to send email:', error);
+      console.error("Failed to send email:", error);
       return { success: false };
     }
   }
@@ -646,13 +683,13 @@ class EmailService {
   async sendTemplate(
     templateId: string,
     to: string | string[],
-    variables: Record<string, string>
+    variables: Record<string, string>,
   ): Promise<{ success: boolean; messageId?: string }> {
     try {
       const response = await fetch(`${this.apiUrl}/api/email/send-template`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           templateId,
@@ -662,13 +699,15 @@ class EmailService {
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to send templated email: ${response.statusText}`);
+        throw new Error(
+          `Failed to send templated email: ${response.statusText}`,
+        );
       }
 
       const data = await response.json();
       return { success: true, messageId: data.messageId };
     } catch (error) {
-      console.error('Failed to send templated email:', error);
+      console.error("Failed to send templated email:", error);
       return { success: false };
     }
   }
@@ -689,13 +728,13 @@ export function createNotificationFromTemplate(
   type: NotificationType,
   userId: string,
   variables: Record<string, string>,
-  locale: 'en' | 'ar' = 'en',
-  overrides: Partial<NotificationPayload> = {}
+  locale: "en" | "ar" = "en",
+  overrides: Partial<NotificationPayload> = {},
 ): NotificationPayload {
   const template = notificationTemplates[type];
-  
+
   const interpolate = (text: string, vars: Record<string, string>): string => {
-    return text.replace(/\{\{(\w+)\}\}/g, (_, key) => vars[key] || '');
+    return text.replace(/\{\{(\w+)\}\}/g, (_, key) => vars[key] || "");
   };
 
   return {

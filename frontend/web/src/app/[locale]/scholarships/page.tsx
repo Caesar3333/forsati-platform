@@ -18,8 +18,13 @@ interface ScholarshipsPageProps {
   };
 }
 
-export async function generateMetadata({ params }: ScholarshipsPageProps): Promise<Metadata> {
-  const t = await getTranslations({ locale: params.locale, namespace: "scholarships" });
+export async function generateMetadata({
+  params,
+}: ScholarshipsPageProps): Promise<Metadata> {
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: "scholarships",
+  });
 
   return {
     title: t("meta.title"),
@@ -31,7 +36,10 @@ export async function generateMetadata({ params }: ScholarshipsPageProps): Promi
   };
 }
 
-export default function ScholarshipsPage({ params, searchParams }: ScholarshipsPageProps) {
+export default function ScholarshipsPage({
+  params,
+  searchParams,
+}: ScholarshipsPageProps) {
   return (
     <ScholarshipsListClient
       locale={params.locale}

@@ -17,8 +17,13 @@ interface VolunteeringPageProps {
   };
 }
 
-export async function generateMetadata({ params }: VolunteeringPageProps): Promise<Metadata> {
-  const t = await getTranslations({ locale: params.locale, namespace: "volunteering" });
+export async function generateMetadata({
+  params,
+}: VolunteeringPageProps): Promise<Metadata> {
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: "volunteering",
+  });
 
   return {
     title: t("meta.title"),
@@ -30,7 +35,10 @@ export async function generateMetadata({ params }: VolunteeringPageProps): Promi
   };
 }
 
-export default function VolunteeringPage({ params, searchParams }: VolunteeringPageProps) {
+export default function VolunteeringPage({
+  params,
+  searchParams,
+}: VolunteeringPageProps) {
   return (
     <VolunteeringListClient
       locale={params.locale}

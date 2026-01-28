@@ -39,9 +39,9 @@ interface CVScanModalProps {
   locale: "ar" | "en";
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  onSubmit?: (data: { 
-    file?: File; 
-    audioUrl?: string; 
+  onSubmit?: (data: {
+    file?: File;
+    audioUrl?: string;
     parsedData?: ParsedResumeData;
     consentToAI?: boolean;
   }) => void;
@@ -49,7 +49,14 @@ interface CVScanModalProps {
   children?: React.ReactNode;
 }
 
-type UploadStatus = "idle" | "uploading" | "parsing" | "parsed" | "analyzing" | "success" | "error";
+type UploadStatus =
+  | "idle"
+  | "uploading"
+  | "parsing"
+  | "parsed"
+  | "analyzing"
+  | "success"
+  | "error";
 type ViewMode = "upload" | "preview" | "analysis";
 
 const translations = {
@@ -83,13 +90,16 @@ const translations = {
     // New consent translations
     consent: {
       title: "موافقة على التحليل بالذكاء الاصطناعي",
-      description: "للحصول على تحليل متقدم واقتراحات مخصصة، نحتاج موافقتك على معالجة بياناتك بالذكاء الاصطناعي.",
+      description:
+        "للحصول على تحليل متقدم واقتراحات مخصصة، نحتاج موافقتك على معالجة بياناتك بالذكاء الاصطناعي.",
       checkbox: "أوافق على تحليل سيرتي الذاتية بالذكاء الاصطناعي",
       privacy: "بياناتك محمية ولن تُشارك مع أي طرف ثالث دون إذنك.",
       redactPII: "إخفاء المعلومات الشخصية",
       redactPIIDescription: "إزالة الاسم والبريد والهاتف قبل التحليل",
-      privacyNotice: "بياناتك تُعالج بشكل آمن ولا تُشارك أبداً دون إذنك الصريح.",
-      noConsentWarning: "بدون الموافقة، سيتم إجراء تحليل أساسي فقط. لن تتوفر الاقتراحات المدعومة بالذكاء الاصطناعي.",
+      privacyNotice:
+        "بياناتك تُعالج بشكل آمن ولا تُشارك أبداً دون إذنك الصريح.",
+      noConsentWarning:
+        "بدون الموافقة، سيتم إجراء تحليل أساسي فقط. لن تتوفر الاقتراحات المدعومة بالذكاء الاصطناعي.",
     },
     // Actions
     quickApply: "تقديم سريع",
@@ -134,13 +144,17 @@ const translations = {
     // New consent translations
     consent: {
       title: "AI Analysis Consent",
-      description: "For advanced analysis and personalized suggestions, we need your consent to process your data with AI.",
+      description:
+        "For advanced analysis and personalized suggestions, we need your consent to process your data with AI.",
       checkbox: "I consent to AI analysis of my CV",
-      privacy: "Your data is protected and will not be shared with third parties without your permission.",
+      privacy:
+        "Your data is protected and will not be shared with third parties without your permission.",
       redactPII: "Redact personal information",
       redactPIIDescription: "Remove name, email, and phone before AI analysis",
-      privacyNotice: "Your data is processed securely and never shared without your explicit permission.",
-      noConsentWarning: "Without consent, only basic parsing will be performed. AI-powered suggestions will not be available.",
+      privacyNotice:
+        "Your data is processed securely and never shared without your explicit permission.",
+      noConsentWarning:
+        "Without consent, only basic parsing will be performed. AI-powered suggestions will not be available.",
     },
     // Actions
     quickApply: "Quick Apply",
@@ -179,15 +193,15 @@ export function CVScanModal({
   const [status, setStatus] = React.useState<UploadStatus>("idle");
   const [errorMessage, setErrorMessage] = React.useState<string>("");
   const [isRecording, setIsRecording] = React.useState(false);
-  const [uploadMode, setUploadMode] = React.useState<"file" | "voice" | "photo">(
-    "file"
-  );
+  const [uploadMode, setUploadMode] = React.useState<
+    "file" | "voice" | "photo"
+  >("file");
   const [viewMode, setViewMode] = React.useState<ViewMode>("upload");
-  
+
   // Consent state
   const [consentToAI, setConsentToAI] = React.useState(false);
   const [redactPII, setRedactPII] = React.useState(false);
-  
+
   // CV Upload hook
   const {
     isUploading,
@@ -202,9 +216,11 @@ export function CVScanModal({
     analyzeResume,
     reset: resetUpload,
   } = useCVUpload();
-  
+
   // Editable parsed data
-  const [editedData, setEditedData] = React.useState<ParsedResumeData | null>(null);
+  const [editedData, setEditedData] = React.useState<ParsedResumeData | null>(
+    null,
+  );
 
   const t = translations[locale];
   const isRTL = locale === "ar";
@@ -228,7 +244,7 @@ export function CVScanModal({
         setErrorMessage("");
       }
     },
-    [t]
+    [t],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -242,21 +258,21 @@ export function CVScanModal({
     if (!file) return;
 
     setStatus("uploading");
-    
+
     try {
       await upload(file, {
-        mode: consentToAI ? 'analyze' : 'parse',
+        mode: consentToAI ? "analyze" : "parse",
         consentToAI,
         redactPII,
       });
-      
+
       // Status will be updated by the hook
     } catch (error) {
       setStatus("error");
       setErrorMessage(t.uploadError);
     }
   };
-  
+
   // Sync status from hook
   React.useEffect(() => {
     if (isUploading) setStatus("uploading");
@@ -271,7 +287,14 @@ export function CVScanModal({
       setStatus("error");
       setErrorMessage(uploadError);
     }
-  }, [isUploading, isPolling, isParsing, isAnalyzing, parsedResume, uploadError]);
+  }, [
+    isUploading,
+    isPolling,
+    isParsing,
+    isAnalyzing,
+    parsedResume,
+    uploadError,
+  ]);
 
   const handleReset = () => {
     setFile(null);
@@ -283,20 +306,20 @@ export function CVScanModal({
     setRedactPII(false);
     resetUpload();
   };
-  
+
   const handleQuickApply = () => {
     if (editedData && onQuickApply) {
       onQuickApply(editedData);
     }
   };
-  
+
   const handleAnalyzeWithAI = async () => {
     if (editedData && !consentToAI) {
       // Show consent required error
       setErrorMessage(t.consent.noConsentWarning);
       return;
     }
-    
+
     if (editedData?.id) {
       setStatus("analyzing");
       try {
@@ -344,7 +367,7 @@ export function CVScanModal({
                 "flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-sm font-medium transition-all",
                 uploadMode === "file"
                   ? "bg-white text-primary-600 shadow-sm"
-                  : "text-muted hover:text-foreground"
+                  : "text-muted hover:text-foreground",
               )}
             >
               <FileText className="h-4 w-4" />
@@ -356,7 +379,7 @@ export function CVScanModal({
                 "flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-sm font-medium transition-all",
                 uploadMode === "voice"
                   ? "bg-white text-primary-600 shadow-sm"
-                  : "text-muted hover:text-foreground"
+                  : "text-muted hover:text-foreground",
               )}
             >
               <Mic className="h-4 w-4" />
@@ -368,7 +391,7 @@ export function CVScanModal({
                 "flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-sm font-medium transition-all",
                 uploadMode === "photo"
                   ? "bg-white text-primary-600 shadow-sm"
-                  : "text-muted hover:text-foreground"
+                  : "text-muted hover:text-foreground",
               )}
             >
               <Camera className="h-4 w-4" />
@@ -393,9 +416,8 @@ export function CVScanModal({
                     isDragActive
                       ? "border-primary-500 bg-primary-50"
                       : "border-border hover:border-primary-300 hover:bg-primary-50/50",
-                    status === "success" &&
-                      "border-success-500 bg-success-50",
-                    status === "error" && "border-danger-500 bg-danger-50"
+                    status === "success" && "border-success-500 bg-success-50",
+                    status === "error" && "border-danger-500 bg-danger-50",
                   )}
                 >
                   <input {...getInputProps()} />
@@ -403,9 +425,10 @@ export function CVScanModal({
                   {status === "uploading" ? (
                     <div className="flex flex-col items-center gap-3">
                       <Loader2 className="h-12 w-12 text-primary-500 animate-spin" />
-                      <p className="text-sm text-muted">{t.analyzing}</p>                      {progress > 0 && (
+                      <p className="text-sm text-muted">{t.analyzing}</p>{" "}
+                      {progress > 0 && (
                         <div className="w-full max-w-xs bg-gray-200 rounded-full h-2">
-                          <div 
+                          <div
                             className="bg-primary-500 h-2 rounded-full transition-all duration-300"
                             style={{ width: `${progress}%` }}
                           />
@@ -418,12 +441,13 @@ export function CVScanModal({
                       <p className="text-sm text-muted">{t.parsing}</p>
                       {progress > 0 && (
                         <div className="w-full max-w-xs bg-gray-200 rounded-full h-2">
-                          <div 
+                          <div
                             className="bg-primary-500 h-2 rounded-full transition-all duration-300"
                             style={{ width: `${progress}%` }}
                           />
                         </div>
-                      )}                    </div>
+                      )}{" "}
+                    </div>
                   ) : status === "success" ? (
                     <div className="flex flex-col items-center gap-3">
                       <CheckCircle className="h-12 w-12 text-success-500" />
@@ -504,13 +528,13 @@ export function CVScanModal({
                       "h-24 w-24 rounded-full flex items-center justify-center transition-all",
                       isRecording
                         ? "bg-danger-100 animate-pulse"
-                        : "bg-primary-100"
+                        : "bg-primary-100",
                     )}
                   >
                     <Mic
                       className={cn(
                         "h-12 w-12",
-                        isRecording ? "text-danger-600" : "text-primary-600"
+                        isRecording ? "text-danger-600" : "text-primary-600",
                       )}
                     />
                   </div>
@@ -576,7 +600,7 @@ export function CVScanModal({
                 onRedactPIIChange={setRedactPII}
                 disabled={status === "uploading" || status === "parsing"}
               />
-              
+
               <div className="bg-neutral-50 rounded-lg p-4">
                 <h4 className="text-sm font-medium text-foreground mb-3">
                   {isRTL ? "ماذا ستحصل؟" : "What you'll get:"}
@@ -595,7 +619,7 @@ export function CVScanModal({
               </div>
             </>
           )}
-          
+
           {/* Parsed Resume Preview */}
           {viewMode === "preview" && editedData && (
             <div className="space-y-4">
@@ -604,7 +628,7 @@ export function CVScanModal({
                 onChange={setEditedData}
                 isEditable={true}
               />
-              
+
               {/* Action Buttons */}
               <div className="grid grid-cols-2 gap-3">
                 <Button
@@ -624,24 +648,18 @@ export function CVScanModal({
                   <Sparkles className="h-4 w-4" />
                   {t.analyzeWithAI}
                 </Button>
-                <Button
-                  variant="ghost"
-                  className="flex items-center gap-2"
-                >
+                <Button variant="ghost" className="flex items-center gap-2">
                   <FileEdit className="h-4 w-4" />
                   {t.generateCover}
                 </Button>
-                <Button
-                  variant="ghost"
-                  className="flex items-center gap-2"
-                >
+                <Button variant="ghost" className="flex items-center gap-2">
                   <Save className="h-4 w-4" />
                   {t.saveProfile}
                 </Button>
               </div>
             </div>
           )}
-          
+
           {/* AI Analysis Results */}
           {viewMode === "analysis" && analysis && (
             <div className="space-y-4">
@@ -653,11 +671,13 @@ export function CVScanModal({
                   <span className="text-2xl text-muted">/100</span>
                 </div>
               </div>
-              
+
               {/* Suggestions */}
               {analysis.suggestions.length > 0 && (
                 <div className="space-y-2">
-                  <h4 className="font-medium text-foreground">{t.suggestions}</h4>
+                  <h4 className="font-medium text-foreground">
+                    {t.suggestions}
+                  </h4>
                   <ul className="space-y-2">
                     {analysis.suggestions.map((suggestion, index) => (
                       <li
@@ -671,7 +691,7 @@ export function CVScanModal({
                   </ul>
                 </div>
               )}
-              
+
               {/* Keywords */}
               {analysis.keywords.length > 0 && (
                 <div className="space-y-2">
@@ -688,7 +708,7 @@ export function CVScanModal({
                   </div>
                 </div>
               )}
-              
+
               {/* Download improved PDF */}
               <Button
                 variant="outline"
@@ -710,7 +730,9 @@ export function CVScanModal({
               <Button
                 variant="primary"
                 onClick={handleSubmit}
-                disabled={!file || status === "uploading" || status === "parsing"}
+                disabled={
+                  !file || status === "uploading" || status === "parsing"
+                }
                 loading={status === "uploading" || status === "parsing"}
               >
                 <Sparkles className="h-4 w-4" />
@@ -722,10 +744,7 @@ export function CVScanModal({
               <Button variant="ghost" onClick={handleReset}>
                 {t.backToUpload}
               </Button>
-              <Button
-                variant="primary"
-                onClick={handleQuickApply}
-              >
+              <Button variant="primary" onClick={handleQuickApply}>
                 <Send className="h-4 w-4" />
                 {t.quickApply}
               </Button>

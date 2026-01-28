@@ -18,7 +18,9 @@ interface UseClipboardReturn {
   error: Error | null;
 }
 
-export function useClipboard(options: UseClipboardOptions = {}): UseClipboardReturn {
+export function useClipboard(
+  options: UseClipboardOptions = {},
+): UseClipboardReturn {
   const {
     timeout = 2000,
     successMessage = "Copied to clipboard",
@@ -58,7 +60,7 @@ export function useClipboard(options: UseClipboardOptions = {}): UseClipboardRet
         return false;
       }
     },
-    [timeout, successMessage, errorMessage, success, showError]
+    [timeout, successMessage, errorMessage, success, showError],
   );
 
   return { copy, copied, error };
@@ -102,7 +104,7 @@ export function useCopyJobLink() {
 
       return copied;
     },
-    [copy, success]
+    [copy, success],
   );
 
   return { copyJobLink };

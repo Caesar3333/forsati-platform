@@ -24,7 +24,11 @@ interface WrapperProps {
 }
 
 // Custom render function with providers
-function AllProviders({ children, session = null, locale = "en" }: WrapperProps) {
+function AllProviders({
+  children,
+  session = null,
+  locale = "en",
+}: WrapperProps) {
   return (
     <SessionProvider session={session}>
       <ToastProvider>
@@ -43,7 +47,7 @@ interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
 
 function customRender(
   ui: React.ReactElement,
-  { session, locale, ...options }: CustomRenderOptions = {}
+  { session, locale, ...options }: CustomRenderOptions = {},
 ) {
   return render(ui, {
     wrapper: ({ children }) => (

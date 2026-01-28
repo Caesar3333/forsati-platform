@@ -14,7 +14,9 @@ interface JobPageProps {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: JobPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: JobPageProps): Promise<Metadata> {
   try {
     const job = await getJob(params.id);
     const isArabic = params.locale === "ar";

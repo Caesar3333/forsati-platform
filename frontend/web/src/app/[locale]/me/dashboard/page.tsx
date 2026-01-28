@@ -14,8 +14,13 @@ interface DashboardPageProps {
   };
 }
 
-export async function generateMetadata({ params }: DashboardPageProps): Promise<Metadata> {
-  const t = await getTranslations({ locale: params.locale, namespace: "dashboard" });
+export async function generateMetadata({
+  params,
+}: DashboardPageProps): Promise<Metadata> {
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: "dashboard",
+  });
 
   return {
     title: t("meta.title"),
@@ -26,18 +31,20 @@ export async function generateMetadata({ params }: DashboardPageProps): Promise<
 export default async function DashboardPage({ params }: DashboardPageProps) {
   // Protect this route - redirect to login if not authenticated
   const session = await getServerSession(authOptions);
-  
+
   if (!session) {
-    redirect(`/${params.locale}/auth/login?callbackUrl=/${params.locale}/me/dashboard`);
+    redirect(
+      `/${params.locale}/auth/login?callbackUrl=/${params.locale}/me/dashboard`,
+    );
   }
 
   return (
     <DashboardClient
       locale={params.locale}
       user={{
-        id: session.user?.id || '',
-        name: session.user?.name || '',
-        email: session.user?.email || '',
+        id: session.user?.id || "",
+        name: session.user?.name || "",
+        email: session.user?.email || "",
         image: session.user?.image || undefined,
       }}
     />

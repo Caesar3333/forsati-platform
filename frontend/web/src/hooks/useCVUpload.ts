@@ -1,18 +1,18 @@
 // © 2026 Forsati. All rights reserved.
-'use client';
+"use client";
 
 /**
  * useCVUpload Hook
  * Hook for CV upload with polling, consent management, and status tracking
- * 
+ *
  * هوك لرفع السيرة الذاتية مع الاستعلام الدوري وإدارة الموافقة وتتبع الحالة
  */
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from "react";
 
 // Types
 export interface UploadOptions {
-  mode: 'parse' | 'analyze';
+  mode: "parse" | "analyze";
   context?: string;
   consentToAI: boolean;
   redactPII?: boolean;
@@ -46,7 +46,7 @@ export interface ParsedResume {
 
 export interface JobStatus {
   jobId: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: "pending" | "processing" | "completed" | "failed";
   progress: number;
   parsedId?: string;
   error?: string;
@@ -72,11 +72,11 @@ export interface UseCVUploadReturn {
   isParsing: boolean;
   isAnalyzing: boolean;
   progress: number;
-  status: JobStatus['status'] | null;
+  status: JobStatus["status"] | null;
   parsedResume: ParsedResume | null;
   analysis: AIAnalysis | null;
   error: string | null;
-  
+
   // Actions
   upload: (file: File, options: UploadOptions) => Promise<void>;
   checkStatus: (jobId: string) => Promise<JobStatus>;
@@ -89,7 +89,7 @@ export interface UseCVUploadReturn {
 // Constants
 const POLL_INTERVAL = 2000; // 2 seconds
 const MAX_POLL_ATTEMPTS = 60; // 2 minutes max
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
 export function useCVUpload(): UseCVUploadReturn {
   // State
@@ -98,11 +98,11 @@ export function useCVUpload(): UseCVUploadReturn {
   const [isParsing, setIsParsing] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [status, setStatus] = useState<JobStatus['status'] | null>(null);
+  const [status, setStatus] = useState<JobStatus["status"] | null>(null);
   const [parsedResume, setParsedResume] = useState<ParsedResume | null>(null);
   const [analysis, setAnalysis] = useState<AIAnalysis | null>(null);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Refs for cleanup
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -134,7 +134,7 @@ export function useCVUpload(): UseCVUploadReturn {
     setAnalysis(null);
     setError(null);
     pollAttemptsRef.current = 0;
-    
+
     if (pollIntervalRef.current) {
       clearInterval(pollIntervalRef.current);
       pollIntervalRef.current = null;
@@ -165,11 +165,11 @@ export function useCVUpload(): UseCVUploadReturn {
     const response = await fetch(`${API_BASE}/api/ingest/status/${jobId}`, {
       signal: abortControllerRef.current?.signal,
     });
-    
+
     if (!response.ok) {
-      throw new Error('Failed to check status');
+      throw new Error("Failed to check status");
     }
-    
+
     const data = await response.json();
     return {
       jobId: data.job_id,
@@ -183,206 +183,227 @@ export function useCVUpload(): UseCVUploadReturn {
   /**
    * Get parsed resume data
    */
-  const getParsedResume = useCallback(async (parsedId: string): Promise<ParsedResume> => {
-    const response = await fetch(`${API_BASE}/api/resume-records/${parsedId}`, {
-      signal: abortControllerRef.current?.signal,
-      credentials: 'include',
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch parsed resume');
-    }
-    
-    const data = await response.json();
-    return data.data || data;
-  }, []);
+  const getParsedResume = useCallback(
+    async (parsedId: string): Promise<ParsedResume> => {
+      const response = await fetch(
+        `${API_BASE}/api/resume-records/${parsedId}`,
+        {
+          signal: abortControllerRef.current?.signal,
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch parsed resume");
+      }
+
+      const data = await response.json();
+      return data.data || data;
+    },
+    [],
+  );
 
   /**
    * Analyze resume with AI (requires consent)
    */
-  const analyzeResume = useCallback(async (parsedId: string): Promise<AIAnalysis> => {
-    setIsAnalyzing(true);
-    setError(null);
-    
-    try {
-      const response = await fetch(`${API_BASE}/api/ingest/analyze/${parsedId}`, {
-        method: 'POST',
-        signal: abortControllerRef.current?.signal,
-        credentials: 'include',
-      });
-      
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Authentication required for AI analysis');
+  const analyzeResume = useCallback(
+    async (parsedId: string): Promise<AIAnalysis> => {
+      setIsAnalyzing(true);
+      setError(null);
+
+      try {
+        const response = await fetch(
+          `${API_BASE}/api/ingest/analyze/${parsedId}`,
+          {
+            method: "POST",
+            signal: abortControllerRef.current?.signal,
+            credentials: "include",
+          },
+        );
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error("Authentication required for AI analysis");
+          }
+          if (response.status === 403) {
+            throw new Error("Consent required for AI analysis");
+          }
+          throw new Error("Failed to analyze resume");
         }
-        if (response.status === 403) {
-          throw new Error('Consent required for AI analysis');
-        }
-        throw new Error('Failed to analyze resume');
+
+        const data = await response.json();
+        const analysisResult: AIAnalysis = {
+          analysisId: data.parsed_id,
+          score: data.score || 0,
+          breakdown: data.analysis || {},
+          suggestions: data.recommendations || [],
+          keywords: data.keywords || [],
+        };
+
+        setAnalysis(analysisResult);
+        return analysisResult;
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Analysis failed";
+        setError(errorMessage);
+        throw err;
+      } finally {
+        setIsAnalyzing(false);
       }
-      
-      const data = await response.json();
-      const analysisResult: AIAnalysis = {
-        analysisId: data.parsed_id,
-        score: data.score || 0,
-        breakdown: data.analysis || {},
-        suggestions: data.recommendations || [],
-        keywords: data.keywords || [],
-      };
-      
-      setAnalysis(analysisResult);
-      return analysisResult;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Analysis failed';
-      setError(errorMessage);
-      throw err;
-    } finally {
-      setIsAnalyzing(false);
-    }
-  }, []);
+    },
+    [],
+  );
 
   /**
    * Start polling for job status
    */
-  const startPolling = useCallback((jobId: string, consentToAI: boolean) => {
-    setIsPolling(true);
-    pollAttemptsRef.current = 0;
-    
-    const poll = async () => {
-      try {
-        pollAttemptsRef.current += 1;
-        
-        if (pollAttemptsRef.current > MAX_POLL_ATTEMPTS) {
-          throw new Error('Processing timeout - please try again');
-        }
-        
-        const jobStatus = await checkStatus(jobId);
-        setStatus(jobStatus.status);
-        setProgress(jobStatus.progress);
-        
-        if (jobStatus.status === 'completed' && jobStatus.parsedId) {
-          // Stop polling
+  const startPolling = useCallback(
+    (jobId: string, consentToAI: boolean) => {
+      setIsPolling(true);
+      pollAttemptsRef.current = 0;
+
+      const poll = async () => {
+        try {
+          pollAttemptsRef.current += 1;
+
+          if (pollAttemptsRef.current > MAX_POLL_ATTEMPTS) {
+            throw new Error("Processing timeout - please try again");
+          }
+
+          const jobStatus = await checkStatus(jobId);
+          setStatus(jobStatus.status);
+          setProgress(jobStatus.progress);
+
+          if (jobStatus.status === "completed" && jobStatus.parsedId) {
+            // Stop polling
+            if (pollIntervalRef.current) {
+              clearInterval(pollIntervalRef.current);
+              pollIntervalRef.current = null;
+            }
+            setIsPolling(false);
+            setIsParsing(true);
+
+            // Fetch parsed resume
+            const parsed = await getParsedResume(jobStatus.parsedId);
+            setParsedResume(parsed);
+            setIsParsing(false);
+
+            // Auto-analyze if consent was given
+            if (consentToAI) {
+              await analyzeResume(jobStatus.parsedId);
+            }
+          } else if (jobStatus.status === "failed") {
+            throw new Error(jobStatus.error || "Processing failed");
+          }
+        } catch (err) {
           if (pollIntervalRef.current) {
             clearInterval(pollIntervalRef.current);
             pollIntervalRef.current = null;
           }
           setIsPolling(false);
-          setIsParsing(true);
-          
-          // Fetch parsed resume
-          const parsed = await getParsedResume(jobStatus.parsedId);
-          setParsedResume(parsed);
           setIsParsing(false);
-          
-          // Auto-analyze if consent was given
-          if (consentToAI) {
-            await analyzeResume(jobStatus.parsedId);
-          }
-        } else if (jobStatus.status === 'failed') {
-          throw new Error(jobStatus.error || 'Processing failed');
+          const errorMessage =
+            err instanceof Error ? err.message : "Unknown error";
+          setError(errorMessage);
         }
-      } catch (err) {
-        if (pollIntervalRef.current) {
-          clearInterval(pollIntervalRef.current);
-          pollIntervalRef.current = null;
-        }
-        setIsPolling(false);
-        setIsParsing(false);
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        setError(errorMessage);
-      }
-    };
-    
-    // Initial check
-    poll();
-    
-    // Start interval
-    pollIntervalRef.current = setInterval(poll, POLL_INTERVAL);
-  }, [checkStatus, getParsedResume, analyzeResume]);
+      };
+
+      // Initial check
+      poll();
+
+      // Start interval
+      pollIntervalRef.current = setInterval(poll, POLL_INTERVAL);
+    },
+    [checkStatus, getParsedResume, analyzeResume],
+  );
 
   /**
    * Upload CV file
    */
-  const upload = useCallback(async (file: File, options: UploadOptions) => {
-    // Reset state
-    reset();
-    
-    // Create abort controller
-    abortControllerRef.current = new AbortController();
-    
-    // Validate file
-    const allowedTypes = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'text/plain',
-    ];
-    
-    if (!allowedTypes.includes(file.type)) {
-      setError('Invalid file format. Please upload PDF, DOCX, DOC, or TXT.');
-      return;
-    }
-    
-    const maxSize = 10 * 1024 * 1024; // 10MB
-    if (file.size > maxSize) {
-      setError('File too large. Maximum size is 10MB.');
-      return;
-    }
-    
-    setIsUploading(true);
-    setStatus('pending');
-    setError(null);
-    
-    try {
-      // Prepare form data
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      // Upload file
-      const response = await fetch(`${API_BASE}/api/ingest/upload`, {
-        method: 'POST',
-        body: formData,
-        signal: abortControllerRef.current.signal,
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.message_en || 
-          errorData.detail?.message_en || 
-          'Upload failed'
-        );
+  const upload = useCallback(
+    async (file: File, options: UploadOptions) => {
+      // Reset state
+      reset();
+
+      // Create abort controller
+      abortControllerRef.current = new AbortController();
+
+      // Validate file
+      const allowedTypes = [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "text/plain",
+      ];
+
+      if (!allowedTypes.includes(file.type)) {
+        setError("Invalid file format. Please upload PDF, DOCX, DOC, or TXT.");
+        return;
       }
-      
-      const data = await response.json();
-      setIsUploading(false);
-      setProgress(10);
-      
-      // Check if already completed (synchronous processing)
-      if (data.data && data.success) {
-        setStatus('completed');
-        setProgress(100);
-        setParsedResume(data.data);
-        
-        // Auto-analyze if consent was given
-        if (options.consentToAI && data.data.id) {
-          await analyzeResume(data.data.id);
+
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      if (file.size > maxSize) {
+        setError("File too large. Maximum size is 10MB.");
+        return;
+      }
+
+      setIsUploading(true);
+      setStatus("pending");
+      setError(null);
+
+      try {
+        // Prepare form data
+        const formData = new FormData();
+        formData.append("file", file);
+
+        // Upload file
+        const response = await fetch(`${API_BASE}/api/ingest/upload`, {
+          method: "POST",
+          body: formData,
+          signal: abortControllerRef.current.signal,
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(
+            errorData.message_en ||
+              errorData.detail?.message_en ||
+              "Upload failed",
+          );
         }
-      } else if (data.job_id) {
-        // Start polling for async processing
-        startPolling(data.job_id, options.consentToAI);
+
+        const data = await response.json();
+        setIsUploading(false);
+        setProgress(10);
+
+        // Check if already completed (synchronous processing)
+        if (data.data && data.success) {
+          setStatus("completed");
+          setProgress(100);
+          setParsedResume(data.data);
+
+          // Auto-analyze if consent was given
+          if (options.consentToAI && data.data.id) {
+            await analyzeResume(data.data.id);
+          }
+        } else if (data.job_id) {
+          // Start polling for async processing
+          startPolling(data.job_id, options.consentToAI);
+        }
+      } catch (err) {
+        setIsUploading(false);
+
+        if (err instanceof Error && err.name === "AbortError") {
+          setError("Upload cancelled");
+        } else {
+          const errorMessage =
+            err instanceof Error ? err.message : "Upload failed";
+          setError(errorMessage);
+        }
       }
-    } catch (err) {
-      setIsUploading(false);
-      
-      if (err instanceof Error && err.name === 'AbortError') {
-        setError('Upload cancelled');
-      } else {
-        const errorMessage = err instanceof Error ? err.message : 'Upload failed';
-        setError(errorMessage);
-      }
-    }
-  }, [reset, startPolling, analyzeResume]);
+    },
+    [reset, startPolling, analyzeResume],
+  );
 
   return {
     // State
@@ -395,7 +416,7 @@ export function useCVUpload(): UseCVUploadReturn {
     parsedResume,
     analysis,
     error,
-    
+
     // Actions
     upload,
     checkStatus,

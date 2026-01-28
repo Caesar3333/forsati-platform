@@ -34,7 +34,13 @@ import { useToast } from "@/hooks/useToast";
 import { useCopyJobLink } from "@/hooks/useClipboard";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { CVScanModal } from "@/components/cv-scan/CVScanModal";
-import { type Job, saveJob, unsaveJob, isJobSaved, getApplicationLink } from "@/lib/opportunities";
+import {
+  type Job,
+  saveJob,
+  unsaveJob,
+  isJobSaved,
+  getApplicationLink,
+} from "@/lib/opportunities";
 
 interface JobDetailClientProps {
   job: Job;
@@ -249,12 +255,12 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
     }
 
     trackApplyStart({ jobId: job.id, jobTitle: job.title, method: "quick" });
-    
+
     setIsLoadingApply(true);
     try {
       // Get application link (may require additional checks)
       const { applyUrl } = await getApplicationLink(job.id);
-      
+
       if (applyUrl.startsWith("http")) {
         // External application
         window.open(applyUrl, "_blank");
@@ -296,18 +302,19 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
         addressCountry: job.location.country,
       },
     },
-    baseSalary: job.salary && !job.salary.confidential
-      ? {
-          "@type": "MonetaryAmount",
-          currency: job.salary.currency,
-          value: {
-            "@type": "QuantitativeValue",
-            minValue: job.salary.min,
-            maxValue: job.salary.max,
-            unitText: "MONTH",
-          },
-        }
-      : undefined,
+    baseSalary:
+      job.salary && !job.salary.confidential
+        ? {
+            "@type": "MonetaryAmount",
+            currency: job.salary.currency,
+            value: {
+              "@type": "QuantitativeValue",
+              minValue: job.salary.min,
+              maxValue: job.salary.max,
+              unitText: "MONTH",
+            },
+          }
+        : undefined,
     skills: job.skills.join(", "),
     industry: job.categories.join(", "),
   };
@@ -328,7 +335,11 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
               href="/jobs"
               className="inline-flex items-center gap-2 text-sm text-muted hover:text-foreground"
             >
-              {isRTL ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />}
+              {isRTL ? (
+                <ArrowRight className="h-4 w-4" />
+              ) : (
+                <ArrowLeft className="h-4 w-4" />
+              )}
               {t.backToJobs}
             </Link>
           </div>
@@ -402,7 +413,10 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
                         </span>
                         <span className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
-                          {t.postedAt.replace("{date}", new Date(job.postedAt).toLocaleDateString(locale))}
+                          {t.postedAt.replace(
+                            "{date}",
+                            new Date(job.postedAt).toLocaleDateString(locale),
+                          )}
                         </span>
                       </div>
                     </div>
@@ -422,7 +436,12 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
                           <Bookmark className="h-5 w-5" />
                         )}
                       </Button>
-                      <Button variant="ghost" size="icon" onClick={handleShare} aria-label={t.share}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={handleShare}
+                        aria-label={t.share}
+                      >
                         <Share2 className="h-5 w-5" />
                       </Button>
                     </div>
@@ -432,7 +451,10 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
                   <div className="flex gap-6 mt-6 pt-6 border-t border-border text-sm text-muted">
                     <span className="flex items-center gap-1">
                       <Users className="h-4 w-4" />
-                      {t.applicants.replace("{count}", String(job.applicantsCount))}
+                      {t.applicants.replace(
+                        "{count}",
+                        String(job.applicantsCount),
+                      )}
                     </span>
                     <span className="flex items-center gap-1">
                       <Eye className="h-4 w-4" />
@@ -441,7 +463,10 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
                     {job.applicationDeadline && (
                       <span className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
-                        {t.deadline}: {new Date(job.applicationDeadline).toLocaleDateString(locale)}
+                        {t.deadline}:{" "}
+                        {new Date(job.applicationDeadline).toLocaleDateString(
+                          locale,
+                        )}
                       </span>
                     )}
                   </div>
@@ -535,8 +560,17 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
                           t.negotiable
                         ) : (
                           <>
-                            {formatCurrency(job.salary.min, job.salary.currency, locale)} -{" "}
-                            {formatCurrency(job.salary.max, job.salary.currency, locale)}
+                            {formatCurrency(
+                              job.salary.min,
+                              job.salary.currency,
+                              locale,
+                            )}{" "}
+                            -{" "}
+                            {formatCurrency(
+                              job.salary.max,
+                              job.salary.currency,
+                              locale,
+                            )}
                             <span className="text-sm font-normal text-muted">
                               {t.perMonth}
                             </span>
@@ -550,7 +584,9 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
                   {isExpired ? (
                     <div className="p-4 bg-warning-50 rounded-lg text-center">
                       <AlertCircle className="h-8 w-8 text-warning-500 mx-auto mb-2" />
-                      <p className="text-warning-700 font-medium">{t.expired}</p>
+                      <p className="text-warning-700 font-medium">
+                        {t.expired}
+                      </p>
                     </div>
                   ) : isAuthenticated ? (
                     <div className="space-y-3">
@@ -593,21 +629,25 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
                     <div className="flex justify-between">
                       <span className="text-muted">{t.experience}</span>
                       <span className="font-medium">
-                        {t.experienceLevels[job.experienceLevel as keyof typeof t.experienceLevels]}
+                        {
+                          t.experienceLevels[
+                            job.experienceLevel as keyof typeof t.experienceLevels
+                          ]
+                        }
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted">{t.location}</span>
-                      <span className="font-medium">
-                        {job.location.city}
-                      </span>
+                      <span className="font-medium">{job.location.city}</span>
                     </div>
                   </div>
 
                   {/* Skills */}
                   {job.skills.length > 0 && (
                     <div className="mt-6 pt-6 border-t border-border">
-                      <p className="text-sm font-medium text-foreground mb-3">{t.skills}</p>
+                      <p className="text-sm font-medium text-foreground mb-3">
+                        {t.skills}
+                      </p>
                       <div className="flex flex-wrap gap-2">
                         {job.skills.map((skill) => (
                           <Badge key={skill} variant="default" size="sm">
@@ -648,7 +688,9 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
                           <CheckCircle className="inline h-4 w-4 ml-1 text-success-500" />
                         )}
                       </p>
-                      <p className="text-sm text-muted">{job.company.industry}</p>
+                      <p className="text-sm text-muted">
+                        {job.company.industry}
+                      </p>
                     </div>
                   </Link>
 
@@ -666,7 +708,11 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
                     </Button>
                     {job.company.website && (
                       <Button variant="ghost" size="sm" asChild>
-                        <a href={job.company.website} target="_blank" rel="noopener noreferrer">
+                        <a
+                          href={job.company.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <ExternalLink className="h-4 w-4" />
                         </a>
                       </Button>
@@ -687,7 +733,11 @@ export function JobDetailClient({ job, locale }: JobDetailClientProps) {
         onSubmit={async (data) => {
           // Handle quick apply with uploaded CV
           track("apply.quick_apply", { jobId: job.id });
-          success(isRTL ? "تم إرسال طلبك بنجاح" : "Application submitted successfully");
+          success(
+            isRTL
+              ? "تم إرسال طلبك بنجاح"
+              : "Application submitted successfully",
+          );
           setIsApplyModalOpen(false);
         }}
       />

@@ -2,43 +2,44 @@
  * Button Component Stories
  * قصص مكون الزر
  */
-import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './Button';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "./Button";
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
+  title: "Components/Button",
   component: Button,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
     docs: {
       description: {
-        component: 'A versatile button component with multiple variants and sizes.',
+        component:
+          "A versatile button component with multiple variants and sizes.",
       },
     },
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     variant: {
-      control: 'select',
-      options: ['primary', 'secondary', 'outline', 'ghost', 'danger'],
-      description: 'The visual style of the button',
+      control: "select",
+      options: ["primary", "secondary", "outline", "ghost", "danger"],
+      description: "The visual style of the button",
     },
     size: {
-      control: 'select',
-      options: ['sm', 'md', 'lg'],
-      description: 'The size of the button',
+      control: "select",
+      options: ["sm", "md", "lg"],
+      description: "The size of the button",
     },
     disabled: {
-      control: 'boolean',
-      description: 'Whether the button is disabled',
+      control: "boolean",
+      description: "Whether the button is disabled",
     },
     loading: {
-      control: 'boolean',
-      description: 'Whether to show loading state',
+      control: "boolean",
+      description: "Whether to show loading state",
     },
     fullWidth: {
-      control: 'boolean',
-      description: 'Whether the button should take full width',
+      control: "boolean",
+      description: "Whether the button should take full width",
     },
   },
 };
@@ -52,70 +53,70 @@ type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
   args: {
-    children: 'Primary Button',
-    variant: 'primary',
+    children: "Primary Button",
+    variant: "primary",
   },
 };
 
 export const Secondary: Story = {
   args: {
-    children: 'Secondary Button',
-    variant: 'secondary',
+    children: "Secondary Button",
+    variant: "secondary",
   },
 };
 
 export const Outline: Story = {
   args: {
-    children: 'Outline Button',
-    variant: 'outline',
+    children: "Outline Button",
+    variant: "outline",
   },
 };
 
 export const Ghost: Story = {
   args: {
-    children: 'Ghost Button',
-    variant: 'ghost',
+    children: "Ghost Button",
+    variant: "ghost",
   },
 };
 
 export const Danger: Story = {
   args: {
-    children: 'Danger Button',
-    variant: 'danger',
+    children: "Danger Button",
+    variant: "danger",
   },
 };
 
 export const Small: Story = {
   args: {
-    children: 'Small Button',
-    size: 'sm',
+    children: "Small Button",
+    size: "sm",
   },
 };
 
 export const Large: Story = {
   args: {
-    children: 'Large Button',
-    size: 'lg',
+    children: "Large Button",
+    size: "lg",
   },
 };
 
 export const Loading: Story = {
   args: {
-    children: 'Loading...',
+    children: "Loading...",
     loading: true,
   },
 };
 
 export const Disabled: Story = {
   args: {
-    children: 'Disabled Button',
+    children: "Disabled Button",
     disabled: true,
   },
 };
 
 export const FullWidth: Story = {
   args: {
-    children: 'Full Width Button',
+    children: "Full Width Button",
     fullWidth: true,
   },
 };
@@ -145,12 +146,12 @@ export const WithIcon: Story = {
 
 export const Arabic: Story = {
   args: {
-    children: 'زر أساسي',
-    variant: 'primary',
+    children: "زر أساسي",
+    variant: "primary",
   },
   parameters: {
     globals: {
-      direction: 'rtl',
+      direction: "rtl",
     },
   },
 };

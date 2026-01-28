@@ -74,7 +74,7 @@ class MockIntersectionObserver implements IntersectionObserver {
 
   constructor(
     private callback: IntersectionObserverCallback,
-    private options?: IntersectionObserverInit
+    private options?: IntersectionObserverInit,
   ) {}
 
   observe = vi.fn();

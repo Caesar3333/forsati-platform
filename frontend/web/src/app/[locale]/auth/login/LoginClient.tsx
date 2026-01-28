@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useTranslations } from 'next-intl';
-import { signIn } from 'next-auth/react';
-import { useState } from 'react';
-import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { useTranslations } from "next-intl";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 // TODO: Integrate with Keycloak for SSO
 // TODO: Add social login providers (Google, LinkedIn)
@@ -19,15 +19,15 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 interface LoginClientProps {
-  locale: 'ar' | 'en';
+  locale: "ar" | "en";
   callbackUrl?: string;
   error?: string;
 }
 
 export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
-  const t = useTranslations('auth.login');
+  const t = useTranslations("auth.login");
   const [isLoading, setIsLoading] = useState(false);
-  const isRTL = locale === 'ar';
+  const isRTL = locale === "ar";
 
   const {
     register,
@@ -40,13 +40,13 @@ export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      await signIn('credentials', {
+      await signIn("credentials", {
         email: data.email,
         password: data.password,
         callbackUrl: callbackUrl || `/${locale}/me/dashboard`,
       });
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -61,16 +61,16 @@ export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
   return (
     <main
       className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8"
-      dir={isRTL ? 'rtl' : 'ltr'}
+      dir={isRTL ? "rtl" : "ltr"}
     >
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            {t('title')}
+            {t("title")}
           </h1>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
-            {t('subtitle')}
+            {t("subtitle")}
           </p>
         </div>
 
@@ -78,7 +78,7 @@ export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
         {error && (
           <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
             <p className="text-red-600 dark:text-red-400 text-sm">
-              {t(`errors.${error}`, { defaultValue: t('errors.default') })}
+              {t(`errors.${error}`, { defaultValue: t("errors.default") })}
             </p>
           </div>
         )}
@@ -92,10 +92,10 @@ export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
-                {t('email')}
+                {t("email")}
               </label>
               <input
-                {...register('email')}
+                {...register("email")}
                 type="email"
                 id="email"
                 autoComplete="email"
@@ -103,10 +103,12 @@ export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
                          bg-white dark:bg-gray-800 text-gray-900 dark:text-white
                          focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500
                          placeholder-gray-400 dark:placeholder-gray-500"
-                placeholder={t('emailPlaceholder')}
+                placeholder={t("emailPlaceholder")}
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-500">{t('errors.invalidEmail')}</p>
+                <p className="mt-1 text-sm text-red-500">
+                  {t("errors.invalidEmail")}
+                </p>
               )}
             </div>
 
@@ -116,10 +118,10 @@ export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
-                {t('password')}
+                {t("password")}
               </label>
               <input
-                {...register('password')}
+                {...register("password")}
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -127,10 +129,12 @@ export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
                          bg-white dark:bg-gray-800 text-gray-900 dark:text-white
                          focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500
                          placeholder-gray-400 dark:placeholder-gray-500"
-                placeholder={t('passwordPlaceholder')}
+                placeholder={t("passwordPlaceholder")}
               />
               {errors.password && (
-                <p className="mt-1 text-sm text-red-500">{t('errors.invalidPassword')}</p>
+                <p className="mt-1 text-sm text-red-500">
+                  {t("errors.invalidPassword")}
+                </p>
               )}
             </div>
           </div>
@@ -141,7 +145,7 @@ export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
               href={`/${locale}/auth/forgot-password`}
               className="text-sm text-emerald-600 hover:text-emerald-500"
             >
-              {t('forgotPassword')}
+              {t("forgotPassword")}
             </Link>
           </div>
 
@@ -173,7 +177,7 @@ export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
                 />
               </svg>
             ) : (
-              t('submit')
+              t("submit")
             )}
           </button>
         </form>
@@ -185,7 +189,7 @@ export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-2 bg-gray-50 dark:bg-gray-900 text-gray-500">
-              {t('orContinueWith')}
+              {t("orContinueWith")}
             </span>
           </div>
         </div>
@@ -194,7 +198,7 @@ export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
         <div className="grid grid-cols-2 gap-4">
           <button
             type="button"
-            onClick={() => handleSocialLogin('google')}
+            onClick={() => handleSocialLogin("google")}
             className="flex items-center justify-center gap-2 py-3 px-4 border border-gray-300 dark:border-gray-600
                      rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300
                      hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
@@ -221,7 +225,7 @@ export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
           </button>
           <button
             type="button"
-            onClick={() => handleSocialLogin('keycloak')}
+            onClick={() => handleSocialLogin("keycloak")}
             className="flex items-center justify-center gap-2 py-3 px-4 border border-gray-300 dark:border-gray-600
                      rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300
                      hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
@@ -235,12 +239,12 @@ export function LoginClient({ locale, callbackUrl, error }: LoginClientProps) {
 
         {/* Register Link */}
         <p className="text-center text-gray-600 dark:text-gray-400">
-          {t('noAccount')}{' '}
+          {t("noAccount")}{" "}
           <Link
             href={`/${locale}/auth/register`}
             className="text-emerald-600 hover:text-emerald-500 font-medium"
           >
-            {t('register')}
+            {t("register")}
           </Link>
         </p>
       </div>

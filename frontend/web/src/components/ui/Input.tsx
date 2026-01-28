@@ -4,8 +4,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   hint?: string;
@@ -31,7 +30,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       dir,
       ...props
     },
-    ref
+    ref,
   ) => {
     const inputId = id || React.useId();
     const isRTL = dir === "rtl";
@@ -65,7 +64,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               <div
                 className={cn(
                   "absolute inset-y-0 flex items-center pointer-events-none text-muted",
-                  isRTL ? "right-0 pr-3" : "left-0 pl-3"
+                  isRTL ? "right-0 pr-3" : "left-0 pl-3",
                 )}
               >
                 {leftIcon}
@@ -88,12 +87,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 rightIcon && (isRTL ? "pl-10" : "pr-10"),
                 leftAddon && "rounded-l-none",
                 rightAddon && "rounded-r-none",
-                className
+                className,
               )}
               ref={ref}
               aria-invalid={error ? "true" : "false"}
               aria-describedby={
-                error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined
+                error
+                  ? `${inputId}-error`
+                  : hint
+                    ? `${inputId}-hint`
+                    : undefined
               }
               {...props}
             />
@@ -103,7 +106,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               <div
                 className={cn(
                   "absolute inset-y-0 flex items-center pointer-events-none text-muted",
-                  isRTL ? "left-0 pl-3" : "right-0 pr-3"
+                  isRTL ? "left-0 pl-3" : "right-0 pr-3",
                 )}
               >
                 {rightIcon}
@@ -134,7 +137,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";

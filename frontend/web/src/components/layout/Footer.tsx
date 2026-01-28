@@ -141,8 +141,16 @@ const translations = {
 const socialLinks = [
   { icon: Facebook, href: "https://facebook.com/forsati", label: "Facebook" },
   { icon: Twitter, href: "https://twitter.com/forsati", label: "Twitter" },
-  { icon: Instagram, href: "https://instagram.com/forsati", label: "Instagram" },
-  { icon: Linkedin, href: "https://linkedin.com/company/forsati", label: "LinkedIn" },
+  {
+    icon: Instagram,
+    href: "https://instagram.com/forsati",
+    label: "Instagram",
+  },
+  {
+    icon: Linkedin,
+    href: "https://linkedin.com/company/forsati",
+    label: "LinkedIn",
+  },
   { icon: Youtube, href: "https://youtube.com/forsati", label: "YouTube" },
 ];
 
@@ -161,10 +169,7 @@ export function Footer({ locale }: FooterProps) {
   };
 
   return (
-    <footer
-      className="bg-neutral-900 text-white"
-      dir={isRTL ? "rtl" : "ltr"}
-    >
+    <footer className="bg-neutral-900 text-white" dir={isRTL ? "rtl" : "ltr"}>
       {/* Main Footer */}
       <div className="container mx-auto px-4 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
@@ -279,13 +284,19 @@ export function Footer({ locale }: FooterProps) {
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-neutral-400">
                 <Mail className="h-4 w-4 shrink-0" />
-                <a href={`mailto:${t.contact.email}`} className="hover:text-white">
+                <a
+                  href={`mailto:${t.contact.email}`}
+                  className="hover:text-white"
+                >
                   {t.contact.email}
                 </a>
               </li>
               <li className="flex items-center gap-2 text-neutral-400">
                 <Phone className="h-4 w-4 shrink-0" />
-                <a href={`tel:${t.contact.phone.replace(/\s/g, "")}`} className="hover:text-white">
+                <a
+                  href={`tel:${t.contact.phone.replace(/\s/g, "")}`}
+                  className="hover:text-white"
+                >
                   {t.contact.phone}
                 </a>
               </li>

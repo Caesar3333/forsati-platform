@@ -2,9 +2,9 @@
  * Button Component
  * مكون الزر
  */
-import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 // ============================================
 // Button Variants
@@ -12,39 +12,39 @@ import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
   // Base styles
-  'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none',
+  "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
   {
     variants: {
       variant: {
         primary:
-          'bg-primary text-white hover:bg-primary-dark focus:ring-primary shadow-sm hover:shadow-md',
+          "bg-primary text-white hover:bg-primary-dark focus:ring-primary shadow-sm hover:shadow-md",
         secondary:
-          'bg-secondary text-white hover:bg-secondary-dark focus:ring-secondary shadow-sm hover:shadow-md',
+          "bg-secondary text-white hover:bg-secondary-dark focus:ring-secondary shadow-sm hover:shadow-md",
         outline:
-          'border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary',
+          "border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary",
         ghost:
-          'text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 focus:ring-gray-500',
+          "text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 focus:ring-gray-500",
         danger:
-          'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500 shadow-sm',
-        link: 'text-primary underline-offset-4 hover:underline focus:ring-primary p-0',
+          "bg-red-500 text-white hover:bg-red-600 focus:ring-red-500 shadow-sm",
+        link: "text-primary underline-offset-4 hover:underline focus:ring-primary p-0",
       },
       size: {
-        sm: 'h-8 px-3 text-xs',
-        md: 'h-10 px-4 text-sm',
-        lg: 'h-12 px-6 text-base',
-        icon: 'h-10 w-10 p-0',
+        sm: "h-8 px-3 text-xs",
+        md: "h-10 px-4 text-sm",
+        lg: "h-12 px-6 text-base",
+        icon: "h-10 w-10 p-0",
       },
       fullWidth: {
-        true: 'w-full',
-        false: '',
+        true: "w-full",
+        false: "",
       },
     },
     defaultVariants: {
-      variant: 'primary',
-      size: 'md',
+      variant: "primary",
+      size: "md",
       fullWidth: false,
     },
-  }
+  },
 );
 
 // ============================================
@@ -52,7 +52,8 @@ const buttonVariants = cva(
 // ============================================
 
 export interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   children: ReactNode;
   loading?: boolean;
@@ -106,7 +107,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       disabled,
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <button
@@ -121,9 +122,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {!loading && rightIcon}
       </button>
     );
-  }
+  },
 );
 
-Button.displayName = 'Button';
+Button.displayName = "Button";
 
 export { buttonVariants };

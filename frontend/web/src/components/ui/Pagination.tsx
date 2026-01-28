@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 interface PaginationProps {
   currentPage: number;
@@ -17,9 +17,9 @@ export default function Pagination({
 }: PaginationProps) {
   if (totalPages <= 1) return null;
 
-  const getVisiblePages = (): (number | 'ellipsis')[] => {
-    const pages: (number | 'ellipsis')[] = [];
-    
+  const getVisiblePages = (): (number | "ellipsis")[] => {
+    const pages: (number | "ellipsis")[] = [];
+
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
@@ -28,14 +28,14 @@ export default function Pagination({
       const half = Math.floor(maxVisiblePages / 2);
       let start = Math.max(currentPage - half, 1);
       let end = Math.min(start + maxVisiblePages - 1, totalPages);
-      
+
       if (end === totalPages) {
         start = Math.max(end - maxVisiblePages + 1, 1);
       }
 
       if (start > 1) {
         pages.push(1);
-        if (start > 2) pages.push('ellipsis');
+        if (start > 2) pages.push("ellipsis");
       }
 
       for (let i = start; i <= end; i++) {
@@ -43,7 +43,7 @@ export default function Pagination({
       }
 
       if (end < totalPages) {
-        if (end < totalPages - 1) pages.push('ellipsis');
+        if (end < totalPages - 1) pages.push("ellipsis");
         pages.push(totalPages);
       }
     }
@@ -65,19 +65,26 @@ export default function Pagination({
         className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         aria-label="Previous page"
       >
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 19l-7-7 7-7"
+          />
         </svg>
       </button>
 
       {/* Page Numbers */}
       <div className="flex items-center gap-1">
-        {visiblePages.map((page, index) => (
-          page === 'ellipsis' ? (
-            <span
-              key={`ellipsis-${index}`}
-              className="px-2 text-gray-400"
-            >
+        {visiblePages.map((page, index) =>
+          page === "ellipsis" ? (
+            <span key={`ellipsis-${index}`} className="px-2 text-gray-400">
               ...
             </span>
           ) : (
@@ -86,15 +93,15 @@ export default function Pagination({
               onClick={() => onPageChange(page)}
               className={`min-w-[40px] h-10 rounded-lg font-medium transition-colors ${
                 currentPage === page
-                  ? 'bg-emerald-600 text-white'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  ? "bg-emerald-600 text-white"
+                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`}
-              aria-current={currentPage === page ? 'page' : undefined}
+              aria-current={currentPage === page ? "page" : undefined}
             >
               {page}
             </button>
-          )
-        ))}
+          ),
+        )}
       </div>
 
       {/* Next Button */}
@@ -104,8 +111,18 @@ export default function Pagination({
         className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         aria-label="Next page"
       >
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5l7 7-7 7"
+          />
         </svg>
       </button>
     </nav>

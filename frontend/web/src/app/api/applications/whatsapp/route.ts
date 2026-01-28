@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { 
-  generateWhatsAppMessage, 
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import {
+  generateWhatsAppMessage,
   generateWhatsAppUrl,
   type WhatsAppApplyRequest,
   type WhatsAppApplyResponse,
   type WhatsAppMessageData,
-} from '@/services/apply/types';
+} from "@/services/apply/types";
 
 /**
  * POST /api/applications/whatsapp
@@ -18,8 +18,8 @@ export async function POST(request: NextRequest) {
     const session = await getServerSession();
     if (!session?.user) {
       return NextResponse.json(
-        { error: 'Unauthorized', message: 'يجب تسجيل الدخول للتقديم' },
-        { status: 401 }
+        { error: "Unauthorized", message: "يجب تسجيل الدخول للتقديم" },
+        { status: 401 },
       );
     }
 
@@ -28,8 +28,8 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     if (!body.jobId) {
       return NextResponse.json(
-        { error: 'Bad Request', message: 'معرّف الوظيفة مطلوب' },
-        { status: 400 }
+        { error: "Bad Request", message: "معرّف الوظيفة مطلوب" },
+        { status: 400 },
       );
     }
 
@@ -40,13 +40,13 @@ export async function POST(request: NextRequest) {
         headers: {
           Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
         },
-      }
+      },
     );
 
     if (!jobResponse.ok) {
       return NextResponse.json(
-        { error: 'Job Not Found', message: 'الوظيفة غير موجودة' },
-        { status: 404 }
+        { error: "Job Not Found", message: "الوظيفة غير موجودة" },
+        { status: 404 },
       );
     }
 
@@ -56,8 +56,11 @@ export async function POST(request: NextRequest) {
     // Verify job has WhatsApp apply method
     if (!jobData.apply_whatsapp) {
       return NextResponse.json(
-        { error: 'Invalid Apply Method', message: 'هذه الوظيفة لا تدعم التقديم عبر واتساب' },
-        { status: 400 }
+        {
+          error: "Invalid Apply Method",
+          message: "هذه الوظيفة لا تدعم التقديم عبر واتساب",
+        },
+        { status: 400 },
       );
     }
 
@@ -68,7 +71,7 @@ export async function POST(request: NextRequest) {
         headers: {
           Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
         },
-      }
+      },
     );
 
     const profileData = await profileResponse.json();
@@ -83,21 +86,24 @@ export async function POST(request: NextRequest) {
 
     // Prepare message data
     const messageData: WhatsAppMessageData = {
-      applicantName: profile?.full_name || session.user.name || 'مرشح',
+      applicantName: profile?.full_name || session.user.name || "مرشح",
       jobTitle: jobData.title,
-      companyName: jobData.company?.name || jobData.company_name || 'الشركة',
+      companyName: jobData.company?.name || jobData.company_name || "الشركة",
       profileLink,
     };
 
     // Generate message
     const prefilledMessage = generateWhatsAppMessage(messageData);
-    const whatsappUrl = generateWhatsAppUrl(jobData.apply_whatsapp, prefilledMessage);
+    const whatsappUrl = generateWhatsAppUrl(
+      jobData.apply_whatsapp,
+      prefilledMessage,
+    );
 
     // Log application attempt (for analytics)
     await logApplicationAttempt({
       jobId: body.jobId,
       applicantId: session.user.id,
-      method: 'whatsapp',
+      method: "whatsapp",
       timestamp: new Date().toISOString(),
     });
 
@@ -113,10 +119,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('WhatsApp apply error:', error);
+    console.error("WhatsApp apply error:", error);
     return NextResponse.json(
-      { error: 'Internal Server Error', message: 'حدث خطأ أثناء التقديم' },
-      { status: 500 }
+      { error: "Internal Server Error", message: "حدث خطأ أثناء التقديم" },
+      { status: 500 },
     );
   }
 }
@@ -128,20 +134,20 @@ function generateProfileToken(userId: string, jobId: string): string {
   const payload = {
     userId,
     jobId,
-    purpose: 'whatsapp_apply',
+    purpose: "whatsapp_apply",
     exp: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
   };
-  
-  return Buffer.from(JSON.stringify(payload)).toString('base64url');
+
+  return Buffer.from(JSON.stringify(payload)).toString("base64url");
 }
 
 /**
  * Mask phone number for privacy
  */
 function maskPhoneNumber(phone: string): string {
-  const cleaned = phone.replace(/[^\d+]/g, '');
-  if (cleaned.length < 8) return '***';
-  
+  const cleaned = phone.replace(/[^\d+]/g, "");
+  if (cleaned.length < 8) return "***";
+
   const prefix = cleaned.slice(0, 4);
   const suffix = cleaned.slice(-2);
   return `${prefix}****${suffix}`;
@@ -158,15 +164,15 @@ async function logApplicationAttempt(data: {
 }) {
   try {
     await fetch(`${process.env.STRAPI_URL}/api/application-attempts`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
       },
       body: JSON.stringify({ data }),
     });
   } catch (error) {
     // Non-critical, log but don't fail
-    console.warn('Failed to log application attempt:', error);
+    console.warn("Failed to log application attempt:", error);
   }
 }

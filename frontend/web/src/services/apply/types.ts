@@ -7,7 +7,7 @@
 // Apply Method Types
 // ============================================
 
-export type ApplyMethod = 'quick' | 'external' | 'email' | 'whatsapp';
+export type ApplyMethod = "quick" | "external" | "email" | "whatsapp";
 
 // ============================================
 // Quick Apply
@@ -23,7 +23,7 @@ export interface QuickApplyRequest {
 
 export interface QuickApplyResponse {
   applicationId: string;
-  status: 'submitted' | 'pending_review' | 'under_review';
+  status: "submitted" | "pending_review" | "under_review";
   appliedAt: string;
   jobTitle: string;
   companyName: string;
@@ -62,7 +62,7 @@ export interface EmailForwardResponse {
   applicationId: string;
   emailSentTo: string; // masked
   sentAt: string;
-  status: 'queued' | 'sent' | 'delivered' | 'failed';
+  status: "queued" | "sent" | "delivered" | "failed";
 }
 
 // ============================================
@@ -85,15 +85,15 @@ export interface WhatsAppApplyResponse {
 // Application Record
 // ============================================
 
-export type ApplicationStatus = 
-  | 'draft'
-  | 'submitted'
-  | 'under_review'
-  | 'shortlisted'
-  | 'interview_scheduled'
-  | 'offered'
-  | 'rejected'
-  | 'withdrawn';
+export type ApplicationStatus =
+  | "draft"
+  | "submitted"
+  | "under_review"
+  | "shortlisted"
+  | "interview_scheduled"
+  | "offered"
+  | "rejected"
+  | "withdrawn";
 
 export interface Application {
   id: string;
@@ -101,13 +101,13 @@ export interface Application {
   applicantId: string;
   resumeId: string;
   coverLetterId?: string;
-  
+
   // Apply method info
   applyMethod: ApplyMethod;
   externalUrl?: string;
   emailSentTo?: string;
   whatsappNumber?: string;
-  
+
   // Status tracking
   status: ApplicationStatus;
   statusHistory: Array<{
@@ -116,15 +116,15 @@ export interface Application {
     note?: string;
     updatedBy?: string;
   }>;
-  
+
   // Screening
   screeningAnswers?: Record<string, string>;
-  
+
   // Consent
   consentToShare: boolean;
   consentToProcess: boolean;
   consentTimestamp: string;
-  
+
   // Metadata
   createdAt: string;
   updatedAt: string;
@@ -140,7 +140,11 @@ export interface ConsentRecord {
   id: string;
   userId: string;
   applicationId: string;
-  purpose: 'share_with_employer' | 'process_application' | 'share_phone' | 'share_profile';
+  purpose:
+    | "share_with_employer"
+    | "process_application"
+    | "share_phone"
+    | "share_profile";
   granted: boolean;
   timestamp: string;
   ipAddress: string;
@@ -159,7 +163,7 @@ export interface EmailTemplateData {
   companyName: string;
   recruiterName?: string;
   recruiterEmail: string;
-  
+
   // Applicant info
   applicantFullName: string;
   applicantHeadline: string;
@@ -168,19 +172,19 @@ export interface EmailTemplateData {
   applicantPhone?: string;
   applicantYearsExperience: number;
   applicantKeySkills: string[];
-  
+
   // Links
   profileLink: string;
   privacyPolicyUrl: string;
   unsubscribeUrl: string;
-  
+
   // Branding
   forsatiLogoUrl: string;
   forsatiStampUrl: string;
-  
+
   // Custom content
   customMessage?: string;
-  
+
   // Attachments
   resumeAttachment?: {
     filename: string;
@@ -213,28 +217,31 @@ export function generateWhatsAppMessage(data: WhatsAppMessageData): string {
     `أنا ${data.applicantName}، أرغب بالتقديم على وظيفة "${data.jobTitle}" المعلنة لديكم.`,
     ``,
   ];
-  
+
   if (data.profileLink) {
     lines.push(`📋 ملفي الشخصي: ${data.profileLink}`);
     lines.push(``);
   }
-  
+
   if (data.customMessage) {
     lines.push(data.customMessage);
     lines.push(``);
   }
-  
+
   lines.push(`شكراً لوقتكم 🙏`);
   lines.push(`---`);
   lines.push(`تم الإرسال عبر منصة فرصتي`);
-  
-  return lines.join('\n');
+
+  return lines.join("\n");
 }
 
-export function generateWhatsAppUrl(phoneNumber: string, message: string): string {
+export function generateWhatsAppUrl(
+  phoneNumber: string,
+  message: string,
+): string {
   // Remove any non-digit characters except +
-  const cleanPhone = phoneNumber.replace(/[^\d+]/g, '');
+  const cleanPhone = phoneNumber.replace(/[^\d+]/g, "");
   const encodedMessage = encodeURIComponent(message);
-  
+
   return `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
 }

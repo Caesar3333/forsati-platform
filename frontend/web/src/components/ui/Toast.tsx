@@ -5,13 +5,7 @@
 
 import * as React from "react";
 import * as ToastPrimitive from "@radix-ui/react-toast";
-import {
-  CheckCircle,
-  AlertCircle,
-  Info,
-  AlertTriangle,
-  X,
-} from "lucide-react";
+import { CheckCircle, AlertCircle, Info, AlertTriangle, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToastContext, ToastType } from "@/hooks/useToast";
 
@@ -41,7 +35,14 @@ interface ToastProps {
   duration?: number;
 }
 
-export function Toast({ id, type, title, message, action, duration = 5000 }: ToastProps) {
+export function Toast({
+  id,
+  type,
+  title,
+  message,
+  action,
+  duration = 5000,
+}: ToastProps) {
   const { remove } = useToastContext();
 
   return (
@@ -53,7 +54,7 @@ export function Toast({ id, type, title, message, action, duration = 5000 }: Toa
         "data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full",
         "data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)]",
         "data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none",
-        toastStyles[type]
+        toastStyles[type],
       )}
       duration={duration}
       onOpenChange={(open) => {
@@ -61,7 +62,7 @@ export function Toast({ id, type, title, message, action, duration = 5000 }: Toa
       }}
     >
       {icons[type]}
-      
+
       <div className="flex-1 grid gap-1">
         <ToastPrimitive.Title className="text-sm font-semibold text-foreground">
           {title}
@@ -101,9 +102,7 @@ export function ToastContainer() {
       {toasts.map((toast) => (
         <Toast key={toast.id} {...toast} />
       ))}
-      <ToastPrimitive.Viewport
-        className="fixed bottom-0 right-0 z-[100] flex max-h-screen w-full flex-col-reverse gap-2 p-4 sm:bottom-auto sm:top-0 sm:max-w-[420px] md:gap-3"
-      />
+      <ToastPrimitive.Viewport className="fixed bottom-0 right-0 z-[100] flex max-h-screen w-full flex-col-reverse gap-2 p-4 sm:bottom-auto sm:top-0 sm:max-w-[420px] md:gap-3" />
     </ToastPrimitive.Provider>
   );
 }

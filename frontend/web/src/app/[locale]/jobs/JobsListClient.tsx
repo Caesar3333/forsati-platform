@@ -27,7 +27,12 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useAnalytics } from "@/hooks/useAnalytics";
-import { getJobs, type Job, type JobType, type JobsListParams } from "@/lib/opportunities";
+import {
+  getJobs,
+  type Job,
+  type JobType,
+  type JobsListParams,
+} from "@/lib/opportunities";
 
 interface JobsListClientProps {
   locale: "ar" | "en";
@@ -110,14 +115,24 @@ const translations = {
       hybrid: "Hybrid",
     },
     locations: ["Amman", "Irbid", "Aqaba", "Zarqa"],
-    categories: ["Technology", "Healthcare", "Education", "Administration", "Sales", "Marketing"],
+    categories: [
+      "Technology",
+      "Healthcare",
+      "Education",
+      "Administration",
+      "Sales",
+      "Marketing",
+    ],
     prev: "Previous",
     next: "Next",
     page: "Page {current} of {total}",
   },
 };
 
-export function JobsListClient({ locale, initialFilters = {} }: JobsListClientProps) {
+export function JobsListClient({
+  locale,
+  initialFilters = {},
+}: JobsListClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const t = translations[locale];
@@ -126,7 +141,12 @@ export function JobsListClient({ locale, initialFilters = {} }: JobsListClientPr
 
   const [jobs, setJobs] = React.useState<Job[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [meta, setMeta] = React.useState({ page: 1, pageSize: 12, pageCount: 1, total: 0 });
+  const [meta, setMeta] = React.useState({
+    page: 1,
+    pageSize: 12,
+    pageCount: 1,
+    total: 0,
+  });
   const [showFilters, setShowFilters] = React.useState(false);
 
   // Filters state
@@ -172,7 +192,8 @@ export function JobsListClient({ locale, initialFilters = {} }: JobsListClientPr
     if (filters.type) params.set("type", filters.type as string);
     if (filters.location) params.set("location", filters.location);
     if (filters.category) params.set("category", filters.category);
-    if (filters.page && filters.page > 1) params.set("page", String(filters.page));
+    if (filters.page && filters.page > 1)
+      params.set("page", String(filters.page));
 
     const url = params.toString() ? `?${params.toString()}` : "";
     router.replace(`/${locale}/jobs${url}`, { scroll: false });
@@ -184,14 +205,17 @@ export function JobsListClient({ locale, initialFilters = {} }: JobsListClientPr
       debounce((value: string) => {
         setFilters((prev) => ({ ...prev, search: value, page: 1 }));
       }, 300),
-    []
+    [],
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     debouncedSearch(e.target.value);
   };
 
-  const handleFilterChange = (key: keyof JobsListParams, value: string | undefined) => {
+  const handleFilterChange = (
+    key: keyof JobsListParams,
+    value: string | undefined,
+  ) => {
     setFilters((prev) => ({
       ...prev,
       [key]: value === prev[key] ? undefined : value,
@@ -207,7 +231,8 @@ export function JobsListClient({ locale, initialFilters = {} }: JobsListClientPr
     });
   };
 
-  const hasActiveFilters = filters.search || filters.type || filters.location || filters.category;
+  const hasActiveFilters =
+    filters.search || filters.type || filters.location || filters.category;
 
   return (
     <>
@@ -217,7 +242,9 @@ export function JobsListClient({ locale, initialFilters = {} }: JobsListClientPr
         {/* Search Header */}
         <div className="bg-white border-b border-border">
           <div className="container mx-auto px-4 py-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4">{t.title}</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
+              {t.title}
+            </h1>
 
             <div className="flex flex-col md:flex-row gap-4">
               {/* Search Input */}
@@ -225,7 +252,7 @@ export function JobsListClient({ locale, initialFilters = {} }: JobsListClientPr
                 <Search
                   className={cn(
                     "absolute top-1/2 -translate-y-1/2 h-5 w-5 text-muted",
-                    isRTL ? "right-3" : "left-3"
+                    isRTL ? "right-3" : "left-3",
                   )}
                 />
                 <input
@@ -235,7 +262,7 @@ export function JobsListClient({ locale, initialFilters = {} }: JobsListClientPr
                   placeholder={t.searchPlaceholder}
                   className={cn(
                     "w-full h-12 rounded-lg border border-border bg-white text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-500",
-                    isRTL ? "pr-10 pl-4" : "pl-10 pr-4"
+                    isRTL ? "pr-10 pl-4" : "pl-10 pr-4",
                   )}
                 />
               </div>
@@ -259,7 +286,7 @@ export function JobsListClient({ locale, initialFilters = {} }: JobsListClientPr
             <aside
               className={cn(
                 "w-full md:w-64 shrink-0 space-y-6",
-                showFilters ? "block" : "hidden md:block"
+                showFilters ? "block" : "hidden md:block",
               )}
             >
               <div className="flex items-center justify-between">
@@ -372,7 +399,9 @@ export function JobsListClient({ locale, initialFilters = {} }: JobsListClientPr
                         variant="primary"
                         size="sm"
                         removable
-                        onRemove={() => handleFilterChange("location", undefined)}
+                        onRemove={() =>
+                          handleFilterChange("location", undefined)
+                        }
                       >
                         {filters.location}
                       </Badge>
@@ -474,9 +503,15 @@ export function JobsListClient({ locale, initialFilters = {} }: JobsListClientPr
                     variant="outline"
                     size="sm"
                     disabled={meta.page <= 1}
-                    onClick={() => setFilters((prev) => ({ ...prev, page: prev.page! - 1 }))}
+                    onClick={() =>
+                      setFilters((prev) => ({ ...prev, page: prev.page! - 1 }))
+                    }
                   >
-                    {isRTL ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+                    {isRTL ? (
+                      <ChevronRight className="h-4 w-4" />
+                    ) : (
+                      <ChevronLeft className="h-4 w-4" />
+                    )}
                     {t.prev}
                   </Button>
 
@@ -490,10 +525,16 @@ export function JobsListClient({ locale, initialFilters = {} }: JobsListClientPr
                     variant="outline"
                     size="sm"
                     disabled={meta.page >= meta.pageCount}
-                    onClick={() => setFilters((prev) => ({ ...prev, page: prev.page! + 1 }))}
+                    onClick={() =>
+                      setFilters((prev) => ({ ...prev, page: prev.page! + 1 }))
+                    }
                   >
                     {t.next}
-                    {isRTL ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                    {isRTL ? (
+                      <ChevronLeft className="h-4 w-4" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
               )}

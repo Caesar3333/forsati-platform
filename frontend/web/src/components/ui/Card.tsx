@@ -10,7 +10,10 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant = "default", padding = "md", children, ...props }, ref) => {
+  (
+    { className, variant = "default", padding = "md", children, ...props },
+    ref,
+  ) => {
     return (
       <div
         ref={ref}
@@ -27,14 +30,14 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
           padding === "sm" && "p-3",
           padding === "md" && "p-4",
           padding === "lg" && "p-6",
-          className
+          className,
         )}
         {...props}
       >
         {children}
       </div>
     );
-  }
+  },
 );
 Card.displayName = "Card";
 
@@ -56,7 +59,10 @@ const CardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn("text-lg font-semibold text-foreground leading-none tracking-tight", className)}
+    className={cn(
+      "text-lg font-semibold text-foreground leading-none tracking-tight",
+      className,
+    )}
     {...props}
   />
 ));
@@ -66,11 +72,7 @@ const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    className={cn("text-sm text-muted", className)}
-    {...props}
-  />
+  <p ref={ref} className={cn("text-sm text-muted", className)} {...props} />
 ));
 CardDescription.displayName = "CardDescription";
 
@@ -94,4 +96,11 @@ const CardFooter = React.forwardRef<
 ));
 CardFooter.displayName = "CardFooter";
 
-export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter };
+export {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+};

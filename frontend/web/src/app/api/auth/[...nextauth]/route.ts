@@ -1,7 +1,11 @@
 // © 2026 Forsati. All rights reserved.
 // NextAuth.js Configuration with Keycloak Provider
 
-import NextAuth, { type NextAuthOptions, type Session, type User } from "next-auth";
+import NextAuth, {
+  type NextAuthOptions,
+  type Session,
+  type User,
+} from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -148,7 +152,7 @@ export const authOptions: NextAuthOptions = {
 
           // Decode the access token to get user info
           const payload = JSON.parse(
-            Buffer.from(tokens.access_token.split(".")[1], "base64").toString()
+            Buffer.from(tokens.access_token.split(".")[1], "base64").toString(),
           );
 
           return {
@@ -179,7 +183,9 @@ export const authOptions: NextAuthOptions = {
             ...token,
             accessToken: account.access_token,
             refreshToken: account.refresh_token,
-            accessTokenExpires: account.expires_at ? account.expires_at * 1000 : undefined,
+            accessTokenExpires: account.expires_at
+              ? account.expires_at * 1000
+              : undefined,
             role: (user as any).role || "candidate",
             locale: (user as any).locale || "ar",
           };
@@ -264,7 +270,7 @@ export const authOptions: NextAuthOptions = {
                 client_id: process.env.KEYCLOAK_CLIENT_ID!,
                 refresh_token: token.refreshToken || "",
               }),
-            }
+            },
           );
         } catch (error) {
           console.error("Keycloak logout error:", error);

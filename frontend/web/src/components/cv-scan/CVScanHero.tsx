@@ -149,7 +149,11 @@ export function CVScanHero({ locale }: CVScanHeroProps) {
             className={cn("space-y-6", isRTL && "lg:order-2")}
           >
             {/* Badge */}
-            <Badge variant="primary" size="lg" icon={<Star className="h-3 w-3" />}>
+            <Badge
+              variant="primary"
+              size="lg"
+              icon={<Star className="h-3 w-3" />}
+            >
               {t.badge}
             </Badge>
 
@@ -192,7 +196,7 @@ export function CVScanHero({ locale }: CVScanHeroProps) {
                   <Search
                     className={cn(
                       "absolute top-1/2 -translate-y-1/2 h-5 w-5 text-muted",
-                      isRTL ? "right-3" : "left-3"
+                      isRTL ? "right-3" : "left-3",
                     )}
                   />
                   <input
@@ -202,7 +206,7 @@ export function CVScanHero({ locale }: CVScanHeroProps) {
                     placeholder={t.searchPlaceholder}
                     className={cn(
                       "w-full h-12 rounded-lg border border-border bg-white text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-500",
-                      isRTL ? "pr-10 pl-4" : "pl-10 pr-4"
+                      isRTL ? "pr-10 pl-4" : "pl-10 pr-4",
                     )}
                   />
                 </div>
@@ -230,7 +234,7 @@ export function CVScanHero({ locale }: CVScanHeroProps) {
                     "relative border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all",
                     isDragActive
                       ? "border-primary-500 bg-primary-50"
-                      : "border-border hover:border-primary-300 hover:bg-primary-50/50"
+                      : "border-border hover:border-primary-300 hover:bg-primary-50/50",
                   )}
                 >
                   <input {...getInputProps()} />
@@ -275,7 +279,9 @@ export function CVScanHero({ locale }: CVScanHeroProps) {
                   onClick={() => setModalOpen(true)}
                 >
                   <Sparkles className="h-4 w-4" />
-                  {isRTL ? "افحص سيرتك بالذكاء الاصطناعي" : "AI-Powered CV Scan"}
+                  {isRTL
+                    ? "افحص سيرتك بالذكاء الاصطناعي"
+                    : "AI-Powered CV Scan"}
                 </Button>
               </div>
 
@@ -283,7 +289,7 @@ export function CVScanHero({ locale }: CVScanHeroProps) {
               <div
                 className={cn(
                   "absolute -bottom-4 bg-white rounded-full px-4 py-2 shadow-lg border border-border flex items-center gap-2",
-                  isRTL ? "-left-4" : "-right-4"
+                  isRTL ? "-left-4" : "-right-4",
                 )}
               >
                 <div className="flex -space-x-2">

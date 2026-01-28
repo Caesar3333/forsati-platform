@@ -15,7 +15,9 @@ interface LoginPageProps {
   };
 }
 
-export async function generateMetadata({ params }: LoginPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: LoginPageProps): Promise<Metadata> {
   const t = await getTranslations({ locale: params.locale, namespace: "auth" });
 
   return {

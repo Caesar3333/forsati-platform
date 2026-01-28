@@ -15,7 +15,9 @@ interface RegisterPageProps {
   };
 }
 
-export async function generateMetadata({ params }: RegisterPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: RegisterPageProps): Promise<Metadata> {
   const t = await getTranslations({ locale: params.locale, namespace: "auth" });
 
   return {
@@ -24,7 +26,10 @@ export async function generateMetadata({ params }: RegisterPageProps): Promise<M
   };
 }
 
-export default function RegisterPage({ params, searchParams }: RegisterPageProps) {
+export default function RegisterPage({
+  params,
+  searchParams,
+}: RegisterPageProps) {
   return (
     <RegisterClient
       locale={params.locale}

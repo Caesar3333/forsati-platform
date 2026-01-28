@@ -1,27 +1,27 @@
 /**
  * Privacy & Consent Management Service
  * خدمة إدارة الخصوصية والموافقة
- * 
+ *
  * Handles user consent tracking, privacy settings, and data protection
  */
 
-import { z } from 'zod';
+import { z } from "zod";
 
 // ============================================
 // Types
 // ============================================
 
-export type ConsentPurpose = 
-  | 'ai_processing'           // معالجة الذكاء الاصطناعي
-  | 'share_with_employer'     // المشاركة مع صاحب العمل
-  | 'share_phone'             // مشاركة رقم الهاتف
-  | 'share_profile'           // مشاركة الملف الشخصي
-  | 'email_notifications'     // إشعارات البريد
-  | 'marketing'               // التسويق
-  | 'analytics'               // التحليلات
-  | 'third_party';            // طرف ثالث
+export type ConsentPurpose =
+  | "ai_processing" // معالجة الذكاء الاصطناعي
+  | "share_with_employer" // المشاركة مع صاحب العمل
+  | "share_phone" // مشاركة رقم الهاتف
+  | "share_profile" // مشاركة الملف الشخصي
+  | "email_notifications" // إشعارات البريد
+  | "marketing" // التسويق
+  | "analytics" // التحليلات
+  | "third_party"; // طرف ثالث
 
-export type ProfileVisibility = 'public' | 'connections' | 'private';
+export type ProfileVisibility = "public" | "connections" | "private";
 
 export interface ConsentRecord {
   id: string;
@@ -57,7 +57,7 @@ export interface DataExportRequest {
   id: string;
   userId: string;
   requestedAt: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: "pending" | "processing" | "completed" | "failed";
   completedAt?: string;
   downloadUrl?: string;
   expiresAt?: string;
@@ -68,7 +68,7 @@ export interface DataDeletionRequest {
   userId: string;
   requestedAt: string;
   reason?: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: "pending" | "processing" | "completed" | "failed";
   completedAt?: string;
   dataDeleted: string[];
 }
@@ -80,14 +80,14 @@ export interface DataDeletionRequest {
 export const ConsentRecordSchema = z.object({
   userId: z.string().min(1),
   purpose: z.enum([
-    'ai_processing',
-    'share_with_employer',
-    'share_phone',
-    'share_profile',
-    'email_notifications',
-    'marketing',
-    'analytics',
-    'third_party',
+    "ai_processing",
+    "share_with_employer",
+    "share_phone",
+    "share_profile",
+    "email_notifications",
+    "marketing",
+    "analytics",
+    "third_party",
   ]),
   granted: z.boolean(),
   source: z.string().min(1),
@@ -95,7 +95,7 @@ export const ConsentRecordSchema = z.object({
 });
 
 export const PrivacySettingsSchema = z.object({
-  profileVisibility: z.enum(['public', 'connections', 'private']),
+  profileVisibility: z.enum(["public", "connections", "private"]),
   showEmail: z.boolean(),
   showPhone: z.boolean(),
   showLocation: z.boolean(),
@@ -132,7 +132,7 @@ export class ConsentService {
       applicationId?: string;
       ipAddress: string;
       userAgent: string;
-    }
+    },
   ): Promise<ConsentRecord> {
     const record: Partial<ConsentRecord> = {
       userId,
@@ -146,16 +146,16 @@ export class ConsentService {
     };
 
     const response = await fetch(`${this.apiUrl}/api/consent-logs`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${this.apiToken}`,
       },
       body: JSON.stringify({ data: record }),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to record consent');
+      throw new Error("Failed to record consent");
     }
 
     const result = await response.json();
@@ -172,7 +172,7 @@ export class ConsentService {
         headers: {
           Authorization: `Bearer ${this.apiToken}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -208,7 +208,7 @@ export class ConsentService {
   async revokeConsent(
     userId: string,
     purpose: ConsentPurpose,
-    reason?: string
+    reason?: string,
   ): Promise<void> {
     // Find the latest consent record
     const response = await fetch(
@@ -217,11 +217,11 @@ export class ConsentService {
         headers: {
           Authorization: `Bearer ${this.apiToken}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
-      throw new Error('Failed to find consent record');
+      throw new Error("Failed to find consent record");
     }
 
     const result = await response.json();
@@ -229,9 +229,9 @@ export class ConsentService {
 
     if (consentId) {
       await fetch(`${this.apiUrl}/api/consent-logs/${consentId}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${this.apiToken}`,
         },
         body: JSON.stringify({
@@ -254,7 +254,7 @@ export class ConsentService {
         headers: {
           Authorization: `Bearer ${this.apiToken}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -262,10 +262,12 @@ export class ConsentService {
     }
 
     const result = await response.json();
-    return result.data?.map((item: any) => ({
-      id: item.id,
-      ...item.attributes,
-    })) || [];
+    return (
+      result.data?.map((item: any) => ({
+        id: item.id,
+        ...item.attributes,
+      })) || []
+    );
   }
 }
 
@@ -292,7 +294,7 @@ export class PrivacyService {
         headers: {
           Authorization: `Bearer ${this.apiToken}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -318,7 +320,7 @@ export class PrivacyService {
    */
   async updateSettings(
     userId: string,
-    settings: Partial<PrivacySettings>
+    settings: Partial<PrivacySettings>,
   ): Promise<PrivacySettings> {
     // Validate settings
     const validated = PrivacySettingsSchema.partial().parse(settings);
@@ -330,7 +332,7 @@ export class PrivacyService {
         headers: {
           Authorization: `Bearer ${this.apiToken}`,
         },
-      }
+      },
     );
 
     const existingResult = await existingResponse.json();
@@ -348,20 +350,23 @@ export class PrivacyService {
 
     if (existingId) {
       // Update existing
-      response = await fetch(`${this.apiUrl}/api/privacy-settings/${existingId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.apiToken}`,
+      response = await fetch(
+        `${this.apiUrl}/api/privacy-settings/${existingId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.apiToken}`,
+          },
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify(payload),
-      });
+      );
     } else {
       // Create new
       response = await fetch(`${this.apiUrl}/api/privacy-settings`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${this.apiToken}`,
         },
         body: JSON.stringify(payload),
@@ -369,7 +374,7 @@ export class PrivacyService {
     }
 
     if (!response.ok) {
-      throw new Error('Failed to update privacy settings');
+      throw new Error("Failed to update privacy settings");
     }
 
     const result = await response.json();
@@ -385,7 +390,7 @@ export class PrivacyService {
   getDefaultSettings(userId: string): PrivacySettings {
     return {
       userId,
-      profileVisibility: 'public',
+      profileVisibility: "public",
       showEmail: false, // Off by default for privacy
       showPhone: false,
       showLocation: true,
@@ -405,21 +410,24 @@ export class PrivacyService {
   applyVisibilityFilter<T extends Record<string, any>>(
     profile: T,
     settings: PrivacySettings,
-    viewerRelation: 'self' | 'connection' | 'public'
+    viewerRelation: "self" | "connection" | "public",
   ): Partial<T> {
     // Self can see everything
-    if (viewerRelation === 'self') {
+    if (viewerRelation === "self") {
       return profile;
     }
 
     // Check profile visibility level
-    if (settings.profileVisibility === 'private' && viewerRelation !== 'self') {
+    if (settings.profileVisibility === "private" && viewerRelation !== "self") {
       return { id: profile.id, full_name: profile.full_name } as Partial<T>;
     }
 
-    if (settings.profileVisibility === 'connections' && viewerRelation === 'public') {
-      return { 
-        id: profile.id, 
+    if (
+      settings.profileVisibility === "connections" &&
+      viewerRelation === "public"
+    ) {
+      return {
+        id: profile.id,
         full_name: profile.full_name,
         headline: profile.headline,
       } as Partial<T>;
@@ -480,24 +488,24 @@ export class DataManagementService {
     const request: Partial<DataExportRequest> = {
       userId,
       requestedAt: new Date().toISOString(),
-      status: 'pending',
+      status: "pending",
     };
 
     const response = await fetch(`${this.apiUrl}/api/data-export-requests`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${this.apiToken}`,
       },
       body: JSON.stringify({ data: request }),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create data export request');
+      throw new Error("Failed to create data export request");
     }
 
     const result = await response.json();
-    
+
     // Trigger async export job (would be handled by Celery worker)
     await this.triggerExportJob(result.data.id, userId);
 
@@ -512,27 +520,27 @@ export class DataManagementService {
    */
   async requestAccountDeletion(
     userId: string,
-    reason?: string
+    reason?: string,
   ): Promise<DataDeletionRequest> {
     const request: Partial<DataDeletionRequest> = {
       userId,
       requestedAt: new Date().toISOString(),
       reason,
-      status: 'pending',
+      status: "pending",
       dataDeleted: [],
     };
 
     const response = await fetch(`${this.apiUrl}/api/data-deletion-requests`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${this.apiToken}`,
       },
       body: JSON.stringify({ data: request }),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create deletion request');
+      throw new Error("Failed to create deletion request");
     }
 
     const result = await response.json();
@@ -557,7 +565,7 @@ export class DataManagementService {
         headers: {
           Authorization: `Bearer ${this.apiToken}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -571,16 +579,26 @@ export class DataManagementService {
     };
   }
 
-  private async triggerExportJob(requestId: string, userId: string): Promise<void> {
+  private async triggerExportJob(
+    requestId: string,
+    userId: string,
+  ): Promise<void> {
     // This would send a message to Celery/Redis queue
     // For now, just log the intent
-    console.log(`Triggering data export job for request ${requestId}, user ${userId}`);
+    console.log(
+      `Triggering data export job for request ${requestId}, user ${userId}`,
+    );
   }
 
-  private async triggerDeletionJob(requestId: string, userId: string): Promise<void> {
+  private async triggerDeletionJob(
+    requestId: string,
+    userId: string,
+  ): Promise<void> {
     // This would send a message to Celery/Redis queue
     // Deletion should be scheduled with 30-day grace period
-    console.log(`Triggering data deletion job for request ${requestId}, user ${userId}`);
+    console.log(
+      `Triggering data deletion job for request ${requestId}, user ${userId}`,
+    );
   }
 }
 
@@ -595,22 +613,22 @@ export function redactPII(text: string): string {
   // Redact emails
   text = text.replace(
     /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,
-    '[EMAIL REDACTED]'
+    "[EMAIL REDACTED]",
   );
 
   // Redact phone numbers (various formats)
   text = text.replace(
     /(\+?\d{1,3}[-.\s]?)?\(?\d{2,3}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}/g,
-    '[PHONE REDACTED]'
+    "[PHONE REDACTED]",
   );
 
   // Redact national IDs (Jordan format: 9 or 10 digits)
-  text = text.replace(/\b\d{9,10}\b/g, '[ID REDACTED]');
+  text = text.replace(/\b\d{9,10}\b/g, "[ID REDACTED]");
 
   // Redact credit card numbers
   text = text.replace(
     /\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b/g,
-    '[CARD REDACTED]'
+    "[CARD REDACTED]",
   );
 
   return text;
@@ -620,13 +638,14 @@ export function redactPII(text: string): string {
  * Mask email for display
  */
 export function maskEmail(email: string): string {
-  const [local, domain] = email.split('@');
-  if (!domain) return '***@***';
-  
-  const maskedLocal = local.length > 2 
-    ? local.charAt(0) + '***' + local.charAt(local.length - 1)
-    : '***';
-  
+  const [local, domain] = email.split("@");
+  if (!domain) return "***@***";
+
+  const maskedLocal =
+    local.length > 2
+      ? local.charAt(0) + "***" + local.charAt(local.length - 1)
+      : "***";
+
   return `${maskedLocal}@${domain}`;
 }
 
@@ -634,10 +653,10 @@ export function maskEmail(email: string): string {
  * Mask phone number for display
  */
 export function maskPhone(phone: string): string {
-  const cleaned = phone.replace(/\D/g, '');
-  if (cleaned.length < 6) return '***';
-  
-  return cleaned.slice(0, 3) + '****' + cleaned.slice(-2);
+  const cleaned = phone.replace(/\D/g, "");
+  if (cleaned.length < 6) return "***";
+
+  return cleaned.slice(0, 3) + "****" + cleaned.slice(-2);
 }
 
 /**
@@ -645,87 +664,102 @@ export function maskPhone(phone: string): string {
  */
 export function getConsentText(
   purpose: ConsentPurpose,
-  locale: 'en' | 'ar' = 'en'
+  locale: "en" | "ar" = "en",
 ): { title: string; description: string } {
-  const texts: Record<ConsentPurpose, { en: { title: string; description: string }; ar: { title: string; description: string } }> = {
+  const texts: Record<
+    ConsentPurpose,
+    {
+      en: { title: string; description: string };
+      ar: { title: string; description: string };
+    }
+  > = {
     ai_processing: {
       en: {
-        title: 'AI Processing Consent',
-        description: 'I consent to the use of AI to analyze my resume and provide job matching recommendations.',
+        title: "AI Processing Consent",
+        description:
+          "I consent to the use of AI to analyze my resume and provide job matching recommendations.",
       },
       ar: {
-        title: 'الموافقة على معالجة الذكاء الاصطناعي',
-        description: 'أوافق على استخدام الذكاء الاصطناعي لتحليل سيرتي الذاتية وتقديم توصيات مطابقة للوظائف.',
+        title: "الموافقة على معالجة الذكاء الاصطناعي",
+        description:
+          "أوافق على استخدام الذكاء الاصطناعي لتحليل سيرتي الذاتية وتقديم توصيات مطابقة للوظائف.",
       },
     },
     share_with_employer: {
       en: {
-        title: 'Share with Employer',
-        description: 'I consent to sharing my application data with the employer for this job posting.',
+        title: "Share with Employer",
+        description:
+          "I consent to sharing my application data with the employer for this job posting.",
       },
       ar: {
-        title: 'المشاركة مع صاحب العمل',
-        description: 'أوافق على مشاركة بيانات طلبي مع صاحب العمل لهذه الوظيفة.',
+        title: "المشاركة مع صاحب العمل",
+        description: "أوافق على مشاركة بيانات طلبي مع صاحب العمل لهذه الوظيفة.",
       },
     },
     share_phone: {
       en: {
-        title: 'Share Phone Number',
-        description: 'I consent to sharing my phone number with the employer.',
+        title: "Share Phone Number",
+        description: "I consent to sharing my phone number with the employer.",
       },
       ar: {
-        title: 'مشاركة رقم الهاتف',
-        description: 'أوافق على مشاركة رقم هاتفي مع صاحب العمل.',
+        title: "مشاركة رقم الهاتف",
+        description: "أوافق على مشاركة رقم هاتفي مع صاحب العمل.",
       },
     },
     share_profile: {
       en: {
-        title: 'Share Profile',
-        description: 'I consent to sharing a link to my professional profile.',
+        title: "Share Profile",
+        description: "I consent to sharing a link to my professional profile.",
       },
       ar: {
-        title: 'مشاركة الملف الشخصي',
-        description: 'أوافق على مشاركة رابط ملفي الشخصي المهني.',
+        title: "مشاركة الملف الشخصي",
+        description: "أوافق على مشاركة رابط ملفي الشخصي المهني.",
       },
     },
     email_notifications: {
       en: {
-        title: 'Email Notifications',
-        description: 'I consent to receiving job alerts and platform notifications via email.',
+        title: "Email Notifications",
+        description:
+          "I consent to receiving job alerts and platform notifications via email.",
       },
       ar: {
-        title: 'إشعارات البريد الإلكتروني',
-        description: 'أوافق على تلقي تنبيهات الوظائف وإشعارات المنصة عبر البريد الإلكتروني.',
+        title: "إشعارات البريد الإلكتروني",
+        description:
+          "أوافق على تلقي تنبيهات الوظائف وإشعارات المنصة عبر البريد الإلكتروني.",
       },
     },
     marketing: {
       en: {
-        title: 'Marketing Communications',
-        description: 'I consent to receiving promotional content and career tips.',
+        title: "Marketing Communications",
+        description:
+          "I consent to receiving promotional content and career tips.",
       },
       ar: {
-        title: 'الاتصالات التسويقية',
-        description: 'أوافق على تلقي المحتوى الترويجي ونصائح المهنة.',
+        title: "الاتصالات التسويقية",
+        description: "أوافق على تلقي المحتوى الترويجي ونصائح المهنة.",
       },
     },
     analytics: {
       en: {
-        title: 'Analytics',
-        description: 'I consent to anonymous usage analytics to improve the platform.',
+        title: "Analytics",
+        description:
+          "I consent to anonymous usage analytics to improve the platform.",
       },
       ar: {
-        title: 'التحليلات',
-        description: 'أوافق على التحليلات المجهولة للاستخدام لتحسين المنصة.',
+        title: "التحليلات",
+        description: "أوافق على التحليلات المجهولة للاستخدام لتحسين المنصة.",
       },
     },
     third_party: {
       en: {
-        title: 'Third-Party Services',
-        description: 'I consent to sharing data with trusted third-party service providers.',
+        title: "Third-Party Services",
+        description:
+          "I consent to sharing data with trusted third-party service providers.",
       },
       ar: {
-        title: 'خدمات الطرف الثالث',
-        description: 'أوافق على مشاركة البيانات مع مزودي خدمات الطرف الثالث الموثوقين.',
+        title: "خدمات الطرف الثالث",
+        description:
+          "أوافق على مشاركة البيانات مع مزودي خدمات الطرف الثالث الموثوقين.",
       },
     },
   };

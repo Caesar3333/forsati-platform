@@ -35,7 +35,7 @@ export function SearchBar({
   // Debounced search
   const debouncedSearch = React.useMemo(
     () => debounce((value: string) => onSearch(value), 300),
-    [onSearch]
+    [onSearch],
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,14 +66,14 @@ export function SearchBar({
           "relative flex items-center rounded-lg border bg-white transition-all duration-200",
           isFocused
             ? "border-primary-500 ring-2 ring-primary-100"
-            : "border-border hover:border-neutral-300"
+            : "border-border hover:border-neutral-300",
         )}
       >
         {/* Search Icon */}
         <div
           className={cn(
             "absolute flex items-center justify-center w-10 h-full text-muted",
-            isRTL ? "right-0" : "left-0"
+            isRTL ? "right-0" : "left-0",
           )}
         >
           {loading ? (
@@ -95,7 +95,7 @@ export function SearchBar({
           autoFocus={autoFocus}
           className={cn(
             "flex-1 h-10 bg-transparent text-sm text-foreground placeholder:text-muted focus:outline-none",
-            isRTL ? "pr-10 pl-10" : "pl-10 pr-10"
+            isRTL ? "pr-10 pl-10" : "pl-10 pr-10",
           )}
         />
 
@@ -106,7 +106,7 @@ export function SearchBar({
             onClick={handleClear}
             className={cn(
               "absolute flex items-center justify-center w-10 h-full text-muted hover:text-foreground transition-colors",
-              isRTL ? "left-0" : "right-0"
+              isRTL ? "left-0" : "right-0",
             )}
             aria-label={isRTL ? "مسح" : "Clear"}
           >
@@ -119,7 +119,7 @@ export function SearchBar({
           <div
             className={cn(
               "absolute hidden sm:flex items-center gap-1 text-xs text-muted",
-              isRTL ? "left-3" : "right-3"
+              isRTL ? "left-3" : "right-3",
             )}
           >
             <kbd className="px-1.5 py-0.5 rounded bg-neutral-100 border border-border font-mono">

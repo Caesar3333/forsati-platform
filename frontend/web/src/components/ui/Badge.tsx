@@ -23,11 +23,16 @@ const badgeVariants = cva(
         "solid-warning": "bg-warning-500 text-white",
         "solid-danger": "bg-danger-500 text-white",
         // Outline variants
-        "outline-primary": "border border-primary-500 text-primary-500 bg-transparent",
-        "outline-secondary": "border border-secondary-500 text-secondary-500 bg-transparent",
-        "outline-success": "border border-success-500 text-success-500 bg-transparent",
-        "outline-warning": "border border-warning-500 text-warning-500 bg-transparent",
-        "outline-danger": "border border-danger-500 text-danger-500 bg-transparent",
+        "outline-primary":
+          "border border-primary-500 text-primary-500 bg-transparent",
+        "outline-secondary":
+          "border border-secondary-500 text-secondary-500 bg-transparent",
+        "outline-success":
+          "border border-success-500 text-success-500 bg-transparent",
+        "outline-warning":
+          "border border-warning-500 text-warning-500 bg-transparent",
+        "outline-danger":
+          "border border-danger-500 text-danger-500 bg-transparent",
       },
       size: {
         sm: "text-xs px-2 py-0.5",
@@ -39,11 +44,12 @@ const badgeVariants = cva(
       variant: "default",
       size: "md",
     },
-  }
+  },
 );
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
+  extends
+    React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof badgeVariants> {
   icon?: React.ReactNode;
   dot?: boolean;
@@ -64,7 +70,7 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <span
@@ -104,7 +110,7 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
         )}
       </span>
     );
-  }
+  },
 );
 
 Badge.displayName = "Badge";

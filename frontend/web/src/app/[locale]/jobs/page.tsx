@@ -17,7 +17,9 @@ interface JobsPageProps {
   };
 }
 
-export async function generateMetadata({ params }: JobsPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: JobsPageProps): Promise<Metadata> {
   const isArabic = params.locale === "ar";
 
   return {
