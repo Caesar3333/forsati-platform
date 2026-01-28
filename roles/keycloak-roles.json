@@ -1,0 +1,100 @@
+{
+  "roles": [
+    {
+      "name": "guest",
+      "description": {
+        "en": "Unauthenticated visitor",
+        "ar": "زائر غير مسجل"
+      },
+      "permissions": [
+        "opportunities:read:public",
+        "organizations:read:public"
+      ]
+    },
+    {
+      "name": "candidate",
+      "description": {
+        "en": "Job seeker / Candidate",
+        "ar": "باحث عن فرصة / مرشح"
+      },
+      "permissions": [
+        "profile:read:own",
+        "profile:write:own",
+        "resume:read:own",
+        "resume:write:own",
+        "applications:read:own",
+        "applications:write:own",
+        "opportunities:read:public",
+        "interviews:read:own"
+      ]
+    },
+    {
+      "name": "recruiter",
+      "description": {
+        "en": "Hiring manager / Recruiter",
+        "ar": "مسؤول توظيف"
+      },
+      "permissions": [
+        "opportunities:read:org",
+        "opportunities:write:org",
+        "applications:read:org",
+        "applications:write:org",
+        "candidates:read:org",
+        "interviews:read:org",
+        "interviews:write:org",
+        "reports:read:org"
+      ]
+    },
+    {
+      "name": "organization_admin",
+      "description": {
+        "en": "Organization owner / Admin",
+        "ar": "صاحب مؤسسة / مدير"
+      },
+      "permissions": [
+        "organization:read:own",
+        "organization:write:own",
+        "team:read:own",
+        "team:write:own",
+        "opportunities:read:org",
+        "opportunities:write:org",
+        "applications:read:org",
+        "applications:write:org",
+        "candidates:read:org",
+        "interviews:read:org",
+        "interviews:write:org",
+        "reports:read:org",
+        "billing:read:own",
+        "billing:write:own"
+      ]
+    },
+    {
+      "name": "moderator",
+      "description": {
+        "en": "Content moderator",
+        "ar": "مشرف محتوى"
+      },
+      "permissions": [
+        "content:read:all",
+        "content:moderate:all",
+        "reports:read:all",
+        "reports:resolve:all",
+        "users:read:limited"
+      ]
+    },
+    {
+      "name": "admin",
+      "description": {
+        "en": "System administrator",
+        "ar": "مدير النظام"
+      },
+      "permissions": [
+        "*:*:*"
+      ]
+    }
+  ],
+  "realm": "forsati",
+  "client_id": "forsati-app",
+  "default_role": "candidate",
+  "updated_at": "2026-01-28T00:00:00Z"
+}

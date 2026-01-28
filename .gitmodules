@@ -1,0 +1,30 @@
+[submodule "services/strapi"]
+	path = services/strapi
+	url = https://github.com/strapi/strapi.git
+[submodule "services/directus"]
+	path = services/directus
+	url = https://github.com/directus/directus.git
+[submodule "services/pyresparser"]
+	path = services/pyresparser
+	url = https://github.com/OmkarPathak/pyresparser.git
+[submodule "services/opencats"]
+	path = services/opencats
+	url = https://github.com/opencats/opencats.git
+[submodule "services/jitsi"]
+	path = services/jitsi
+	url = https://github.com/jitsi/docker-jitsi-meet.git
+[submodule "services/rasa"]
+	path = services/rasa
+	url = https://github.com/RasaHQ/rasa.git
+[submodule "services/botpress"]
+	path = services/botpress
+	url = https://github.com/botpress/botpress.git
+[submodule "services/appsmith"]
+	path = services/appsmith
+	url = https://github.com/appsmithorg/appsmith.git
+[submodule "frontend/ant-design-pro"]
+	path = frontend/ant-design-pro
+	url = https://github.com/ant-design/ant-design-pro.git
+[submodule "frontend/nextjs-examples"]
+	path = frontend/nextjs-examples
+	url = https://github.com/vercel/next.js.git

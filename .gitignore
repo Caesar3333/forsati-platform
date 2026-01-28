@@ -1,0 +1,122 @@
+# © 2026 Forsati. All rights reserved.
+# .gitignore for Forsati Platform
+
+# ===========================================
+# Environment & Secrets
+# ===========================================
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# ===========================================
+# Dependencies
+# ===========================================
+node_modules/
+.pnp/
+.pnp.js
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+venv/
+ENV/
+
+# ===========================================
+# IDE & Editors
+# ===========================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# ===========================================
+# Build & Output
+# ===========================================
+.next/
+out/
+.nuxt/
+.cache/
+.parcel-cache/
+.turbo/
+*.tsbuildinfo
+
+# ===========================================
+# Testing
+# ===========================================
+coverage/
+.nyc_output/
+*.lcov
+.pytest_cache/
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+
+# ===========================================
+# OS Generated
+# ===========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ===========================================
+# Docker
+# ===========================================
+docker-compose.override.yml
+
+# ===========================================
+# Logs
+# ===========================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ===========================================
+# Data & Uploads
+# ===========================================
+uploads/
+data/
+*.sqlite
+*.sqlite3
+*.db
+
+# ===========================================
+# Temporary
+# ===========================================
+tmp/
+temp/
+*.tmp
+*.temp

@@ -1,0 +1,91 @@
+{
+  "feature": "platform-bootstrap",
+  "version": "1.0.0",
+  "description": {
+    "en": "Initial platform bootstrap and infrastructure setup",
+    "ar": "التهيئة الأولية للمنصة وإعداد البنية التحتية"
+  },
+  "markets": ["jo", "sa", "ae"],
+  "market_defaults": {
+    "jo": {
+      "currency": "JOD",
+      "timezone": "Asia/Amman",
+      "phone_examples": ["+962 7 9123 4567", "079 123 4567"],
+      "locale": "ar-JO"
+    },
+    "sa": {
+      "currency": "SAR",
+      "timezone": "Asia/Riyadh",
+      "phone_examples": ["+966 5 1234 5678"],
+      "locale": "ar-SA"
+    },
+    "ae": {
+      "currency": "AED",
+      "timezone": "Asia/Dubai",
+      "phone_examples": ["+971 5 123 4567"],
+      "locale": "ar-AE"
+    }
+  },
+  "frontend": {
+    "pages": [],
+    "components": []
+  },
+  "backend": {
+    "services": [
+      {
+        "name": "strapi",
+        "type": "docker",
+        "port": 1337,
+        "health_endpoint": "/_health"
+      },
+      {
+        "name": "keycloak",
+        "type": "docker",
+        "port": 8080,
+        "health_endpoint": "/health"
+      },
+      {
+        "name": "minio",
+        "type": "docker",
+        "port": 9000,
+        "console_port": 9001
+      },
+      {
+        "name": "postgres",
+        "type": "docker",
+        "port": 5432
+      },
+      {
+        "name": "ingestor",
+        "type": "fastapi",
+        "port": 8000,
+        "health_endpoint": "/health"
+      }
+    ],
+    "endpoints": [],
+    "strapi_collections": [],
+    "db_tables": []
+  },
+  "dashboards": {
+    "super_admin": null,
+    "organization_admin": null,
+    "hiring_manager": null,
+    "candidate": null
+  },
+  "required_roles": ["admin"],
+  "i18n_keys": {
+    "en": [],
+    "ar": []
+  },
+  "seo": {
+    "meta_title_key": null,
+    "meta_description_key": null,
+    "json_ld": null
+  },
+  "audit": {
+    "audit_events": ["platform.bootstrap"],
+    "log_collection": "audit_logs"
+  },
+  "created_at": "2026-01-28T00:00:00Z",
+  "status": "completed"
+}
