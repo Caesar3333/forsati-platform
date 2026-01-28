@@ -1,6 +1,15 @@
 # © 2026 Forsati. All rights reserved.
 # Forsati Platform - Docker Compose Configuration
 # Development Environment
+# 
+# Usage:
+#   docker-compose up -d --build
+#   docker-compose logs -f
+#   docker-compose down
+#
+# Prerequisites:
+#   - Copy .env.example to .env and fill in values
+#   - OR run: scripts/setup_github_secrets.ps1 -LocalEnvOnly
 
 version: "3.9"
 
@@ -14,14 +23,14 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-forsati_db}
-      POSTGRES_USER: ${POSTGRES_USER:-forsati_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_USER: ${POSTGRES_USER:-forsati}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-forsati_user} -d ${POSTGRES_DB:-forsati_db}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-forsati} -d ${POSTGRES_DB:-forsati_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -37,15 +46,15 @@ services:
     restart: unless-stopped
     command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER is required}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD is required}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
     ports:
       - "9000:9000"   # API
       - "9001:9001"   # Console
     volumes:
       - minio_data:/data
     healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -63,10 +72,10 @@ services:
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-forsati_db}
-      KC_DB_USERNAME: ${POSTGRES_USER:-forsati_user}
-      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
-      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:?KEYCLOAK_ADMIN is required}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?KEYCLOAK_ADMIN_PASSWORD is required}
+      KC_DB_USERNAME: ${POSTGRES_USER:-forsati}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
       KC_HOSTNAME_STRICT: "false"
       KC_HTTP_ENABLED: "true"
     ports:
@@ -79,15 +88,18 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 60s
+      start_period: 90s
     networks:
       - forsati-network
 
   # ===========================================
   # Strapi (Headless CMS)
+  # Using custom build for development
   # ===========================================
   strapi:
-    image: strapi/strapi:latest
+    build:
+      context: ./services/strapi-app
+      dockerfile: Dockerfile
     container_name: forsati-strapi
     restart: unless-stopped
     environment:
@@ -95,17 +107,18 @@ services:
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
       DATABASE_NAME: ${POSTGRES_DB:-forsati_db}
-      DATABASE_USERNAME: ${POSTGRES_USER:-forsati_user}
-      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
-      APP_KEYS: ${STRAPI_APP_KEYS:?STRAPI_APP_KEYS is required}
-      API_TOKEN_SALT: ${STRAPI_API_TOKEN_SALT:?STRAPI_API_TOKEN_SALT is required}
-      ADMIN_JWT_SECRET: ${STRAPI_ADMIN_JWT_SECRET:?STRAPI_ADMIN_JWT_SECRET is required}
-      TRANSFER_TOKEN_SALT: ${STRAPI_TRANSFER_TOKEN_SALT:?STRAPI_TRANSFER_TOKEN_SALT is required}
-      JWT_SECRET: ${STRAPI_JWT_SECRET:?STRAPI_JWT_SECRET is required}
+      DATABASE_USERNAME: ${POSTGRES_USER:-forsati}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      APP_KEYS: ${STRAPI_APP_KEYS:-key1,key2,key3,key4}
+      API_TOKEN_SALT: ${STRAPI_API_TOKEN_SALT:-apisalt123}
+      ADMIN_JWT_SECRET: ${STRAPI_ADMIN_JWT_SECRET:-adminjwt123}
+      TRANSFER_TOKEN_SALT: ${STRAPI_TRANSFER_TOKEN_SALT:-transfer123}
+      JWT_SECRET: ${STRAPI_JWT_SECRET:-jwtsecret123}
+      NODE_ENV: development
     ports:
       - "1337:1337"
     volumes:
-      - strapi_data:/srv/app
+      - strapi_data:/srv/app/public/uploads
     depends_on:
       postgres:
         condition: service_healthy
@@ -113,8 +126,8 @@ services:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:1337/_health"]
       interval: 10s
       timeout: 5s
-      retries: 5
-      start_period: 60s
+      retries: 10
+      start_period: 120s
     networks:
       - forsati-network
 

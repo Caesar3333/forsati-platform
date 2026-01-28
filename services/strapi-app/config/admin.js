@@ -1,0 +1,20 @@
+// © 2026 Forsati. All rights reserved.
+// Strapi Admin Configuration
+
+module.exports = ({ env }) => ({
+  auth: {
+    secret: env('ADMIN_JWT_SECRET', 'admin-jwt-secret'),
+  },
+  apiToken: {
+    salt: env('API_TOKEN_SALT', 'api-token-salt'),
+  },
+  transfer: {
+    token: {
+      salt: env('TRANSFER_TOKEN_SALT', 'transfer-token-salt'),
+    },
+  },
+  flags: {
+    nps: env.bool('FLAG_NPS', true),
+    promoteEE: env.bool('FLAG_PROMOTE_EE', true),
+  },
+});
