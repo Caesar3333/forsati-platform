@@ -1,0 +1,657 @@
+openapi: 3.0.3
+info:
+  title: Forsati Opportunities API
+  description: |
+    API for job opportunities, applications, and employer management.
+    
+    ## Features
+    - Job listings with search and filters
+    - Quick apply functionality
+    - Application tracking
+    - Saved jobs management
+    - Company profiles
+    
+    ## Rate Limiting
+    - Anonymous: 100 requests/minute
+    - Authenticated: 1000 requests/minute
+  version: 1.0.0
+  contact:
+    name: Forsati Platform
+    email: api@forsati.jo
+
+servers:
+  - url: https://api.forsati.jo
+    description: Production
+  - url: https://staging-api.forsati.jo
+    description: Staging
+  - url: http://localhost:1337/api
+    description: Local (Strapi)
+
+tags:
+  - name: Jobs
+    description: Job opportunity operations
+  - name: Applications
+    description: Job application management
+  - name: Saved
+    description: Saved/bookmarked jobs
+  - name: Companies
+    description: Company profiles
+
+paths:
+  /opportunities:
+    get:
+      tags:
+        - Jobs
+      summary: List job opportunities
+      description: Get paginated list of active job opportunities with optional filters.
+      operationId: listJobs
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            default: 12
+            minimum: 1
+            maximum: 100
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search in title, description, and skills
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [full-time, part-time, contract, internship, remote, hybrid]
+        - name: location
+          in: query
+          schema:
+            type: string
+          description: City or country filter
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: experienceLevel
+          in: query
+          schema:
+            type: string
+            enum: [entry, junior, mid, senior, lead, executive]
+        - name: salaryMin
+          in: query
+          schema:
+            type: integer
+        - name: salaryMax
+          in: query
+          schema:
+            type: integer
+        - name: featured
+          in: query
+          schema:
+            type: boolean
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [newest, salary-high, salary-low, relevance]
+            default: newest
+      responses:
+        "200":
+          description: List of jobs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/JobSummary"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+
+  /opportunities/{id}:
+    get:
+      tags:
+        - Jobs
+      summary: Get job details
+      description: Get full details of a specific job opportunity.
+      operationId: getJob
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Job details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Job"
+        "404":
+          description: Job not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /opportunities/{id}/preview:
+    get:
+      tags:
+        - Jobs
+      summary: Get job preview for sharing
+      description: Get minimal job data for social sharing previews.
+      operationId: getJobPreview
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Job preview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobPreview"
+
+  /opportunities/{id}/application-link:
+    get:
+      tags:
+        - Jobs
+      summary: Get application link
+      description: |
+        Get the application URL for a job. Requires authentication.
+        May return external URL or internal quick-apply endpoint.
+      operationId: getApplicationLink
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Application link
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  applyUrl:
+                    type: string
+                    format: uri
+                  type:
+                    type: string
+                    enum: [internal, external]
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Profile incomplete or not eligible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /applications/quick:
+    post:
+      tags:
+        - Applications
+      summary: Quick apply to a job
+      description: Submit a quick application using your profile resume.
+      operationId: quickApply
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jobId
+              properties:
+                jobId:
+                  type: string
+                resumeId:
+                  type: string
+                  description: Optional specific resume to use
+                coverLetter:
+                  type: string
+                  maxLength: 2000
+                answers:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      questionId:
+                        type: string
+                      answer:
+                        type: string
+      responses:
+        "201":
+          description: Application submitted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  applicationId:
+                    type: string
+                  message:
+                    type: string
+        "400":
+          description: Invalid application
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: Already applied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /applications/me:
+    get:
+      tags:
+        - Applications
+      summary: Get my applications
+      description: List all applications submitted by the authenticated user.
+      operationId: getMyApplications
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, reviewed, shortlisted, rejected, hired, withdrawn]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: List of applications
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Application"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /applications/{id}/withdraw:
+    post:
+      tags:
+        - Applications
+      summary: Withdraw an application
+      description: Withdraw a previously submitted application.
+      operationId: withdrawApplication
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Application withdrawn
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: Application not found
+
+  /saved-jobs:
+    get:
+      tags:
+        - Saved
+      summary: Get saved jobs
+      description: List all jobs saved/bookmarked by the user.
+      operationId: getSavedJobs
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: List of saved jobs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SavedJob"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /saved-jobs/{jobId}:
+    post:
+      tags:
+        - Saved
+      summary: Save a job
+      description: Add a job to saved/bookmarks.
+      operationId: saveJob
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Job saved
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: Already saved
+    
+    delete:
+      tags:
+        - Saved
+      summary: Unsave a job
+      description: Remove a job from saved/bookmarks.
+      operationId: unsaveJob
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Job removed from saved
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /saved-jobs/{jobId}/check:
+    get:
+      tags:
+        - Saved
+      summary: Check if job is saved
+      description: Check if a specific job is in user's saved list.
+      operationId: isJobSaved
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Saved status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  saved:
+                    type: boolean
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+  schemas:
+    PaginationMeta:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        pageCount:
+          type: integer
+        total:
+          type: integer
+
+    JobSummary:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        slug:
+          type: string
+        type:
+          type: string
+          enum: [full-time, part-time, contract, internship, remote, hybrid]
+        experienceLevel:
+          type: string
+        postedAt:
+          type: string
+          format: date-time
+        isFeatured:
+          type: boolean
+        isUrgent:
+          type: boolean
+        applicantsCount:
+          type: integer
+        location:
+          type: object
+          properties:
+            city:
+              type: string
+            country:
+              type: string
+            remote:
+              type: boolean
+        company:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            slug:
+              type: string
+            logo:
+              type: string
+              nullable: true
+            verified:
+              type: boolean
+        salary:
+          type: object
+          nullable: true
+          properties:
+            min:
+              type: integer
+            max:
+              type: integer
+            currency:
+              type: string
+            negotiable:
+              type: boolean
+            confidential:
+              type: boolean
+
+    Job:
+      allOf:
+        - $ref: "#/components/schemas/JobSummary"
+        - type: object
+          properties:
+            description:
+              type: string
+            requirements:
+              type: array
+              items:
+                type: string
+            responsibilities:
+              type: array
+              items:
+                type: string
+            benefits:
+              type: array
+              items:
+                type: string
+            skills:
+              type: array
+              items:
+                type: string
+            categories:
+              type: array
+              items:
+                type: string
+            isActive:
+              type: boolean
+            applicationDeadline:
+              type: string
+              format: date-time
+              nullable: true
+            viewsCount:
+              type: integer
+            canonical:
+              type: string
+              format: uri
+            ogMeta:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+            company:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                slug:
+                  type: string
+                logo:
+                  type: string
+                  nullable: true
+                verified:
+                  type: boolean
+                industry:
+                  type: string
+                website:
+                  type: string
+                  nullable: true
+                description:
+                  type: string
+                  nullable: true
+
+    JobPreview:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        company:
+          type: string
+        location:
+          type: string
+        salary:
+          type: string
+          nullable: true
+        canonical:
+          type: string
+        ogImage:
+          type: string
+          nullable: true
+
+    Application:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum: [pending, reviewed, shortlisted, rejected, hired, withdrawn]
+        appliedAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        job:
+          $ref: "#/components/schemas/JobSummary"
+
+    SavedJob:
+      type: object
+      properties:
+        id:
+          type: string
+        savedAt:
+          type: string
+          format: date-time
+        job:
+          $ref: "#/components/schemas/JobSummary"
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        code:
+          type: string

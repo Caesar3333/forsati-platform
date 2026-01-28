@@ -1,0 +1,72 @@
+{
+  "name": "scholarships",
+  "version": "1.0.0",
+  "description": {
+    "en": "Scholarships and educational grants discovery platform",
+    "ar": "منصة اكتشاف المنح الدراسية والتعليمية"
+  },
+  "markets": ["jo", "sa", "ae"],
+  "status": "development",
+  "owner": "platform-team",
+  "frontend": {
+    "pages": [
+      "src/app/[locale]/scholarships/page.tsx",
+      "src/app/[locale]/scholarships/[id]/page.tsx",
+      "src/app/[locale]/org/[orgId]/scholarships/new/page.tsx"
+    ],
+    "components": [
+      "src/components/opportunities/OpportunityCard.tsx",
+      "src/components/opportunities/OpportunityFilters.tsx",
+      "src/components/scholarships/ScholarshipDetail.tsx",
+      "src/components/scholarships/ScholarshipForm.tsx",
+      "src/components/scholarships/DeadlineCountdown.tsx"
+    ]
+  },
+  "backend": {
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/scholarships",
+        "auth": "optional",
+        "description": "List scholarships"
+      },
+      {
+        "method": "GET",
+        "path": "/api/scholarships/{id}",
+        "auth": "optional",
+        "description": "Get scholarship details"
+      },
+      {
+        "method": "POST",
+        "path": "/api/scholarships",
+        "auth": "required",
+        "role": "organization",
+        "description": "Create scholarship listing"
+      },
+      {
+        "method": "POST",
+        "path": "/api/scholarships/{id}/save",
+        "auth": "required",
+        "description": "Save scholarship to user list"
+      }
+    ],
+    "services": ["strapi", "typesense"]
+  },
+  "i18n_keys": [
+    "scholarships.title",
+    "scholarships.subtitle",
+    "scholarships.card.*",
+    "scholarships.detail.*",
+    "scholarships.filters.*",
+    "scholarships.deadline.*",
+    "scholarships.apply.*"
+  ],
+  "privacy": {
+    "data_collected": ["scholarship_views", "saved_scholarships"],
+    "requires_explicit_consent": false
+  },
+  "dependencies": {
+    "features": [],
+    "packages": ["@tanstack/react-query", "next-intl", "date-fns"]
+  }
+}
